@@ -9,8 +9,7 @@
 name: Build & Deploy
 
 on:
-  push: 
-    branches: [ "master" ]
+  deployment
 
 permissions:
   contents: read
@@ -28,8 +27,19 @@ jobs:
         os: [ubuntu-latest]
             
     runs-on: ${{ matrix.os }}
+    env:
+      SHA: ${{ github.event.deployment.sha }}
+      ENVIRONMENT: ${{ github.event.deployment.environment }}
+      DEPLOY_ID: ${{ github.event.deployment.id}}
     
-    steps:          
+    steps:
+    - name: In-progress Status
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'in_progress'
+        deployment-id: ${{ env.DEPLOY_ID }}
+     
     - name: Checkout
       uses: actions/checkout@v3
       
@@ -74,6 +84,14 @@ jobs:
         report_paths: '**/build/test-results/test/TEST-*.xml'
         token: ${{ github.token }}
         
+    - name: Failure Status
+      if: failure()
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'failure'
+        deployment-id: ${{env.DEPLOY_ID}}
+        
     - name: Slack Notification
       if: failure()
       uses: 8398a7/action-slack@v3
@@ -104,6 +122,10 @@ jobs:
         os: [ubuntu-latest]
             
     runs-on: ${{ matrix.os }}
+    env:
+      SHA: ${{ github.event.deployment.sha }}
+      ENVIRONMENT: ${{ github.event.deployment.environment }}
+      DEPLOY_ID: ${{ github.event.deployment.id}}
     
     steps:
     - name: Checkout
@@ -128,6 +150,14 @@ jobs:
         name: playground-artifact
         path: build/libs/playground.jar
         retention-days: 14
+        
+    - name: Failure Status
+      if: failure()
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'failure'
+        deployment-id: ${{env.DEPLOY_ID}}
         
     - name: Slack Notification
       if: failure()
@@ -159,6 +189,10 @@ jobs:
         os: [ubuntu-latest]
             
     runs-on: ${{ matrix.os }}
+    env:
+      SHA: ${{ github.event.deployment.sha }}
+      ENVIRONMENT: ${{ github.event.deployment.environment }}
+      DEPLOY_ID: ${{ github.event.deployment.id}}
 
     steps:
     - id: file-name
@@ -187,6 +221,22 @@ jobs:
     - name: Run Deploy Script
       run: gcloud compute ssh ${{ secrets.GCP_INSTANCE_NAME }} --zone "us-west1-b" --command "echo ${{ secrets.GCP_RUNNER_PASSWORD }} | sudo -S -u ${{ secrets.GCP_USER }} ${{ secrets.GCP_WORK_DIR }}/shell/deploy.sh"
           
+    - name: Success Status
+      if: success()
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'success'
+        deployment-id: ${{env.DEPLOY_ID}}
+
+    - name: Failure Status
+      if: failure()
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'failure'
+        deployment-id: ${{env.DEPLOY_ID}}
+        
     - name: Slack Notification
       if: always()
       uses: 8398a7/action-slack@v3

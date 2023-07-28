@@ -1,0 +1,262 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Build & Deploy
+
+on:
+  deployment
+
+permissions:
+  contents: read
+  id-token: write
+  checks: write
+  pull-requests: write
+  actions: read
+  deployments: write
+  
+jobs:
+  test:
+    name: Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+            
+    runs-on: ${{ matrix.os }}
+    env:
+      SHA: ${{ github.event.deployment.sha }}
+      ENVIRONMENT: ${{ github.event.deployment.environment }}
+      DEPLOY_ID: ${{ github.event.deployment.id}}
+    
+    steps:
+    - name: In-progress Status
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'in_progress'
+        deployment-id: ${{ env.DEPLOY_ID }}
+     
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: temurin
+        cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Make service.json
+      run: echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' > /home/runner/work/playground/playground/service.json
+      
+    - name: Test with Gradle
+      run: ./gradlew test
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: '/home/runner/work/playground/playground/service.json'
+        
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          build/test-results/**/*.xml
+
+    - name: Report JUnit test
+      uses: mikepenz/action-junit-report@v3
+      if: always()
+      with:
+        report_paths: '**/build/test-results/test/TEST-*.xml'
+        token: ${{ github.token }}
+        
+    - name: Failure Status
+      if: failure()
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'failure'
+        deployment-id: ${{env.DEPLOY_ID}}
+        
+    - name: Slack Notification
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+        mention: here
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        
+    - name: Slack Notification
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+        mention: here
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+      
+  build:
+    name: Build
+    needs: test
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+            
+    runs-on: ${{ matrix.os }}
+    env:
+      SHA: ${{ github.event.deployment.sha }}
+      ENVIRONMENT: ${{ github.event.deployment.environment }}
+      DEPLOY_ID: ${{ github.event.deployment.id}}
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+          
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: temurin
+        cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+      
+    - name: Artifact Upload Jar
+      uses: actions/upload-artifact@v3
+      with:
+        name: playground-artifact
+        path: build/libs/playground.jar
+        retention-days: 14
+        
+    - name: Failure Status
+      if: failure()
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'failure'
+        deployment-id: ${{env.DEPLOY_ID}}
+        
+    - name: Slack Notification
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+        mention: here
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        
+    - name: Slack Notification
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+        mention: here
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+
+  deploy:
+    name: Deploy & Restart
+    needs: build
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+            
+    runs-on: ${{ matrix.os }}
+    env:
+      SHA: ${{ github.event.deployment.sha }}
+      ENVIRONMENT: ${{ github.event.deployment.environment }}
+      DEPLOY_ID: ${{ github.event.deployment.id}}
+
+    steps:
+    - id: file-name
+      name: Set jar file name
+      run: echo "JAR_FILE_NAME=playground_$(TZ=Asia/Seoul date +'%Y%m%d%H%M%S%3N')_${GITHUB_SHA::7}.jar" >> $GITHUB_OUTPUT
+      
+    - name: Artifact Download Jar
+      uses: actions/download-artifact@v3
+      with:
+        name: playground-artifact
+        
+    - name: Rename Jar 
+      run: mv playground.jar ${{ steps.file-name.outputs.JAR_FILE_NAME }}
+        
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      
+    - name: Copy Jar File
+      run: gcloud compute scp ${{ steps.file-name.outputs.JAR_FILE_NAME }} ${{ secrets.GCP_INSTANCE_NAME }}:${{ secrets.GCP_DEPLOY_DIR }} --zone "us-west1-b"
+      
+    - name: Run Deploy Script
+      run: gcloud compute ssh ${{ secrets.GCP_INSTANCE_NAME }} --zone "us-west1-b" --command "echo ${{ secrets.GCP_RUNNER_PASSWORD }} | sudo -S -u ${{ secrets.GCP_USER }} ${{ secrets.GCP_WORK_DIR }}/shell/deploy.sh"
+          
+    - name: Success Status
+      if: success()
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'success'
+        deployment-id: ${{env.DEPLOY_ID}}
+
+    - name: Failure Status
+      if: failure()
+      uses: chrnorm/deployment-status@v2
+      with:
+        token: '${{ github.token }}'
+        state: 'failure'
+        deployment-id: ${{env.DEPLOY_ID}}
+        
+    - name: Slack Notification
+      if: always()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+        mention: here
+        if_mention: failure,cancelled
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+
+    - name: Slack Notification
+      if: always()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+        mention: here
+        if_mention: failure,cancelled
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+

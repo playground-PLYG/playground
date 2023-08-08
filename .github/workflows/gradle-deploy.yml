@@ -7,8 +7,11 @@
 
 name: Build & Deploy
 
+#on:
+#  deployment
 on:
-  deployment
+  push: 
+    branches: [ "master" ]
 
 permissions:
   contents: read

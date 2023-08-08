@@ -94,27 +94,27 @@ jobs:
     #    state: 'failure'
     #    deployment-id: ${{env.DEPLOY_ID}}
         
-    - name: Slack Notification
-      if: failure()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
-        mention: here
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        
-    - name: Slack Notification
-      if: failure()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
-        mention: here
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+    #- name: Slack Notification
+    #  if: failure()
+    #  uses: 8398a7/action-slack@v3
+    #  with:
+    #    status: ${{ job.status }}
+    #    fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+    #    mention: here
+    #  env:
+    #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    #    MATRIX_CONTEXT: ${{ toJson(matrix) }}
+    #    
+    #- name: Slack Notification
+    #  if: failure()
+    #  uses: 8398a7/action-slack@v3
+    #  with:
+    #    status: ${{ job.status }}
+    #    fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+    #    mention: here
+    #  env:
+    #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
+    #    MATRIX_CONTEXT: ${{ toJson(matrix) }}
 
     - name: Discord Notification
       uses: sarisia/actions-status-discord@v1
@@ -168,27 +168,27 @@ jobs:
     #    state: 'failure'
     #    deployment-id: ${{env.DEPLOY_ID}}
         
-    - name: Slack Notification
-      if: failure()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
-        mention: here
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        
-    - name: Slack Notification
-      if: failure()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
-        mention: here
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+    #- name: Slack Notification
+    #  if: failure()
+    #  uses: 8398a7/action-slack@v3
+    #  with:
+    #    status: ${{ job.status }}
+    #    fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+    #    mention: here
+    #  env:
+    #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    #    MATRIX_CONTEXT: ${{ toJson(matrix) }}
+    #    
+    #- name: Slack Notification
+    #  if: failure()
+    #  uses: 8398a7/action-slack@v3
+    #  with:
+    #    status: ${{ job.status }}
+    #    fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+    #    mention: here
+    #  env:
+    #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
+    #    MATRIX_CONTEXT: ${{ toJson(matrix) }}
 
     - name: Discord Notification
       uses: sarisia/actions-status-discord@v1
@@ -245,37 +245,37 @@ jobs:
     #    state: 'success'
     #    deployment-id: ${{env.DEPLOY_ID}}
 
-    - name: Failure Status
-      if: failure()
-      uses: chrnorm/deployment-status@v2
-      with:
-        token: '${{ github.token }}'
-        state: 'failure'
-        deployment-id: ${{env.DEPLOY_ID}}
+    #- name: Failure Status
+    #  if: failure()
+    #  uses: chrnorm/deployment-status@v2
+    #  with:
+    #    token: '${{ github.token }}'
+    #    state: 'failure'
+    #    deployment-id: ${{env.DEPLOY_ID}}
         
-    - name: Slack Notification
-      if: always()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
-        mention: here
-        if_mention: failure,cancelled
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
-
-    - name: Slack Notification
-      if: always()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
-        mention: here
-        if_mention: failure,cancelled
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
-        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+    #- name: Slack Notification
+    #  if: always()
+    #  uses: 8398a7/action-slack@v3
+    #  with:
+    #    status: ${{ job.status }}
+    #    fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+    #    mention: here
+    #    if_mention: failure,cancelled
+    #  env:
+    #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    #    MATRIX_CONTEXT: ${{ toJson(matrix) }}
+    #
+    #- name: Slack Notification
+    #  if: always()
+    #  uses: 8398a7/action-slack@v3
+    #  with:
+    #    status: ${{ job.status }}
+    #    fields: repo,commit,message,author,action,took,eventName,ref,workflow,pullRequest
+    #    mention: here
+    #    if_mention: failure,cancelled
+    #  env:
+    #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
+    #    MATRIX_CONTEXT: ${{ toJson(matrix) }}
 
     - name: Discord Notification
       uses: sarisia/actions-status-discord@v1

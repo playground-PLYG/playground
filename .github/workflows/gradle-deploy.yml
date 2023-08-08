@@ -121,7 +121,7 @@ jobs:
       if: failure()
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        username: Github Actions
+        username: GitHub Actions
       
   build:
     name: Build
@@ -195,7 +195,7 @@ jobs:
       if: failure()
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        username: Github Actions
+        username: GitHub Actions
 
   deploy:
     name: Deploy & Restart
@@ -282,5 +282,5 @@ jobs:
       if: always()
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        username: Github Actions
+        username: GitHub Actions
 

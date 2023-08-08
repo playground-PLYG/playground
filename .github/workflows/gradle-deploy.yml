@@ -260,3 +260,8 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
         MATRIX_CONTEXT: ${{ toJson(matrix) }}
 
+    - uses: sarisia/actions-status-discord@v1
+      if: always()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+

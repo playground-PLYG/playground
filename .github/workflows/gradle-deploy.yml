@@ -115,6 +115,13 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
         MATRIX_CONTEXT: ${{ toJson(matrix) }}
+
+    - name: Discord Notification
+      uses: sarisia/actions-status-discord@v1
+      if: failure()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        username: Github Actions
       
   build:
     name: Build
@@ -182,6 +189,13 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
         MATRIX_CONTEXT: ${{ toJson(matrix) }}
+
+    - name: Discord Notification
+      uses: sarisia/actions-status-discord@v1
+      if: failure()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        username: Github Actions
 
   deploy:
     name: Deploy & Restart
@@ -268,4 +282,5 @@ jobs:
       if: always()
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        username: Github Actions
 

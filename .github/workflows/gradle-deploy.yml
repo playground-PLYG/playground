@@ -35,12 +35,12 @@ jobs:
       DEPLOY_ID: ${{ github.event.deployment.id}}
     
     steps:
-    - name: In-progress Status
-      uses: chrnorm/deployment-status@v2
-      with:
-        token: '${{ github.token }}'
-        state: 'in_progress'
-        deployment-id: ${{ env.DEPLOY_ID }}
+    #- name: In-progress Status
+    #  uses: chrnorm/deployment-status@v2
+    #  with:
+    #    token: '${{ github.token }}'
+    #    state: 'in_progress'
+    #    deployment-id: ${{ env.DEPLOY_ID }}
      
     - name: Checkout
       uses: actions/checkout@v3
@@ -86,13 +86,13 @@ jobs:
         report_paths: '**/build/test-results/test/TEST-*.xml'
         token: ${{ github.token }}
         
-    - name: Failure Status
-      if: failure()
-      uses: chrnorm/deployment-status@v2
-      with:
-        token: '${{ github.token }}'
-        state: 'failure'
-        deployment-id: ${{env.DEPLOY_ID}}
+    #- name: Failure Status
+    #  if: failure()
+    #  uses: chrnorm/deployment-status@v2
+    #  with:
+    #    token: '${{ github.token }}'
+    #    state: 'failure'
+    #    deployment-id: ${{env.DEPLOY_ID}}
         
     - name: Slack Notification
       if: failure()
@@ -153,13 +153,13 @@ jobs:
         path: build/libs/playground.jar
         retention-days: 14
         
-    - name: Failure Status
-      if: failure()
-      uses: chrnorm/deployment-status@v2
-      with:
-        token: '${{ github.token }}'
-        state: 'failure'
-        deployment-id: ${{env.DEPLOY_ID}}
+    #- name: Failure Status
+    #  if: failure()
+    #  uses: chrnorm/deployment-status@v2
+    #  with:
+    #    token: '${{ github.token }}'
+    #    state: 'failure'
+    #    deployment-id: ${{env.DEPLOY_ID}}
         
     - name: Slack Notification
       if: failure()
@@ -223,13 +223,13 @@ jobs:
     - name: Run Deploy Script
       run: gcloud compute ssh ${{ secrets.GCP_INSTANCE_NAME }} --zone "us-west1-b" --command "echo ${{ secrets.GCP_RUNNER_PASSWORD }} | sudo -S -u ${{ secrets.GCP_USER }} ${{ secrets.GCP_WORK_DIR }}/shell/deploy.sh"
           
-    - name: Success Status
-      if: success()
-      uses: chrnorm/deployment-status@v2
-      with:
-        token: '${{ github.token }}'
-        state: 'success'
-        deployment-id: ${{env.DEPLOY_ID}}
+    #- name: Success Status
+    #  if: success()
+    #  uses: chrnorm/deployment-status@v2
+    #  with:
+    #    token: '${{ github.token }}'
+    #    state: 'success'
+    #    deployment-id: ${{env.DEPLOY_ID}}
 
     - name: Failure Status
       if: failure()
@@ -263,7 +263,8 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_2BONO }}
         MATRIX_CONTEXT: ${{ toJson(matrix) }}
 
-    - uses: sarisia/actions-status-discord@v1
+    - name: Discord Notification
+      uses: sarisia/actions-status-discord@v1
       if: always()
       with:
         webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}

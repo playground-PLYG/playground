@@ -6,6 +6,7 @@ deployments:
   description: Development deploy
   on_push: true
   on_push_branch: master
+
     
 # Automatically trigger deploy on default branch passing
 # on_push: true

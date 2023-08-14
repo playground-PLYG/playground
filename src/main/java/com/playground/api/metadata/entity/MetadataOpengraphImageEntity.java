@@ -5,26 +5,39 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "metadata_keyword")
+@Table(name = "metadata_opengraph_image")
 public class MetadataOpengraphImageEntity extends BaseEntity {
+  /**
+   * seq
+   */
+  @Id
+  @Column
+  private String seq;
+
   /**
    * URL
    */
-  @Id
   @Column
   private String url;
 
   /**
-   * keyword
+   * image URL
    */
   @Column
-  private String keyword;
+  private String image;
+
+  @Builder
+  public MetadataOpengraphImageEntity(String seq, String url, String image) {
+    super();
+    this.seq = seq;
+    this.url = url;
+    this.image = image;
+  }
 }

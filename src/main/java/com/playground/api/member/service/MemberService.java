@@ -28,7 +28,7 @@ public class MemberService {
   private final MemberRepository memberRepository;
   private final ModelMapper modelMapper;
 
-  @Transactional()
+  @Transactional
   public SignUpResponse signUp(SignUpRequest req) {
     log.debug(">>> req : {}", req);
     MemberEntity rstMember = memberRepository.findByUserIdOrEmail(req.getUserId(), req.getEmail());

@@ -3,6 +3,7 @@ package com.playground.api.metadata.service;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.metadata.entity.MetadataEntity;
@@ -12,6 +13,7 @@ import com.playground.api.metadata.model.MetadataResponse;
 import com.playground.api.metadata.repository.MetadataKeywordRepository;
 import com.playground.api.metadata.repository.MetadataOpengraphImageRepository;
 import com.playground.api.metadata.repository.MetadataRepository;
+import com.playground.constants.CacheType;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,7 +24,7 @@ public class MetadataService {
   private final MetadataKeywordRepository metadataKeywordRepository;
   private final ModelMapper modelMapper;
 
-  // @Cacheable(cacheManager = CacheType.TEN_MINUTES, cacheNames = "metadata", key = "#url", unless = "#result == null")
+  @Cacheable(cacheManager = CacheType.TEN_MINUTES, cacheNames = "metadata", key = "#url", unless = "#result == null")
   @Transactional(readOnly = true)
   public MetadataResponse getMetadata(String url) {
     MetadataEntity metadata = metadataRepository.findById(url).orElse(null);

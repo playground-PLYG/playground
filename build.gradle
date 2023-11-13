@@ -43,7 +43,7 @@ dependencies {
 	implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager'
 	// implementation 'com.navercorp.lucy:lucy-xss-servlet:2.0.1' // spring boot 3.1.X 버전 업 하면서 lucy-xss-servlet-filter 내부의 javax 패키지 사용하는 부분이 있어서 임시 주석
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	implementation 'org.apache.commons:commons-text:1.10.0'
+	implementation 'org.apache.commons:commons-text:1.11.0'
 	implementation 'org.apache.poi:poi:5.2.4'
 	implementation 'org.apache.poi:poi-ooxml:5.2.4'
 	implementation 'org.json:json:20231013'

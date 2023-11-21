@@ -1,7 +1,7 @@
 # app.yaml
 
 runtime: java17
-entrypoint: 'java -jar ./build/libs/playground-0.0.1-SNAPSHOT.jar'
+entrypoint: 'java -jar -Dspring.profiles.active=dev ./build/libs/playground.jar'
 handlers:
   - url: /.*
     script: this field is required, but ignored

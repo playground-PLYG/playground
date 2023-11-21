@@ -21,7 +21,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.playground.constants.RedisSubscibeChannel;
 import com.playground.listener.RedisSeverSentEventsMessageSubscribeListener;
 import com.playground.listener.RedisWebSocketMessageSubscribeListener;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -38,6 +40,9 @@ public class RedisConfig {
   @Bean
   public RedisConnectionFactory redisConnectionFactory() {
     RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+
+    log.debug(">>> redisHost : {}", redisHost);
+    log.debug(">>> redisPort : {}", redisPort);
 
     redisStandaloneConfiguration.setHostName(redisHost);
     redisStandaloneConfiguration.setPort(redisPort);

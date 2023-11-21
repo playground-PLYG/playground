@@ -1,10 +1,11 @@
-# app.yaml
-
 runtime: java17
-entrypoint: 'java -jar -Dspring.profiles.active=dev ./build/libs/playground.jar'
+entrypoint: 'java -jar ./build/libs/playground.jar'
 handlers:
   - url: /.*
     script: this field is required, but ignored
 
 manual_scaling:
   instances: 1
+
+env_variables:
+ spring_profiles_active: "dev"

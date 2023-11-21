@@ -1,0 +1,124 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Build & Deploy to GAE
+
+on:
+  push: 
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  checks: write
+  pull-requests: write
+  actions: read
+  deployments: write
+  
+jobs:
+  test:
+    name: Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+            
+    runs-on: ${{ matrix.os }}
+    env:
+      SHA: ${{ github.event.deployment.sha }}
+      ENVIRONMENT: ${{ github.event.deployment.environment }}
+      DEPLOY_ID: ${{ github.event.deployment.id}}
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+          
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: temurin
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Make service.json
+      run: echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' > /home/runner/work/playground/playground/service.json
+      
+    - name: Build with Gradle
+      run: ./gradlew test
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: '/home/runner/work/playground/playground/service.json'
+        
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          build/test-results/**/*.xml
+
+    - name: Report JUnit test
+      uses: mikepenz/action-junit-report@v3
+      if: always()
+      with:
+        report_paths: '**/build/test-results/test/TEST-*.xml'
+        token: ${{ github.token }}
+        
+    - name: Discord Notification
+      uses: sarisia/actions-status-discord@v1
+      if: failure()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        username: GitHub Actions
+      
+  build:
+    name: Build
+    needs: test
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+            
+    runs-on: ${{ matrix.os }}
+    env:
+      SHA: ${{ github.event.deployment.sha }}
+      ENVIRONMENT: ${{ github.event.deployment.environment }}
+      DEPLOY_ID: ${{ github.event.deployment.id}}
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+          
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: temurin
+        cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+      
+    - name: Auth to GCP
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+          
+    - name: Deploy to App Engine
+      uses: google-github-actions/deploy-appengine@v1
+      with:
+        deliverables: build.gradle
+        project_id: ${{ secrets.PROJECT_ID }}
+        
+    - name: Discord Notification
+      uses: sarisia/actions-status-discord@v1
+      if: always()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        username: GitHub Actions

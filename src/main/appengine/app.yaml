@@ -1,0 +1,10 @@
+# app.yaml
+
+runtime: java17
+entrypoint: 'java -jar ./build/libs/playground-0.0.1-SNAPSHOT.jar'
+handlers:
+  - url: /.*
+    script: this field is required, but ignored
+
+manual_scaling:
+  instances: 1

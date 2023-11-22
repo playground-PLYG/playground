@@ -72,7 +72,7 @@ public class CodeController {
    * 코드 수정
    */
   @Operation(summary = "코드 수정", description = "코드 수정")
-  @PostMapping("/playground/public/code/codeUpdate")
+  @PostMapping("/public/code/codeUpdate")
   public ResponseEntity<BaseResponse<CodeResponse>> updateCodeList(@RequestBody @Valid CodeSearchRequest req) {
 	  
 	  LOGGER.debug("updateCodeList:::::::::::::::"+req);

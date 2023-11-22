@@ -1,5 +1,7 @@
 package com.playground.api.member.service;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -8,8 +10,11 @@ import org.springframework.util.ObjectUtils;
 
 import com.playground.api.member.entity.MemberEntity;
 import com.playground.api.member.entity.PgMemberEntity;
+import com.playground.api.member.entity.specification.MemberSpecification;
 import com.playground.api.member.model.GetEmailResponse;
 import com.playground.api.member.model.MemberInfoResponse;
+import com.playground.api.member.model.MemberResponse;
+import com.playground.api.member.model.MemberSearchRequest;
 import com.playground.api.member.model.PgSignUpRequest;
 import com.playground.api.member.model.PgSignUpResponse;
 import com.playground.api.member.model.SignInRequest;
@@ -31,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-
+	private final MemberSpecification memberSpecification;
 	private final MemberRepository memberRepository;
 	private final PgMemberRepository pgMemberRepository;
 	private final ModelMapper modelMapper;
@@ -101,5 +106,19 @@ public class MemberService {
 	
 	return modelMapper.map(member, PgSignUpResponse.class);
   }
+  
+
+  @Transactional(readOnly = true)
+  public List<MemberResponse> getMemeberList(MemberSearchRequest req) {   
+    List<PgMemberEntity> member = pgMemberRepository.findAll();
+  
+
+    log.debug(">>> member : {}", member);
+  
+    return member.stream().map(item -> modelMapper.map(item, MemberResponse.class)).toList();
+  }
+
+
 
 }
+

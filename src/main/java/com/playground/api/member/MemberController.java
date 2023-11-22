@@ -1,5 +1,9 @@
 package com.playground.api.member;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.playground.api.member.model.GetEmailResponse;
 import com.playground.api.member.model.MemberInfoResponse;
+import com.playground.api.member.model.MemberResponse;
+import com.playground.api.member.model.MemberSearchRequest;
 import com.playground.api.member.model.PgSignUpRequest;
 import com.playground.api.member.model.PgSignUpResponse;
 import com.playground.api.member.model.SignInRequest;
@@ -18,6 +24,8 @@ import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
 import com.playground.api.member.service.MemberService;
+import com.playground.api.menu.model.MenuResponse;
+import com.playground.api.menu.model.SaveMenuRequest;
 import com.playground.model.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,5 +85,15 @@ public class MemberController {
   public ResponseEntity<BaseResponse<PgSignUpResponse>> signup(@RequestBody @Valid PgSignUpRequest req) {
 	return ResponseEntity.ok(new BaseResponse<>(memberService.pgSignUp(req)));
   }
+  
+  /**
+   *회원 조회
+   */
+  @Operation(summary = "회원 조회", description = "회원 조회")
+  @PostMapping("/public/code/memberSearch")
+  public ResponseEntity<BaseResponse<List<MemberResponse>>> getMemberList(@RequestBody @Valid MemberSearchRequest req) {
+    return ResponseEntity.ok(new BaseResponse<>(memberService.getMemeberList(req)));
+  }
 
 }
+  

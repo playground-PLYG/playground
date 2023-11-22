@@ -10,7 +10,6 @@ import org.springframework.util.ObjectUtils;
 
 import com.playground.api.member.entity.MemberEntity;
 import com.playground.api.member.entity.PgMemberEntity;
-import com.playground.api.member.entity.specification.MemberSpecification;
 import com.playground.api.member.model.GetEmailResponse;
 import com.playground.api.member.model.MemberInfoResponse;
 import com.playground.api.member.model.MemberResponse;
@@ -36,7 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-	private final MemberSpecification memberSpecification;
 	private final MemberRepository memberRepository;
 	private final PgMemberRepository pgMemberRepository;
 	private final ModelMapper modelMapper;

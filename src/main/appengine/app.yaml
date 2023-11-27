@@ -5,13 +5,13 @@ runtime: java17
 #env: flex
 instance_class: F1
 entrypoint: 'java -jar ./build/libs/playground.jar'
-handlers:
-  - url: /.*
-    script: this field is required, but ignored
+#handlers:
+#  - url: /.*
+#    script: this field is required, but ignored
 
 automatic_scaling:
   min_num_instances: 1
-  max_num_instances: 0
+  max_num_instances: 1
 
 env_variables:
  spring_profiles_active: "dev"

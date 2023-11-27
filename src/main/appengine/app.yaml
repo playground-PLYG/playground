@@ -2,7 +2,7 @@ runtime: java
 runtime_config:
     operating_system: "ubuntu22"
     runtime_version: "17"
-env: flex
+#env: flex
 instance_class: F1
 entrypoint: 'java -jar ./build/libs/playground.jar'
 handlers:

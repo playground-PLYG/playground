@@ -5,9 +5,9 @@ runtime: java17
 #env: flex
 instance_class: F1
 entrypoint: 'java -jar ./build/libs/playground.jar'
-#handlers:
-#  - url: /.*
-#    script: this field is required, but ignored
+handlers:
+  - url: /.*
+    script: this field is required, but ignored
 
 automatic_scaling:
   min_instances: 1

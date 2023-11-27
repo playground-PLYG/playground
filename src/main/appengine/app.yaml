@@ -1,7 +1,7 @@
-runtime: java
-runtime_config:
-    operating_system: "ubuntu22"
-    runtime_version: "17"
+runtime: java17
+#runtime_config:
+#    operating_system: "ubuntu22"
+#    runtime_version: "17"
 #env: flex
 instance_class: F1
 entrypoint: 'java -jar ./build/libs/playground.jar'
@@ -9,9 +9,9 @@ handlers:
   - url: /.*
     script: this field is required, but ignored
 
-automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 1
+#automatic_scaling:
+#  min_num_instances: 1
+#  max_num_instances: 1
 
 env_variables:
  spring_profiles_active: "dev"

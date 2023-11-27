@@ -9,9 +9,9 @@ handlers:
   - url: /.*
     script: this field is required, but ignored
 
-#automatic_scaling:
-#  min_num_instances: 1
-#  max_num_instances: 1
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 0
 
 env_variables:
  spring_profiles_active: "dev"

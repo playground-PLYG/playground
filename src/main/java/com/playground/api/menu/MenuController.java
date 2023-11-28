@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.menu.model.MenuResponse;
 import com.playground.api.menu.model.SaveMenuRequest;
+import com.playground.api.menu.model.SearchMenuRequest;
 import com.playground.api.menu.service.MenuService;
 import com.playground.model.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,6 +50,15 @@ public class MenuController {
   @PostMapping("/public/menu/save")
   public ResponseEntity<BaseResponse<MenuResponse>> saveMenu(@RequestBody @Valid SaveMenuRequest request) {
     return ResponseEntity.ok(new BaseResponse<>(menuService.saveMenu(request)));
+  }
+
+  /**
+   * 조건별 메뉴 조회
+   */
+  @Operation(summary = "조건별 메뉴 조회", description = "조건별 메뉴 조회")
+  @PostMapping("/public/menu/select-by-condition")
+  public ResponseEntity<BaseResponse<List<MenuResponse>>> selectByCondition(@RequestBody @Valid SearchMenuRequest request) {
+    return ResponseEntity.ok(new BaseResponse<>(menuService.selectByCondition(request)));
   }
 }
 

@@ -5,10 +5,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.menu.entity.MenuEntity;
+import com.playground.api.menu.entity.specification.MenuSpecification;
 import com.playground.api.menu.model.MenuResponse;
 import com.playground.api.menu.model.SaveMenuRequest;
+import com.playground.api.menu.model.SearchMenuRequest;
 import com.playground.api.menu.repository.MenuRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,23 +19,23 @@ import lombok.extern.slf4j.Slf4j;
 public class MenuService {
 
   private final MenuRepository menuRepository;
+  private final MenuSpecification menuSpecification;
   private final ModelMapper modelMapper;
 
   @Transactional(readOnly = true)
-  public List<MenuResponse> selectMenu() {   
+  public List<MenuResponse> selectMenu() {
     List<MenuEntity> entityList = menuRepository.findByUseYnOrderByMenuId("Y");
     return entityList.stream().map(item -> modelMapper.map(item, MenuResponse.class)).toList();
   }
 
   @Transactional(readOnly = true)
-  public List<MenuResponse> selectAllMenu() {   
+  public List<MenuResponse> selectAllMenu() {
     List<MenuEntity> entityList = menuRepository.findAllByOrderByMenuId();
     return entityList.stream().map(item -> modelMapper.map(item, MenuResponse.class)).toList();
   }
 
   @Transactional
   public MenuResponse saveMenu(SaveMenuRequest request) {
-    log.debug("request: {}", request);  
     MenuEntity entity = MenuEntity.builder()
                                   .menuId(request.getMenuId())
                                   .menuNm(request.getMenuNm())
@@ -49,5 +50,16 @@ public class MenuService {
     log.debug("result entity: {}", entity);
     
     return modelMapper.map(entity, MenuResponse.class);
+  }
+
+  @Transactional(readOnly = true)
+  public List<MenuResponse> selectByCondition(SearchMenuRequest request) {
+    MenuEntity entity = MenuEntity.builder()
+                                  .menuNm(request.getMenuNm())
+                                  .menuUrl(request.getMenuUrl())
+                                  .useYn(request.getUseYn())
+                                  .build();
+    List<MenuEntity> entityList = menuRepository.findAll(menuSpecification.searchCondition(entity));
+    return entityList.stream().map(item -> modelMapper.map(item, MenuResponse.class)).toList();
   }
 }

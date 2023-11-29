@@ -27,6 +27,7 @@ public class MenuController {
 
   /**
    * 메뉴 조회
+   * @return List<MenuResponse> 메뉴 리스트
    */
   @Operation(summary = "메뉴 조회", description = "메뉴 조회")
   @GetMapping("/public/menu/select")
@@ -36,6 +37,7 @@ public class MenuController {
   
   /**
    * 전체 메뉴 목록 조회
+   * @return List<MenuResponse> 메뉴 리스트
    */
   @Operation(summary = "전체 메뉴 목록 조회", description = "전체 메뉴 목록 조회")
   @GetMapping("/public/menu/select-all")
@@ -45,6 +47,8 @@ public class MenuController {
 
   /**
    * 메뉴 저장
+   * @param SaveMenuRequest 메뉴 저장을 위한 request
+   * @return MenuResponse 단일 메뉴
    */
   @Operation(summary = "메뉴 저장", description = "메뉴 수정/저장")
   @PostMapping("/public/menu/save")
@@ -54,6 +58,8 @@ public class MenuController {
 
   /**
    * 조건별 메뉴 조회
+   * @param SearchMenuRequest 메뉴 조회를 위한 request. menuNm, menuUrl, useYn 세 항목에 대해서만 값이 존재
+   * @return List<MenuResponse> 메뉴 리스트
    */
   @Operation(summary = "조건별 메뉴 조회", description = "조건별 메뉴 조회")
   @PostMapping("/public/menu/select-by-condition")

@@ -8,6 +8,7 @@ import com.playground.api.sample.entity.SampleUserEntity;
 
 @Component
 public class MenuSpecification {
+  /** 조건별 메뉴 조회 */
   public Specification<MenuEntity> searchCondition(MenuEntity menuEntity) {
     Specification<MenuEntity> spec = (root, query, criteriaBuilder) -> null;
 

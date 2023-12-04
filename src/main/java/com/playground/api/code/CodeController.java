@@ -1,11 +1,12 @@
 package com.playground.api.code;
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,15 +36,22 @@ public class CodeController {
    */
   @Operation(summary = "코드 조회", description = "코드 조회")
   @PostMapping("/public/code/codeSearch")
-  public ResponseEntity<BaseResponse<Page<CodeResponse>>> getCodeList(@RequestBody @Valid CodeSearchRequest req,
-      Pageable pageable) {
+  public ResponseEntity<BaseResponse<List<CodeResponse>>> getCodeList(@RequestBody @Valid CodeSearchRequest req) {
 	  
 	  LOGGER.debug("CodeSearchRequest:::::::::::::::"+req);
 
-    return ResponseEntity.ok(new BaseResponse<>(codeService.getCodePageList(req, pageable)));
+    return ResponseEntity.ok(new BaseResponse<>(codeService.getCodePageList(req)));
   }
   
-  
+  /**
+   * 상위 조회
+   */
+  @Operation(summary = "상위코드id조회", description = "상위코드id 조회")
+  @GetMapping("/public/code/selectUpCodeid")
+  public ResponseEntity<BaseResponse<List<CodeResponse>>> selectUpCodeid() {
+    return ResponseEntity.ok(new BaseResponse<>(codeService.selectUpCodeid()));
+  }
+
   /**
    * 코드 삭제
    */
@@ -57,7 +65,7 @@ public class CodeController {
   }
   
   /**
-   * 코드 등록
+   * 코드 등록/수정
    */
   @Operation(summary = "코드 등록", description = "코드 등록")
   @PostMapping("/public/code/codeSave")
@@ -68,17 +76,7 @@ public class CodeController {
 	  	return ResponseEntity.ok(new BaseResponse<>(codeService.saveCodeList(req)));	
   }
   
-  /**
-   * 코드 수정
-   */
-  @Operation(summary = "코드 수정", description = "코드 수정")
-  @PostMapping("/public/code/codeUpdate")
-  public ResponseEntity<BaseResponse<CodeResponse>> updateCodeList(@RequestBody @Valid CodeSearchRequest req) {
-	  
-	  LOGGER.debug("updateCodeList:::::::::::::::"+req);
-	  	
-	  	return ResponseEntity.ok(new BaseResponse<>(codeService.updateCodeList(req)));	
-  }
+
 
 }
 

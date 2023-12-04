@@ -6,10 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-@Schema(name = "SignResponse", description = "응답 데이터")
+@Schema(name = "CodeResponse", description = "응답 데이터")
 @Getter
 @Setter
 public class CodeResponse extends BaseDto {
+	
+	 @Schema(description = "일련번호")
+	 private String sn;
 
 	 @Schema(description = "코드ID")
 	 private String cdId;

@@ -10,6 +10,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.playground.api.member.entity.MemberEntity;
 import com.playground.api.member.entity.PgMemberEntity;
+import com.playground.api.member.entity.specification.MemberSpecification;
 import com.playground.api.member.model.GetEmailResponse;
 import com.playground.api.member.model.MemberInfoResponse;
 import com.playground.api.member.model.MemberResponse;
@@ -35,9 +36,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+	private final MemberSpecification memberSpecification;
 	private final MemberRepository memberRepository;
 	private final PgMemberRepository pgMemberRepository;
 	private final ModelMapper modelMapper;
+
 
   @Transactional
   public SignUpResponse signUp(SignUpRequest req) {
@@ -106,12 +109,17 @@ public class MemberService {
   }
   
 
-  @Transactional(readOnly = true)
-  public List<MemberResponse> getMemeberList(MemberSearchRequest req) {   
-    List<PgMemberEntity> member = pgMemberRepository.findAll();
-  
 
-    log.debug(">>> member : {}", member);
+  
+  public List<MemberResponse> getMemeberList(MemberSearchRequest req) {   
+	  
+	  PgMemberEntity pgEntity = modelMapper.map(req, PgMemberEntity.class);
+	  
+	    log.debug(">>> pgEntity : {}", pgEntity);
+	    
+	  List<PgMemberEntity> member = pgMemberRepository.findAll(memberSpecification.searchCondition(pgEntity));
+	  
+	  	log.debug(">>> member : {}", member);
   
     return member.stream().map(item -> modelMapper.map(item, MemberResponse.class)).toList();
   }

@@ -11,6 +11,9 @@ import lombok.Setter;
 @Setter
 public class CodeSearchRequest extends BaseDto {
 
+	@Schema(description = "일련번호")
+	private String sn;
+	
 	@Schema(description = "코드ID")
 	private String cdId;
   

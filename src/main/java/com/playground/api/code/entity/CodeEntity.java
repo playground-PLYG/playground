@@ -1,18 +1,18 @@
 package com.playground.api.code.entity;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import com.playground.entity.BaseEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
@@ -26,11 +26,20 @@ import lombok.Setter;
 @Entity
 @Table(name = "tb_code")
 public class CodeEntity extends BaseEntity {
+	
+  /**
+   * 일련번호
+   */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "sn")
+  private String sn;	
+	
+	
 
   /**
    * 코드id
    */
-  @Id
   @Column(name = "cd_id")
   private String cdId;
   
@@ -92,8 +101,9 @@ public class CodeEntity extends BaseEntity {
   
 
   @Builder
-  public CodeEntity(String cdId, String cdNm,String upCdId, String groupCdYn, String sortSn, String regMbrNo, Timestamp regDt, String mdfcnMbrNo, Timestamp dfcnDt ) {
+  public CodeEntity(String sn,String cdId, String cdNm,String upCdId, String groupCdYn, String sortSn, String regMbrNo, Timestamp regDt, String mdfcnMbrNo, Timestamp dfcnDt ) {
     super();
+    this.sn = sn;
     this.cdId = cdId;
     this.cdNm = cdNm;
     this.upCdId = upCdId;

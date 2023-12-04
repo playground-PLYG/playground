@@ -9,10 +9,10 @@ import lombok.Setter;
 @Schema(name = "MemberRequest", description = "요청 데이터")
 @Getter
 @Setter
-public class MemberSearchRequest {
+public class MemberSearchRequest  extends BaseDto {
 	
 	 @Schema(description = "회원번호")
-	 private String mbrNo;
+	 private Integer mbrNo;
 	 
 	 @Schema(description = "회원명")
 	 private String mbrNm;

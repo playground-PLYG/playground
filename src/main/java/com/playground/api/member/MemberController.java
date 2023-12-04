@@ -2,8 +2,8 @@ package com.playground.api.member;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.playground.api.code.CodeController;
 import com.playground.api.member.model.GetEmailResponse;
 import com.playground.api.member.model.MemberInfoResponse;
 import com.playground.api.member.model.MemberResponse;
@@ -24,15 +25,16 @@ import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
 import com.playground.api.member.service.MemberService;
-import com.playground.api.menu.model.MenuResponse;
-import com.playground.api.menu.model.SaveMenuRequest;
 import com.playground.model.BaseResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 @Tag(name = "member", description = "회원 API")
 @RestController
 @RequiredArgsConstructor
@@ -40,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
   private final MemberService memberService;
+  private final Logger LOGGER = LoggerFactory.getLogger(CodeController.class.getName());
 
   /**
    * 회원가입
@@ -90,8 +93,11 @@ public class MemberController {
    *회원 조회
    */
   @Operation(summary = "회원 조회", description = "회원 조회")
-  @PostMapping("/public/code/memberSearch")
+  @PostMapping("/public/pgMember/memberSearch")
   public ResponseEntity<BaseResponse<List<MemberResponse>>> getMemberList(@RequestBody @Valid MemberSearchRequest req) {
+	  
+	    log.debug(">>> 회원조회 : {}", req);
+	  
     return ResponseEntity.ok(new BaseResponse<>(memberService.getMemeberList(req)));
   }
 

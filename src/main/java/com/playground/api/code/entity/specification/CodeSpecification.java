@@ -21,7 +21,8 @@ public class CodeSpecification {
         }
 
      if (StringUtils.isNotBlank(codeEntity.getUpCdId())) {
-          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("upCdId"), codeEntity.getUpCdId() + "%"));
+          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cdNm"), codeEntity.getUpCdId() + "%"));
+          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("groupCdYn"), "Y"));
         }
      
      if (StringUtils.isNotBlank(codeEntity.getGroupCdYn())) {

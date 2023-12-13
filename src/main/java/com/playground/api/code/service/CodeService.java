@@ -64,11 +64,23 @@ public class CodeService {
    * 코드등록/수정
    */
   public CodeResponse saveCodeList(CodeSearchRequest req) {
-	   
+	  
+	  String groupCdYn =  req.getGroupCdYn();
+	  log.debug("groupCdYn: {}", groupCdYn);
+	  
+	  if(groupCdYn.equals("N")) {
+		  String up =  req.getUpCdId();
+		  CodeEntity upCode = codeRepository.findByCdNm(up);
+		  log.debug("upCode: {}", upCode.getCdId());
+		  log.debug("upCode: {}", upCode);
+		  
+		  req.setUpCdId(upCode.getCdId());
+	  }
+	  
 	  CodeEntity codeEntity = modelMapper.map(req, CodeEntity.class);
 		  
 	  CodeEntity saveCode = codeRepository.save(codeEntity);
-		  
+
 	  return  modelMapper.map(saveCode, CodeResponse.class);  	  
 	  
   }

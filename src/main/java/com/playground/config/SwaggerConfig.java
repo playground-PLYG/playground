@@ -1,10 +1,17 @@
 package com.playground.config;
 
-import org.springdoc.core.models.GroupedOpenApi;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.customizers.OperationCustomizer;
+import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
+import com.playground.utils.ProfileUtil;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -14,9 +21,18 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 public class SwaggerConfig {
+  @Autowired
+  private ServerProperties serverProperties;
+
+  @Autowired
+  private ProfileUtil profileUtil;
+
   @Bean
   public GroupedOpenApi publicApi() {
     return GroupedOpenApi.builder().group("playground").pathsToMatch("/playground/**").build();
@@ -26,6 +42,32 @@ public class SwaggerConfig {
   public OpenAPI openAPI() {
 
     Info info = new Info().version("v1.0.0").title("Playground API").description("playground 프로젝트 API 명세서");
+
+    Server server = null;
+
+    try {
+      String hostname = InetAddress.getLocalHost().getHostName();
+
+      if (StringUtils.isNotBlank(hostname)) {
+        server = new Server();
+
+        String port = String.valueOf(serverProperties.getPort());
+
+        if (profileUtil.isLocal()) {
+          hostname = "http://localhost";
+        } else {
+          hostname = "https://" + hostname;
+        }
+
+        if (StringUtils.isNotBlank(port)) {
+          hostname += ":" + port;
+        }
+
+        server.setUrl(hostname);
+      }
+    } catch (UnknownHostException e) {
+      log.error("UnknownHost", e);
+    }
 
     // SecurityScheme 명
     String jwtSchemeName = "jwtAuth";
@@ -37,7 +79,13 @@ public class SwaggerConfig {
     Components components = new Components().addSecuritySchemes(jwtSchemeName, new SecurityScheme().name(jwtSchemeName).type(SecurityScheme.Type.HTTP) // HTTP 방식
         .scheme("bearer").bearerFormat("JWT")); // 토큰 형식을 지정하는 임의의 문자(Optional)
 
-    return new OpenAPI().info(info).addSecurityItem(securityRequirement).components(components);
+    OpenAPI openApi = new OpenAPI().info(info).addSecurityItem(securityRequirement).components(components);
+
+    if (server != null) {
+      openApi.servers(List.of(server));
+    }
+
+    return openApi;
   }
 
   // 전역 설정 필요 시 사용

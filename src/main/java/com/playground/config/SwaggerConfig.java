@@ -53,14 +53,18 @@ public class SwaggerConfig {
 
         String port = String.valueOf(serverProperties.getPort());
 
+        log.debug(">>> hostname : {}", hostname);
+        log.debug(">>> getActiveProfile : {}", profileUtil.getActiveProfile());
+        log.debug(">>> isLocal : {}", profileUtil.isLocal());
+
         if (profileUtil.isLocal()) {
           hostname = "http://localhost";
+
+          if (StringUtils.isNotBlank(port)) {
+            hostname += ":" + port;
+          }
         } else {
           hostname = "https://" + hostname;
-        }
-
-        if (StringUtils.isNotBlank(port)) {
-          hostname += ":" + port;
         }
 
         server.setUrl(hostname);

@@ -56,6 +56,8 @@ public class SwaggerConfig {
         log.debug(">>> hostname : {}", hostname);
         log.debug(">>> getActiveProfile : {}", profileUtil.getActiveProfile());
         log.debug(">>> isLocal : {}", profileUtil.isLocal());
+        log.debug(">>> GAE_INSTANCE : {}", System.getenv("GAE_INSTANCE"));
+        log.debug(">>> HOSTNAME : {}", System.getenv("HOSTNAME"));
 
         if (profileUtil.isLocal()) {
           hostname = "http://localhost";

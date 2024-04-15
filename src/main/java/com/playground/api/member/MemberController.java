@@ -1,9 +1,6 @@
 package com.playground.api.member;
 
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.playground.api.code.CodeController;
 import com.playground.api.member.model.GetEmailResponse;
 import com.playground.api.member.model.MemberInfoResponse;
 import com.playground.api.member.model.MemberResponse;
@@ -26,7 +21,6 @@ import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
 import com.playground.api.member.service.MemberService;
 import com.playground.model.BaseResponse;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -42,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
   private final MemberService memberService;
-  private final Logger LOGGER = LoggerFactory.getLogger(CodeController.class.getName());
 
   /**
    * 회원가입
@@ -77,7 +70,7 @@ public class MemberController {
   @Operation(summary = "회원 여부 조회", description = "회원 여부 조회")
   @GetMapping("/public/pgMember/get-email")
   public ResponseEntity<BaseResponse<GetEmailResponse>> getEmail(@RequestParam String email) {
-	return ResponseEntity.ok(new BaseResponse<>(memberService.getEmail(email)));
+    return ResponseEntity.ok(new BaseResponse<>(memberService.getEmail(email)));
   }
 
   /**
@@ -86,20 +79,20 @@ public class MemberController {
   @Operation(summary = "회원 가입", description = "회원 등록")
   @PostMapping("/public/pgMember/sign-up")
   public ResponseEntity<BaseResponse<PgSignUpResponse>> signup(@RequestBody @Valid PgSignUpRequest req) {
-	return ResponseEntity.ok(new BaseResponse<>(memberService.pgSignUp(req)));
+    return ResponseEntity.ok(new BaseResponse<>(memberService.pgSignUp(req)));
   }
-  
+
   /**
-   *회원 조회
+   * 회원 조회
    */
   @Operation(summary = "회원 조회", description = "회원 조회")
   @PostMapping("/public/pgMember/memberSearch")
   public ResponseEntity<BaseResponse<List<MemberResponse>>> getMemberList(@RequestBody @Valid MemberSearchRequest req) {
-	  
-	    log.debug(">>> 회원조회 : {}", req);
-	  
+
+    log.debug(">>> 회원조회 : {}", req);
+
     return ResponseEntity.ok(new BaseResponse<>(memberService.getMemeberList(req)));
   }
 
 }
-  
+

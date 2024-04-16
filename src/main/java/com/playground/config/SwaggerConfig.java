@@ -2,7 +2,9 @@ package com.playground.config;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -62,6 +64,14 @@ public class SwaggerConfig {
         log.debug(">>> com.google.appengine.api.url.host : {}", System.getenv("com.google.appengine.api.url.host"));
         log.debug(">>> SystemProperty.applicationId.get() : {}", SystemProperty.applicationId.get());
 
+        Properties props = System.getProperties();
+        Enumeration<Object> enumm = props.keys();
+        while (enumm.hasMoreElements()) {
+          String key = (String) enumm.nextElement();
+          String value = (String) props.get(key);
+          System.out.println("# " + key + " : " + value);
+          log.debug(">>> property - {} : {}", key, value);
+        }
 
         if (profileUtil.isLocal()) {
           hostname = "http://localhost";

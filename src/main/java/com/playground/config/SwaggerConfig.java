@@ -62,6 +62,7 @@ public class SwaggerConfig {
         log.debug(">>> com.google.appengine.api.url.host : {}", System.getenv("com.google.appengine.api.url.host"));
         log.debug(">>> SystemProperty.applicationId.get() : {}", SystemProperty.applicationId.get());
 
+
         if (profileUtil.isLocal()) {
           hostname = "http://localhost";
 

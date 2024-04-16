@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
+import com.google.appengine.api.utils.SystemProperty;
 import com.playground.utils.ProfileUtil;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.models.Components;
@@ -58,6 +59,8 @@ public class SwaggerConfig {
         log.debug(">>> isLocal : {}", profileUtil.isLocal());
         log.debug(">>> GAE_INSTANCE : {}", System.getenv("GAE_INSTANCE"));
         log.debug(">>> HOSTNAME : {}", System.getenv("HOSTNAME"));
+        log.debug(">>> com.google.appengine.api.url.host : {}", System.getenv("com.google.appengine.api.url.host"));
+        log.debug(">>> SystemProperty.applicationId.get() : {}", SystemProperty.applicationId.get());
 
         if (profileUtil.isLocal()) {
           hostname = "http://localhost";

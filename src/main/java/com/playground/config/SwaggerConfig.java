@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,19 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 public class SwaggerConfig {
-  @Autowired
-  private ServerProperties serverProperties;
-
-  @Autowired
-  private ProfileUtil profileUtil;
-
   @Bean
   public GroupedOpenApi publicApi() {
     return GroupedOpenApi.builder().group("playground").pathsToMatch("/playground/**").build();
   }
 
   @Bean
-  public OpenAPI openAPI() {
+  public OpenAPI openAPI(ServerProperties serverProperties, ProfileUtil profileUtil) {
 
     Info info = new Info().version("v1.0.0").title("Playground API").description("playground 프로젝트 API 명세서");
 

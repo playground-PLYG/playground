@@ -71,7 +71,7 @@ public class JwtFilter extends OncePerRequestFilter {
     String token = extractToken(authorizationHeader);
 
     try {
-      return Jwts.parserBuilder().setSigningKey(JwtTokenUtil.getKey()).build().parseClaimsJws(token).getBody();
+      return Jwts.parser().verifyWith(JwtTokenUtil.getKey()).build().parseSignedClaims(token).getPayload();
     } catch (Exception e) {
       throw new CustomException(MessageUtils.NOT_VERIFICATION_TOKEN);
     }

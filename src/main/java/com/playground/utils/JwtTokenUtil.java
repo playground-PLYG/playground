@@ -1,16 +1,17 @@
 package com.playground.utils;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.crypto.SecretKey;
 import org.springframework.util.StringUtils;
 import com.playground.api.member.model.MemberInfoResponse;
 import com.playground.constants.PlaygroundConstants;
 import com.playground.exception.CustomException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -19,16 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 @UtilityClass
 public class JwtTokenUtil {
   private static final String USER_ID = "userId";
+  
+  private static final String secretKey = "PlaygroundTestKey256SecreyKeyTestKeyYamlfhQodigka256e39djf"; // 이거 좋은 방법 없나 확인 필요
 
-  private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+  private static final SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 
   // 토큰 생성
   public static String createToken(String userId, String name) {
-
-    Map<String, Object> headers = new HashMap<>();
-
-    headers.put("typ", "JWT");
-    headers.put("alg", "HS256");
 
     Map<String, Object> payloads = new HashMap<>();
 
@@ -42,12 +40,13 @@ public class JwtTokenUtil {
     Date ext = new Date(); // 토큰 만료 시간
     ext.setTime(ext.getTime() + expiredTime);
 
-    return Jwts.builder().setHeader(headers) // Headers 설정
-        .setClaims(payloads) // Claims 설정
-        .setIssuer("issuer") // 발급자
-        .setSubject("auth") // 토큰 용도
-        .setExpiration(ext) // 토큰 만료 시간 설정
-        .signWith(key).compact(); // 토큰 생성
+    return Jwts.builder()
+        .claims(payloads) // Claims 설정
+        .issuer("issuer") // 발급자
+        .subject("auth") // 토큰 용도
+        .expiration(ext) // 토큰 만료 시간 설정
+        .signWith(key)
+        .compact(); // 토큰 생성
   }
 
   /**
@@ -62,7 +61,7 @@ public class JwtTokenUtil {
    */
   private static Claims getAllClaims(String token) {
     try {
-      return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+      return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     } catch (Exception e) {
       throw new CustomException(MessageUtils.NOT_VERIFICATION_TOKEN);
     }
@@ -121,7 +120,7 @@ public class JwtTokenUtil {
     return rs;
   }
 
-  public static Key getKey() {
+  public static SecretKey getKey() {
     return key;
   }
 }

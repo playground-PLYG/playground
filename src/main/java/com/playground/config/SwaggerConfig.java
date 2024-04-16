@@ -2,10 +2,7 @@ package com.playground.config;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -14,7 +11,6 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
-import com.google.appengine.api.utils.SystemProperty;
 import com.playground.utils.ProfileUtil;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.models.Components;
@@ -57,27 +53,6 @@ public class SwaggerConfig {
 
         String port = String.valueOf(serverProperties.getPort());
 
-        log.debug(">>> hostname : {}", hostname);
-        log.debug(">>> getActiveProfile : {}", profileUtil.getActiveProfile());
-        log.debug(">>> isLocal : {}", profileUtil.isLocal());
-        log.debug(">>> GAE_INSTANCE : {}", System.getenv("GAE_INSTANCE"));
-        log.debug(">>> HOSTNAME : {}", System.getenv("HOSTNAME"));
-        log.debug(">>> com.google.appengine.api.url.host : {}", System.getenv("com.google.appengine.api.url.host"));
-        log.debug(">>> SystemProperty.applicationId.get() : {}", SystemProperty.applicationId.get());
-
-        Properties props = System.getProperties();
-        Enumeration<Object> enumm = props.keys();
-        while (enumm.hasMoreElements()) {
-          String key = (String) enumm.nextElement();
-          String value = (String) props.get(key);
-          log.debug(">>> property -- {} : {}", key, value);
-        }
-
-        Map<String, String> envs = System.getenv();
-        envs.entrySet().stream().forEach(env -> {
-          log.debug(">>> env --- {} : {}", env.getKey(), env.getValue());
-        });
-
         if (profileUtil.isLocal()) {
           hostname = "http://localhost";
 
@@ -85,7 +60,7 @@ public class SwaggerConfig {
             hostname += ":" + port;
           }
         } else {
-          hostname = "https://" + hostname;
+          hostname = "https://" + System.getenv("GOOGLE_CLOUD_PROJECT") + ".uw.r.appspot.com";
         }
 
         server.setUrl(hostname);

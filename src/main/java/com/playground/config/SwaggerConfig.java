@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.springdoc.core.customizers.OperationCustomizer;
@@ -69,9 +70,13 @@ public class SwaggerConfig {
         while (enumm.hasMoreElements()) {
           String key = (String) enumm.nextElement();
           String value = (String) props.get(key);
-          System.out.println("# " + key + " : " + value);
-          log.debug(">>> property - {} : {}", key, value);
+          log.debug(">>> property -- {} : {}", key, value);
         }
+
+        Map<String, String> envs = System.getenv();
+        envs.entrySet().stream().forEach(env -> {
+          log.debug(">>> env --- {} : {}", env.getKey(), env.getValue());
+        });
 
         if (profileUtil.isLocal()) {
           hostname = "http://localhost";

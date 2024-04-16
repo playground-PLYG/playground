@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import com.playground.api.menu.entity.MenuEntity;
-import com.playground.api.sample.entity.SampleUserEntity;
 
 @Component
 public class MenuSpecification {
@@ -16,7 +15,7 @@ public class MenuSpecification {
       String menuNm = menuEntity.getMenuNm();
       String menuUrl = menuEntity.getMenuUrl();
       String useYn = menuEntity.getUseYn();
-      
+
       if (StringUtils.isNotBlank(menuNm)) {
         spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("menuNm"), "%" + menuNm + "%"));
       }

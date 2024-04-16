@@ -1,14 +1,23 @@
 package com.playground.api.sample;
 
-import com.playground.api.sample.model.RequestMappingExcelDownResponse;
-import com.playground.api.sample.model.RequestMappingResponse;
-import com.playground.model.BaseResponse;
-import com.playground.utils.ExcelDownUtil;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -21,12 +30,12 @@ import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.*;
+import com.playground.api.sample.model.RequestMappingExcelDownResponse;
+import com.playground.api.sample.model.RequestMappingResponse;
+import com.playground.utils.ExcelDownUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @Tag(name = "request-mapping", description = "RequestMapping 샘플 API")
 @RestController
@@ -41,7 +50,7 @@ public class RequestMappingController {
   @Operation(summary = "requestMapping 정보 조회",
       description = "RequestMappingHandlerMapping를 활용해서 request의 url, http method, class명, method, parameter, return type등 정보를 조회")
   @GetMapping
-  public ResponseEntity<BaseResponse<Map<String, RequestMappingResponse>>> getRequestMappings() { // NOSONAR
+  public Map<String, RequestMappingResponse> getRequestMappings() { // NOSONAR
     ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
     Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping.getHandlerMethods();
     Map<String, RequestMappingResponse> resultMap = new HashMap<>();
@@ -113,7 +122,7 @@ public class RequestMappingController {
       }
     }
 
-    return ResponseEntity.ok(new BaseResponse<>(new TreeMap<>(resultMap)));
+    return new TreeMap<>(resultMap);
   }
 
   /**

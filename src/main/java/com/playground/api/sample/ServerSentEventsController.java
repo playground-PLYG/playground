@@ -1,7 +1,5 @@
 package com.playground.api.sample;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,10 +26,8 @@ public class ServerSentEventsController {
    */
   @Operation(summary = "sse 메시지 발송", description = "sse의 연결된 사용자(id)에게 메시지 전송")
   @PostMapping("/send-message")
-  public ResponseEntity<Void> sendMessage(@RequestBody SseDto sseDto) {
+  public void sendMessage(@RequestBody SseDto sseDto) {
     serverSentEventsService.sendMessage(sseDto);
-
-    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   /**

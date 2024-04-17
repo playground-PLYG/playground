@@ -1,4 +1,4 @@
-package com.playground.api.menu;
+package com.playground.api.menu.controller;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;

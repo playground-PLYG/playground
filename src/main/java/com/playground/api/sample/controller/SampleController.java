@@ -1,4 +1,4 @@
-package com.playground.api.sample;
+package com.playground.api.sample.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,4 +1,4 @@
-package com.playground.api.sample;
+package com.playground.api.sample.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

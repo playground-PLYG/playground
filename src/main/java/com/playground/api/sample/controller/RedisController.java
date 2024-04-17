@@ -1,4 +1,4 @@
-package com.playground.api.sample;
+package com.playground.api.sample.controller;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -1,4 +1,4 @@
-package com.playground.api.sample;
+package com.playground.api.sample.controller;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;

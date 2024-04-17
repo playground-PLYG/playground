@@ -1,4 +1,4 @@
-package com.playground.api.member;
+package com.playground.api.member.controller;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;

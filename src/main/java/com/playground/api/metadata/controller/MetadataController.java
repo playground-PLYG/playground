@@ -1,4 +1,4 @@
-package com.playground.api.metadata;
+package com.playground.api.metadata.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

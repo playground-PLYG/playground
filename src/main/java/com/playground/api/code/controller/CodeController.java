@@ -1,4 +1,4 @@
-package com.playground.api.code;
+package com.playground.api.code.controller;
 
 
 import java.util.List;

@@ -16,23 +16,23 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.playground.annotation.Secret;
 import com.playground.constants.PlaygroundConstants;
 import com.playground.utils.MaskingUtil;
-import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class BaseEntity {
-  @Schema(description = "등록사용자id")
+  @Column(name = "regist_usr_id")
   private String registUsrId;
 
-  @Schema(description = "등록일시")
+  @Column(name = "regist_dt")
   private LocalDateTime registDt;
 
-  @Schema(description = "수정사용자id")
+  @Column(name = "updt_usr_id")
   private String updtUsrId;
 
-  @Schema(description = "수정일시")
+  @Column(name = "updt_dt")
   private LocalDateTime updtDt;
 
   @Override

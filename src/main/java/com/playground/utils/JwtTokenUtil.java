@@ -1,7 +1,6 @@
 package com.playground.utils;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @UtilityClass
 public class JwtTokenUtil {
   private static final String USER_ID = "mberId";
-  
+
   private static final String secretKey = "PlaygroundTestKey256SecreyKeyTestKeyYamlfhQodigka256e39djf"; // 이거 좋은 방법 없나 확인 필요
 
   private static final SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
@@ -40,13 +39,11 @@ public class JwtTokenUtil {
     Date ext = new Date(); // 토큰 만료 시간
     ext.setTime(ext.getTime() + expiredTime);
 
-    return Jwts.builder()
-        .claims(payloads) // Claims 설정
+    return Jwts.builder().claims(payloads) // Claims 설정
         .issuer("issuer") // 발급자
         .subject("auth") // 토큰 용도
         .expiration(ext) // 토큰 만료 시간 설정
-        .signWith(key)
-        .compact(); // 토큰 생성
+        .signWith(key).compact(); // 토큰 생성
   }
 
   /**

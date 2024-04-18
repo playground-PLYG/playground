@@ -1,17 +1,11 @@
 package com.playground.api.member.entity;
 
+import com.playground.annotation.Secret;
+import com.playground.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
-import com.playground.annotation.Secret;
-import com.playground.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -92,5 +86,4 @@ public class MemberEntity extends BaseEntity {
     this.diCn = diCn;
     this.mberTelno = mberTelno;
   }
-
 }

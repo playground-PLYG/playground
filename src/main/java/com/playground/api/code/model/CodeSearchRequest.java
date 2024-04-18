@@ -11,29 +11,29 @@ import lombok.Setter;
 @Setter
 public class CodeSearchRequest extends BaseDto {
 
-	@Schema(description = "일련번호")
-	private String sn;
+	@Schema(description = "코드일련번호")
+	private String codeSn;
 	
 	@Schema(description = "코드ID")
-	private String cdId;
+	private String codeId;
   
 	@Schema(description = "코드명")
-	private String cdNm;
+	private String codeNm;
 	 
 	@Schema(description = "상위코드ID")
-	private String upCdId;
+	private String upperCodeId;
 	 
 	@Schema(description = "그룹코드여부")
-	private String groupCdYn;
+	private String groupCodeAt;
 	
 	@Schema(description = "정렬순번")
-	private String sortSn;
+	private String sortOrdr;
 	
-	@Schema(description = "등록자")
-	private String regMbrNo;
+	@Schema(description = "등록사용자ID")
+	private String registUsrId;
 	
-	@Schema(description = "수정자")
-	private String mdfcnMbrNo;
+	@Schema(description = "수정사용자ID")
+	private String updtUsrId;
 	 
 
 

@@ -13,34 +13,34 @@ import lombok.Setter;
 @Setter
 public class PgSignUpResponse extends BaseDto {
 
-  @Schema(description = "회원번호")
-  private int mbrNo;
-	
+  @Schema(description = "회원ID")
+  private Integer mberNo;
+  
   @Schema(description = "회원명")
-  private String mbrNm;
+  private String mberNm;
   
   @Schema(description = "회원생년월일")
-  private String mbrBrdt;
+  private String mberBymd;
   
   @Schema(description = "회원성별코드")
-  private String mbrGndrCd;
-
+  private String mberSexdstnCode;
+  
   @Schema(description = "회원이메일주소")
-  private String mbrEmlAddr;
+  private String mberEmailAdres;
   
   @Schema(description = "회원전화번호")
-  private String mbrTelno;
+  private String MberTelno;
   
-  @Schema(description = "등록회원번호")
-  private int regMbrNo;
+  @Schema(description = "등록사용자ID")
+  private String registUsrId;
 
   @Schema(description = "등록일시")
-  private LocalDateTime regDt;
+  private LocalDateTime registDt;
 
-  @Schema(description = "수정회원번호")
-  private int mdfcnMbrNo;
+  @Schema(description = "수정사용자ID")
+  private String updtUsrId;
 
   @Schema(description = "수정일시")
-  private LocalDateTime mdfcnDt;
+  private LocalDateTime updtDt;
   
 }

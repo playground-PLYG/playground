@@ -11,24 +11,24 @@ import lombok.Setter;
 @Setter
 public class MetadataResponse extends BaseDto {
   /**
-   * URL
+   * 메타데이터URL
    */
-  private String url;
+  private String metdataUrl;
 
   /**
-   * title
+   * 메타데이터제목
    */
-  private String title;
+  private String metdataSj;
 
   /**
-   * description
+   * 메타데이터설명
    */
-  private String description;
+  private String metdataDc;
 
   /**
-   * category
+   * 메타데이터카테고리
    */
-  private String category;
+  private String metdataCategory;
 
   /**
    * keyword 목록
@@ -36,24 +36,24 @@ public class MetadataResponse extends BaseDto {
   private List<String> keywords;
 
   /**
-   * 이름
+   * 미리보기이미지제목
    */
-  private String ogTitle;
+  private String prevewImageSj;
 
   /**
-   * og_description
+   * 미리보기이미지설명
    */
-  private String ogDescription;
+  private String prevewImageDc;
 
   /**
-   * og_url
+   * 미리보기이미지URL
    */
-  private String ogUrl;
+  private String prevewImageUrl;
 
   /**
-   * og_site_name
+   * 미리보기사이트명
    */
-  private String ogSiteName;
+  private String prevewSiteNm;
 
   /**
    * og image 목록
@@ -61,17 +61,13 @@ public class MetadataResponse extends BaseDto {
   private List<String> ogImages;
 
   /**
-   * metadata_base
+   * 메타데이터기본내용
    */
-  private String metadataBase;
+  private String metdataBassCn;
 
   /**
-   * icon url
+   * 메타데이터아이콘명
    */
-  private String icon;
+  private String metdataIconNm;
 
-  /**
-   * apple icon url
-   */
-  private String apple;
 }

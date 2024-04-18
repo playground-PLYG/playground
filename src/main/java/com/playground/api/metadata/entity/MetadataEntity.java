@@ -11,72 +11,67 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "metadata")
+@Table(name = "tb_metdata")
 public class MetadataEntity extends BaseEntity {
   /**
-   * URL
+   * 메타데이터URL
    */
   @Id
-  @Column
-  private String url;
+  @Column(name = "metdata_url")
+  private String metdataUrl;
 
   /**
-   * title
+   * 메타데이터제목
    */
-  @Column
-  private String title;
+  @Column(name = "metdata_sj")
+  private String metdataSj;
 
   /**
-   * description
+   * 메타데이터설명
    */
-  @Column
-  private String description;
+  @Column(name = "metdata_dc")
+  private String metdataDc;
 
   /**
-   * category
+   * 메타데이터카테고리
    */
-  @Column
-  private String category;
+  @Column(name = "metdata_category")
+  private String metdataCategory;
 
   /**
-   * 이름
+   * 미리보기이미지제목
    */
-  @Column(name = "og_title")
-  private String ogTitle;
+  @Column(name = "prevew_image_sj")
+  private String prevewImageSj;
 
   /**
-   * og_description
+   * 미리보기이미지설명
    */
-  @Column(name = "og_description")
-  private String ogDescription;
+  @Column(name = "prevew_image_dc")
+  private String prevewImageDc;
 
   /**
-   * og_url
+   * 미리보기이미지URL
    */
-  @Column(name = "og_url")
-  private String ogUrl;
+  @Column(name = "prevew_image_url")
+  private String prevewImageUrl;
 
   /**
-   * og_site_name
+   * 미리보기사이트명
    */
-  @Column(name = "og_site_name")
-  private String ogSiteName;
+  @Column(name = "prevew_site_nm")
+  private String prevewSiteNm;
 
   /**
-   * metadata_base
+   * 메타데이터기본내용
    */
-  @Column(name = "metadata_base")
-  private String metadataBase;
+  @Column(name = "metdata_bass_cn")
+  private String metdataBassCn;
 
   /**
-   * icon url
+   * 메타데이터아이콘명
    */
-  @Column
-  private String icon;
+  @Column(name = "metdata_icon_nm")
+  private String metdataIconNm;
 
-  /**
-   * apple icon url
-   */
-  @Column
-  private String apple;
 }

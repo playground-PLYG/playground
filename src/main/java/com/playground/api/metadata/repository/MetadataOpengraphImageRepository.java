@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.playground.api.metadata.entity.MetadataOpengraphImageEntity;
 
 public interface MetadataOpengraphImageRepository extends JpaRepository<MetadataOpengraphImageEntity, String> {
-  List<MetadataOpengraphImageEntity> findByUrl(String url);
+  List<MetadataOpengraphImageEntity> findByPrevewImageUrl(String url);
 }

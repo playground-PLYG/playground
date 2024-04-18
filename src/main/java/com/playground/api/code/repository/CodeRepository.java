@@ -12,5 +12,5 @@ public interface CodeRepository extends CrudRepository<CodeEntity, String>, JpaS
 
   List<CodeEntity> findAll();
 
-  CodeEntity findByCdNm(String up);
+  CodeEntity findByCodeNm(String up);
 }

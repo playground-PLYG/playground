@@ -111,8 +111,8 @@ public class JwtTokenUtil {
 
       Claims claims = getAllClaims(authorization);
 
-      rs.setName((String) claims.get("name"));
-      rs.setUserId((String) claims.get(USER_ID));
+      rs.setMberNm((String) claims.get("name"));
+      rs.setMberId((String) claims.get(USER_ID));
 
       return rs;
     }

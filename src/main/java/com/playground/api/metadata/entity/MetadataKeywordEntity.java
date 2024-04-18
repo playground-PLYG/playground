@@ -12,32 +12,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "metadata_keyword")
+@Table(name = "tb_metdata_kwrd")
 public class MetadataKeywordEntity extends BaseEntity {
   /**
-   * seq
+   * 키워드일련번호
    */
   @Id
-  @Column
-  private String seq;
+  @Column(name="kwrd_sn")
+  private String kwrdSn;
 
   /**
-   * URL
+   * 키워드URL
    */
-  @Column
-  private String url;
+  @Column(name="kwrd_url")
+  private String kwrdUrl;
 
   /**
-   * keyword
+   * 키워드내용
    */
-  @Column
-  private String keyword;
+  @Column(name="kwrd_cn")
+  private String kwrdCn;
 
   @Builder
-  public MetadataKeywordEntity(String seq, String url, String keyword) {
+  public MetadataKeywordEntity(String kwrdSn, String kwrdUrl, String kwrdCn) {
     super();
-    this.seq = seq;
-    this.url = url;
-    this.keyword = keyword;
+    this.kwrdSn = kwrdSn;
+    this.kwrdUrl = kwrdUrl;
+    this.kwrdCn = kwrdCn;
   }
+
 }

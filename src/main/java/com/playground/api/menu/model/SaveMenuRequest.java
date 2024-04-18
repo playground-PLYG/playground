@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 public class SaveMenuRequest extends BaseDto {
 
-  @Schema(description = "메뉴ID")
-  private int menuId;
+  @Schema(description = "메뉴일련번호")
+  private int menuSn;
 
   @Schema(description = "메뉴명")
   private String menuNm;
@@ -20,28 +20,28 @@ public class SaveMenuRequest extends BaseDto {
   @Schema(description = "메뉴URL")
   private String menuUrl;
 
-  @Schema(description = "메뉴레벨")
-  private String menuLvl;
+  @Schema(description = "메뉴계층번호")
+  private String menuDepth;
 
   @Schema(description = "정렬순서")
-  private String menuSortOrder;
+  private String menuSortOrdr;
 
-  @Schema(description = "상위메뉴ID")
-  private String parentMenuId;
+  @Schema(description = "상위메뉴일련번호")
+  private String upperMenuSn;
 
-  @Schema(description = "등록자")
-  private int regMbrNo;
+  @Schema(description = "사용여부")
+  private String useAt;
+
+  @Schema(description = "등록사용자ID")
+  private String registUsrId;
 
   @Schema(description = "등록일시")
-  private LocalDateTime regDt;
+  private LocalDateTime registDt;
 
-  @Schema(description = "수정자")
-  private int mdfcnMbrNo;
+  @Schema(description = "수정사용자ID")
+  private String updtUsrId;
 
   @Schema(description = "수정일시")
-  private LocalDateTime mdfcnDt;
-  
-  @Schema(description = "사용여부")
-  private String useYn;
+  private LocalDateTime updtDt;
 
 }

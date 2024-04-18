@@ -11,28 +11,28 @@ import lombok.Setter;
 @Setter
 public class GetEmailResponse extends BaseDto {
 
-  @Schema(description = "회원번호")
-  private int mbrNo;
+  @Schema(description = "회원ID")
+  private int mberId;
 	
   @Schema(description = "회원명")
-  private String mbrNm;
+  private String mberNm;
   
   @Schema(description = "회원생년월일")
-  private String mbrBrdt;
+  private String mberBymd;
   
   @Schema(description = "회원성별코드")
-  private String mbrGndrCd;
+  private String mbrSexdstnCode;
 
   @Schema(description = "회원이메일주소")
-  private String mbrEmlAddr;
+  private String mbrEmailAdres;
   
-  @Schema(description = "ci값")
-  private String ciVl;
+  @Schema(description = "ci내용")
+  private String ciCn;
   
-  @Schema(description = "di값")
-  private String diVl;
+  @Schema(description = "di내용")
+  private String diCn;
   
   @Schema(description = "회원전화번호")
-  private String mbrTelno;
+  private String mberTelno;
   
 }

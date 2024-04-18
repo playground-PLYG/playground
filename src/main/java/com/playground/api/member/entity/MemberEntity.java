@@ -4,6 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 import com.playground.annotation.Secret;
 import com.playground.entity.BaseEntity;
 import lombok.Builder;
@@ -13,42 +19,78 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "member")
+@Table(name = "tb_mber")
 public class MemberEntity extends BaseEntity {
 
   /**
-   * 아이디
+   * 회원ID
    */
   @Id
-  @Column(name = "user_id")
-  private String userId;
+  @Column(name = "mber_id")
+  private String mberId;
 
   /**
    * 비밀번호
    */
   @Secret
-  @Column
-  private String password;
+  @Column(name = "mber_password")
+  private String mberPassword;
 
   /**
-   * 이름
+   * 회원명
    */
-  @Column
-  private String name;
+  @Column(name = "mber_nm")
+  private String mberNm;
 
   /**
-   * 이메일
+   * 회원생년월일
    */
-  @Column
-  private String email;
+  @Column(name = "mber_bymd")
+  private String mberBymd;
+
+  /**
+   * 회원성별코드
+   */
+  @Column(name = "mber_sexdstn_code")
+  private String mberSexdstnCode;
+
+  /**
+   * 회원이메일주소
+   */
+  @Column(name = "mber_email_adres")
+  private String mberEmailAdres;
+
+  /**
+   * CI내용
+   */
+  @Column(name = "ci_cn")
+  private String ciCn;
+
+  /**
+   * DI내용
+   */
+  @Column(name = "di_cn")
+  private String diCn;
+
+  /**
+   * 회원전화번호
+   */
+  @Column(name = "mber_telno")
+  private String mberTelno;
 
   @Builder
-  public MemberEntity(String userId, String password, String name, String email) {
+  public MemberEntity(String mberId, String mberPassword, String mberNm, String mberBymd, String mberSexdstnCode, String mberEmailAdres, String ciCn,
+      String diCn, String mberTelno) {
     super();
-    this.userId = userId;
-    this.password = password;
-    this.name = name;
-    this.email = email;
+    this.mberId = mberId;
+    this.mberPassword = mberPassword;
+    this.mberNm = mberNm;
+    this.mberBymd = mberBymd;
+    this.mberSexdstnCode = mberSexdstnCode;
+    this.mberEmailAdres = mberEmailAdres;
+    this.ciCn = ciCn;
+    this.diCn = diCn;
+    this.mberTelno = mberTelno;
   }
 
 }

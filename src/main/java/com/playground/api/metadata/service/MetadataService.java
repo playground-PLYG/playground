@@ -32,16 +32,16 @@ public class MetadataService {
     if (metadata != null) {
       MetadataResponse result = modelMapper.map(metadata, MetadataResponse.class);
 
-      List<MetadataOpengraphImageEntity> ogImageList = metadataOpengraphImageRepository.findByUrl(url);
+      List<MetadataOpengraphImageEntity> ogImageList = metadataOpengraphImageRepository.findByPrevewImageUrl(url);
 
       if (CollectionUtils.isNotEmpty(ogImageList)) {
-        result.setOgImages(ogImageList.stream().map(row -> row.getImage()).toList());
+        result.setOgImages(ogImageList.stream().map(row -> row.getPrevewImageCn()).toList());
       }
 
-      List<MetadataKeywordEntity> keywordList = metadataKeywordRepository.findByUrl(url);
+      List<MetadataKeywordEntity> keywordList = metadataKeywordRepository.findByKwrdUrl(url);
 
       if (CollectionUtils.isNotEmpty(keywordList)) {
-        result.setKeywords(keywordList.stream().map(row -> row.getKeyword()).toList());
+        result.setKeywords(keywordList.stream().map(row -> row.getKwrdCn()).toList());
       }
 
       return result;

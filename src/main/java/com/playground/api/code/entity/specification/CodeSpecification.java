@@ -12,21 +12,21 @@ public class CodeSpecification {
     Specification<CodeEntity> spec = (root, query, criteriaBuilder) -> null;
 
     if (codeEntity != null) {
-      if (StringUtils.isNotBlank(codeEntity.getCdId())) {
-        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cdId"), codeEntity.getCdId() + "%"));
+      if (StringUtils.isNotBlank(codeEntity.getCodeId())) {
+        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("codeId"), codeEntity.getCodeId() + "%"));
       }
       
-     if (StringUtils.isNotBlank(codeEntity.getCdNm())) {
-          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cdNm"), codeEntity.getCdNm() + "%"));
+     if (StringUtils.isNotBlank(codeEntity.getCodeNm())) {
+          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("codeNm"), codeEntity.getCodeNm() + "%"));
         }
 
-     if (StringUtils.isNotBlank(codeEntity.getUpCdId())) {
-          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("cdNm"), codeEntity.getUpCdId() + "%"));
-          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("groupCdYn"), "Y"));
+     if (StringUtils.isNotBlank(codeEntity.getUpperCodeId())) {
+          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("codeNm"), codeEntity.getUpperCodeId() + "%"));
+          spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("groupCodeAt"), "Y"));
         }
      
-     if (StringUtils.isNotBlank(codeEntity.getGroupCdYn())) {
-         spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("groupCdYn"), codeEntity.getGroupCdYn() + "%"));
+     if (StringUtils.isNotBlank(codeEntity.getGroupCodeAt())) {
+         spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("groupCodeAt"), codeEntity.getGroupCodeAt() + "%"));
        }
       }
 

@@ -11,22 +11,22 @@ import lombok.Setter;
 @Setter
 public class MemberSearchRequest  extends BaseDto {
 	
-	 @Schema(description = "회원번호")
-	 private Integer mbrNo;
+	 @Schema(description = "회원ID")
+	 private Integer mberNo;
 	 
 	 @Schema(description = "회원명")
-	 private String mbrNm;
+	 private String mberNm;
 	 
 	 @Schema(description = "회원생년월일")
-	 private String mbrBrdt;
+	 private String mberBymd;
 	 
 	 @Schema(description = "회원성별코드")
-	 private String mbrGndrCd;
+	 private String mberSexdstnCode;
 	 
 	 @Schema(description = "회원이메일주소")
-	 private String mbrEmlAddr;
+	 private String mberEmailAdres;
 	 
-	 @Schema(description = "회원전화번호ID")
-	 private String MbrTelno;
+	 @Schema(description = "회원전화번호")
+	 private String MberTelno;
 
 }

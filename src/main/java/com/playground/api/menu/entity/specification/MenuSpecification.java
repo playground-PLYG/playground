@@ -14,7 +14,7 @@ public class MenuSpecification {
     if (menuEntity != null) {
       String menuNm = menuEntity.getMenuNm();
       String menuUrl = menuEntity.getMenuUrl();
-      String useYn = menuEntity.getUseYn();
+      String useAt = menuEntity.getUseAt();
 
       if (StringUtils.isNotBlank(menuNm)) {
         spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("menuNm"), "%" + menuNm + "%"));
@@ -24,8 +24,8 @@ public class MenuSpecification {
         spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("menuUrl"), "%" + menuUrl + "%"));
       }
 
-      if (StringUtils.isNotBlank(useYn)) {
-        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("useYn"), useYn));
+      if (StringUtils.isNotBlank(useAt)) {
+        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("useAt"), useAt));
       }
     }
 

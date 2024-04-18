@@ -12,32 +12,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "metadata_opengraph_image")
+@Table(name = "tb_metdata_prevew_image")
 public class MetadataOpengraphImageEntity extends BaseEntity {
   /**
-   * seq
+   * 미리보기이미지일련번호
    */
   @Id
-  @Column
-  private String seq;
+  @Column(name="prevew_image_Sn")
+  private String prevewImageSn;
 
   /**
-   * URL
+   * 미리보기이미지URL
    */
-  @Column
-  private String url;
+  @Column(name="prevew_image_url")
+  private String prevewImageUrl;
 
   /**
-   * image URL
+   * 미리보기이미지내용
    */
-  @Column
-  private String image;
+  @Column(name="prevew_image_cn")
+  private String prevewImageCn;
 
   @Builder
-  public MetadataOpengraphImageEntity(String seq, String url, String image) {
+  public MetadataOpengraphImageEntity(String prevewImageSn, String prevewImageUrl, String prevewImageCn) {
     super();
-    this.seq = seq;
-    this.url = url;
-    this.image = image;
+    this.prevewImageSn = prevewImageSn;
+    this.prevewImageUrl = prevewImageUrl;
+    this.prevewImageCn = prevewImageCn;
   }
+
 }

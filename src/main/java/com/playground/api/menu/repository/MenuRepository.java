@@ -9,7 +9,7 @@ import com.playground.api.menu.entity.MenuEntity;
 @Repository
 public interface MenuRepository extends JpaRepository<MenuEntity, String>, JpaSpecificationExecutor<MenuEntity> {
   /** 메뉴 조회 */
-  List<MenuEntity> findByUseYnOrderByMenuId(String useYn);
+  List<MenuEntity> findByUseAtOrderByMenuSn(String useAt);
   /** 전체 메뉴 목록 조회 */
-  List<MenuEntity> findAllByOrderByMenuId();
+  List<MenuEntity> findAllByOrderByMenuSn();
 }

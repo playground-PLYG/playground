@@ -9,6 +9,11 @@ import java.util.Objects;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.ReflectionUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,21 +22,29 @@ import com.playground.annotation.Secret;
 import com.playground.constants.PlaygroundConstants;
 import com.playground.utils.MaskingUtil;
 import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public class BaseEntity {
-  @Column(name = "regist_usr_id")
+  @CreatedBy
+  @Column(name = "regist_usr_id", updatable = false)
   private String registUsrId;
 
-  @Column(name = "regist_dt")
+  @CreationTimestamp
+  @Column(name = "regist_dt", updatable = false)
   private LocalDateTime registDt;
 
+  @LastModifiedBy
   @Column(name = "updt_usr_id")
   private String updtUsrId;
 
+  @UpdateTimestamp
   @Column(name = "updt_dt")
   private LocalDateTime updtDt;
 

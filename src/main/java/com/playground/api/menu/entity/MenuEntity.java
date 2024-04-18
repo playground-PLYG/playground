@@ -41,14 +41,14 @@ public class MenuEntity extends BaseEntity {
 
   /** 상위메뉴ID */
   @Column(name = "upper_menu_sn")
-  private String upperMenuSn;
+  private Integer upperMenuSn;
 
   /** 사용여부 */
   @Column(name = "use_at")
   private String useAt;
 
   @Builder
-  public MenuEntity(Integer menuSn, String menuNm, String menuUrl, Integer menuDepth, Integer menuSortOrdr, String upperMenuSn, String useAt) {
+  public MenuEntity(Integer menuSn, String menuNm, String menuUrl, Integer menuDepth, Integer menuSortOrdr, Integer upperMenuSn, String useAt) {
     super();
     this.menuSn = menuSn;
     this.menuNm = menuNm;

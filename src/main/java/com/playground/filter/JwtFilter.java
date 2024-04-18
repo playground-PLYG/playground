@@ -59,7 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     try {
-      MDC.put("userId", userId);
+      MDC.put("mberId", userId);
       filterChain.doFilter(request, response);
     } finally {
       MDC.clear();

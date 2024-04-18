@@ -1,10 +1,5 @@
 package com.playground.api.menu.entity;
 
-import java.sql.Timestamp;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
 import com.playground.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,11 +33,11 @@ public class MenuEntity extends BaseEntity {
 
   /** 메뉴레벨 */
   @Column(name = "menu_depth")
-  private String menuDepth;
+  private Integer menuDepth;
 
   /** 정렬순서 */
   @Column(name = "menu_sort_ordr")
-  private String menuSortOrdr;
+  private Integer menuSortOrdr;
 
   /** 상위메뉴ID */
   @Column(name = "upper_menu_sn")
@@ -53,7 +48,7 @@ public class MenuEntity extends BaseEntity {
   private String useAt;
 
   @Builder
-  public MenuEntity(Integer menuSn, String menuNm, String menuUrl, String menuDepth, String menuSortOrdr, String upperMenuSn, String useAt) {
+  public MenuEntity(Integer menuSn, String menuNm, String menuUrl, Integer menuDepth, Integer menuSortOrdr, String upperMenuSn, String useAt) {
     super();
     this.menuSn = menuSn;
     this.menuNm = menuNm;

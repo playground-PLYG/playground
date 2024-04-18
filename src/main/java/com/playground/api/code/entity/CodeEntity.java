@@ -63,10 +63,10 @@ public class CodeEntity extends BaseEntity {
    * 정렬 순번
    */
   @Column(name = "sort_ordr")
-  private String sortOrdr;
+  private Integer sortOrdr;
 
   @Builder
-  public CodeEntity(String codeSn, String codeId, String codeNm, String upperCodeId, String groupCodeAt, String sortOrdr) {
+  public CodeEntity(String codeSn, String codeId, String codeNm, String upperCodeId, String groupCodeAt, Integer sortOrdr) {
     super();
     this.codeSn = codeSn;
     this.codeId = codeId;

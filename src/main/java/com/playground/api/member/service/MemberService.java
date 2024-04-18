@@ -45,8 +45,12 @@ public class MemberService {
       throw new CustomException(MessageUtils.DUPLICATE_USER);
     }
 
-    MemberEntity saveMember = memberRepository.save(MemberEntity.builder().mberId(req.getMberId())
-        .mberPassword(CryptoUtil.encodePassword(req.getMberPassword())).mberNm(req.getMberNm()).mberEmailAdres(req.getMberEmailAdres()).build());
+    MemberEntity saveMember = memberRepository.save(MemberEntity.builder()
+        .mberId(req.getMberId())
+        .mberPassword(CryptoUtil.encodePassword(req.getMberPassword()))
+        .mberNm(req.getMberNm())
+        .mberEmailAdres(req.getMberEmailAdres())
+        .build());
 
     return modelMapper.map(saveMember, SignUpResponse.class);
   }

@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class JwtTokenUtil {
-  private static final String USER_ID = "userId";
+  private static final String USER_ID = "mberId";
   
   private static final String secretKey = "PlaygroundTestKey256SecreyKeyTestKeyYamlfhQodigka256e39djf"; // 이거 좋은 방법 없나 확인 필요
 
@@ -72,7 +72,7 @@ public class JwtTokenUtil {
    */
   public static String getUsernameFromToken(String token) {
     try {
-      return String.valueOf(getAllClaims(token).get("name"));
+      return String.valueOf(getAllClaims(token).get("mberNm"));
     } catch (NullPointerException e) {
       throw new CustomException(MessageUtils.NOT_VERIFICATION_TOKEN);
     }
@@ -111,7 +111,7 @@ public class JwtTokenUtil {
 
       Claims claims = getAllClaims(authorization);
 
-      rs.setMberNm((String) claims.get("name"));
+      rs.setMberNm((String) claims.get("mberNm"));
       rs.setMberId((String) claims.get(USER_ID));
 
       return rs;

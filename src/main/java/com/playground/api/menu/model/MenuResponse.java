@@ -21,10 +21,10 @@ public class MenuResponse extends BaseDto {
   private String menuUrl;
 
   @Schema(description = "메뉴계층번호")
-  private String menuDepth;
+  private Integer menuDepth;
 
   @Schema(description = "정렬순서")
-  private String menuSortOrdr;
+  private Integer menuSortOrdr;
 
   @Schema(description = "상위메뉴일련번호")
   private String upperMenuSn;

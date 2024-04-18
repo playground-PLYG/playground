@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Id;
 
 import org.springframework.data.redis.core.RedisHash;
-import com.playground.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,7 @@ import lombok.Setter;
 @RedisHash(value = "RedisRepositoryEntity")
 @Getter
 @Setter
-public class RedisRepositoryEntity extends BaseEntity {
+public class RedisRepositoryEntity {
 
   @Id
   private String id;

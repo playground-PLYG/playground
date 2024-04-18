@@ -67,7 +67,7 @@ public class CodeService {
     String groupCdYn = req.getGroupCodeAt();
     log.debug("groupCdYn: {}", groupCdYn);
 
-    if (groupCdYn.equals("N")) {
+    if ("N".equals(groupCdYn)) {
       String up = req.getUpperCodeId();
       CodeEntity upCode = codeRepository.findByCodeNm(up);
       log.debug("upCode: {}", upCode.getCodeId());

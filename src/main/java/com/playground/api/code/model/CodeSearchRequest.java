@@ -27,7 +27,7 @@ public class CodeSearchRequest extends BaseDto {
 	private String groupCodeAt;
 	
 	@Schema(description = "정렬순번")
-	private String sortOrdr;
+	private Integer sortOrdr;
 	
 	@Schema(description = "등록사용자ID")
 	private String registUsrId;

@@ -2,6 +2,7 @@ package com.playground.entity;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -15,8 +16,25 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.playground.annotation.Secret;
 import com.playground.constants.PlaygroundConstants;
 import com.playground.utils.MaskingUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class BaseEntity {
+  @Schema(description = "등록사용자id")
+  private String registUsrId;
+
+  @Schema(description = "등록일시")
+  private LocalDateTime registDt;
+
+  @Schema(description = "수정사용자id")
+  private String updtUsrId;
+
+  @Schema(description = "수정일시")
+  private LocalDateTime updtDt;
+
   @Override
   public String toString() { // NOSONAR
     Map<String, Object> map = new HashMap<>();

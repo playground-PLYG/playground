@@ -36,7 +36,8 @@ public class P6SpySqlFormatConfig implements MessageFormattingStrategy {
     if (isStatementDDL(sql, category)) {
       return FormatStyle.DDL.getFormatter().format(sql).toUpperCase(Locale.ROOT).replace("+0900", "");
     }
-    return FormatStyle.BASIC.getFormatter().format(sql).toUpperCase(Locale.ROOT).replace("+0900", "");
+
+    return FormatStyle.BASIC.getFormatter().format(sql).replace("+0900", "");
   }
 
   private boolean isStatementDDL(final String sql, final String category) {
@@ -53,8 +54,8 @@ public class P6SpySqlFormatConfig implements MessageFormattingStrategy {
 
   private String getMessage(final int connectionId, final long elapsed, final StringBuilder callStackBuilder) {
     return NEW_LINE + SEPARATOR + NEW_LINE + " Info" + NEW_LINE + SEPARATOR + NEW_LINE + TAB + String.format("Connection ID : %s", connectionId)
-        + NEW_LINE + TAB + String.format("Execution Time : %s ms", elapsed) + NEW_LINE + NEW_LINE + TAB + String.format("Call Stack : %s",
-        callStackBuilder) + NEW_LINE + SEPARATOR;
+        + NEW_LINE + TAB + String.format("Execution Time : %s ms", elapsed) + NEW_LINE + NEW_LINE + TAB
+        + String.format("Call Stack : %s", callStackBuilder) + NEW_LINE + SEPARATOR;
   }
 
   private StringBuilder getStackBuilder() {

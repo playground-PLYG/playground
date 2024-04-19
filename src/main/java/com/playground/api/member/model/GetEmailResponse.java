@@ -12,7 +12,7 @@ import lombok.Setter;
 public class GetEmailResponse extends BaseDto {
 
   @Schema(description = "회원ID")
-  private int mberId;
+  private String mberId;
 	
   @Schema(description = "회원명")
   private String mberNm;

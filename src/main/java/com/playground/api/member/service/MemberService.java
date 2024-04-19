@@ -44,7 +44,7 @@ public class MemberService {
     if (!ObjectUtils.isEmpty(rstMember)) {
       throw new CustomException(MessageUtils.DUPLICATE_USER);
     }
-
+    
     MemberEntity saveMember = memberRepository.save(MemberEntity.builder()
         .mberId(req.getMberId())
         .mberPassword(CryptoUtil.encodePassword(req.getMberPassword()))
@@ -117,6 +117,13 @@ public class MemberService {
     log.debug(">>> member : {}", member);
 
     return member.stream().map(item -> modelMapper.map(item, MemberResponse.class)).toList();
+  }
+  
+  @Transactional
+  public String getMemberDupCheck(MemberSearchRequest req) {
+    MemberEntity rstMember = memberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
+    
+    return ObjectUtils.isEmpty(rstMember) ? "N" : "Y";
   }
 
 }

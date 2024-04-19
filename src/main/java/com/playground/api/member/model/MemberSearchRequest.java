@@ -12,7 +12,7 @@ import lombok.Setter;
 public class MemberSearchRequest  extends BaseDto {
 	
 	 @Schema(description = "회원ID")
-	 private Integer mberNo;
+	 private String mberId;
 	 
 	 @Schema(description = "회원명")
 	 private String mberNm;

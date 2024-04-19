@@ -23,7 +23,7 @@ public class CodeResponse extends BaseDto {
   private String upperCodeId;
 
   @Schema(description = "그룹코드여부")
-  private String groupCodedAt;
+  private String groupCodeAt;
 
   @Schema(description = "정렬순번")
   private Integer sortOrdr;

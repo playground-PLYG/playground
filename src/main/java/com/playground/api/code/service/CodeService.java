@@ -50,8 +50,10 @@ public class CodeService {
    * 코드삭제
    */
   public void deleteCode(CodeSearchRequest req) {
+	  
+	  
+	int codeSn = Integer.parseInt(req.getCodeSn());
 
-    String codeSn = req.getCodeSn();
     codeRepository.delete(CodeEntity.builder().codeSn(codeSn).build());
 
   }

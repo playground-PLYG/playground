@@ -1,6 +1,5 @@
 package com.playground.aop;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,8 +38,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
       return body;
     }
 
-    if (response.getHeaders().getContentType() != null && StringUtils.equals(String.valueOf(response.getHeaders().getContentType()),
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
+    if (response.getHeaders().getContentType() != null) {
       return body;
     }
 

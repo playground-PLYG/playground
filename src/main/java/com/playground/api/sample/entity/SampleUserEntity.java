@@ -15,42 +15,41 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "member")
+@Table(name = "tb_mber")
 public class SampleUserEntity extends BaseEntity {
 
   /**
-   * 아이디
+   * 회원ID
    */
   @Id
-  @Column(name = "user_id")
-  private String userId;
+  @Column(name = "mber_id")
+  private String mberId;
 
   /**
    * 비밀번호
    */
   @Secret
-  @Column
-  private String password;
+  @Column(name = "mber_password")
+  private String mberPassword;
 
   /**
-   * 이름
+   * 회원명
    */
-  @Column
-  private String name;
+  @Column(name = "mber_nm")
+  private String mberNm;
 
   /**
-   * 이메일
+   * 회원이메일주소
    */
-  @Column
-  private String email;
+  @Column(name = "mber_email_adres")
+  private String mberEmailAdres;
 
   @Builder
-  public SampleUserEntity(String userId, String password, String name, String email) {
+  public SampleUserEntity(String mberId, String mberPassword, String mberNm, String mberEmailAdres) {
     super();
-    this.userId = userId;
-    this.password = password;
-    this.name = name;
-    this.email = email;
+    this.mberId = mberId;
+    this.mberPassword = mberPassword;
+    this.mberNm = mberNm;
+    this.mberEmailAdres = mberEmailAdres;
   }
-
 }

@@ -1,12 +1,12 @@
 package com.playground.api.sample.entity;
 
+import com.playground.annotation.ExcelDown;
+import com.playground.annotation.Secret;
+import com.playground.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import com.playground.annotation.ExcelDown;
-import com.playground.annotation.Secret;
-import com.playground.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,33 +14,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "member")
+@Table(name = "tb_mber")
 public class ExcelDownEntity extends BaseEntity {
 
   @Id
-  @Column(name = "user_id")
+  @Column(name = "mber_id")
   @ExcelDown(headerName = "아이디", dataFormat = "내 아이디는 : @", order = 1, width = 150)
-  private String userId;
+  private String mberId;
 
   @Secret
-  @Column
+  @Column(name = "mber_password")
   @ExcelDown(headerName = "비밀번호")
-  private String password;
+  private String mberPassword;
 
-  @Column
+  @Column(name = "mber_nm")
   @ExcelDown(headerName = "이름", order = 2)
-  private String name;
+  private String mberNm;
 
+  @Column(name = "mber_email_adres")
   @ExcelDown(headerName = "이메일", width = 150)
-  private String email;
+  private String mberEmailAdres;
 
   @Builder
-  public ExcelDownEntity(String userId, String password, String name, String email) {
+  public ExcelDownEntity(String mberId, String mberPassword, String mberNm, String mberEmailAdres) {
     super();
-    this.userId = userId;
-    this.password = password;
-    this.name = name;
-    this.email = email;
+    this.mberId = mberId;
+    this.mberPassword = mberPassword;
+    this.mberNm = mberNm;
+    this.mberEmailAdres = mberEmailAdres;
   }
-
 }

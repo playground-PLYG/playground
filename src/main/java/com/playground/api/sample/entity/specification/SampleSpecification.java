@@ -11,16 +11,16 @@ public class SampleSpecification {
     Specification<SampleUserEntity> spec = (root, query, criteriaBuilder) -> null;
 
     if (sampleEntity != null) {
-      if (StringUtils.isNotBlank(sampleEntity.getUserId())) {
-        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("userId"), sampleEntity.getUserId() + "%"));
+      if (StringUtils.isNotBlank(sampleEntity.getMberId())) {
+        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("mberId"), sampleEntity.getMberId() + "%"));
       }
 
-      if (StringUtils.isNotBlank(sampleEntity.getName())) {
-        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), sampleEntity.getName() + "%"));
+      if (StringUtils.isNotBlank(sampleEntity.getMberNm())) {
+        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("mberNm"), sampleEntity.getMberNm() + "%"));
       }
 
-      if (StringUtils.isNotBlank(sampleEntity.getEmail())) {
-        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("email"), sampleEntity.getEmail() + "%"));
+      if (StringUtils.isNotBlank(sampleEntity.getMberEmailAdres())) {
+        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("mberEmailAdres"), sampleEntity.getMberEmailAdres() + "%"));
       }
     }
 

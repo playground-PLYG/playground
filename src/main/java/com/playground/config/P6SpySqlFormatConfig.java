@@ -15,7 +15,10 @@ public class P6SpySqlFormatConfig implements MessageFormattingStrategy {
   private static final String CREATE = "create";
   private static final String ALTER = "alter";
   private static final String COMMENT = "comment";
-  private static final String SEPARATOR = "----------------------------------------------------------------------------------------------------";
+  private static final String SEPARATOR_HYP_STRING =
+      "----------------------------------------------------------------------------------------------------";
+  private static final String SEPARATOR_EQL_STRING =
+      "====================================================================================================";
   private static final String TAB = "    ";
 
   @Override
@@ -29,7 +32,19 @@ public class P6SpySqlFormatConfig implements MessageFormattingStrategy {
       return "";
     }
 
-    return NEW_LINE + SEPARATOR + NEW_LINE + " Query" + NEW_LINE + SEPARATOR + sqlFormatToUpper(sql, category) + ";" + message;
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(NEW_LINE);
+    sb.append(SEPARATOR_EQL_STRING);
+    sb.append(NEW_LINE);
+    sb.append(" Query");
+    sb.append(NEW_LINE);
+    sb.append(SEPARATOR_HYP_STRING);
+    sb.append(sqlFormatToUpper(sql, category));
+    sb.append(";");
+    sb.append(message);
+
+    return sb.toString();
   }
 
   private String sqlFormatToUpper(final String sql, final String category) {
@@ -53,9 +68,29 @@ public class P6SpySqlFormatConfig implements MessageFormattingStrategy {
   }
 
   private String getMessage(final int connectionId, final long elapsed, final StringBuilder callStackBuilder) {
-    return NEW_LINE + SEPARATOR + NEW_LINE + " Info" + NEW_LINE + SEPARATOR + NEW_LINE + TAB + String.format("Connection ID : %s", connectionId)
-        + NEW_LINE + TAB + String.format("Execution Time : %s ms", elapsed) + NEW_LINE + NEW_LINE + TAB
-        + String.format("Call Stack : %s", callStackBuilder) + NEW_LINE + SEPARATOR;
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(NEW_LINE);
+    sb.append(SEPARATOR_HYP_STRING);
+    sb.append(NEW_LINE);
+    sb.append(" Info");
+    sb.append(NEW_LINE);
+    sb.append(SEPARATOR_HYP_STRING);
+    sb.append(NEW_LINE);
+    sb.append(TAB);
+    sb.append(String.format("Connection ID : %s", connectionId));
+    sb.append(NEW_LINE);
+    sb.append(TAB);
+    sb.append(String.format("Execution Time : %s ms", elapsed));
+    sb.append(NEW_LINE);
+    sb.append(NEW_LINE);
+    sb.append(TAB);
+    sb.append(String.format("Call Stack : %s", callStackBuilder));
+    sb.append(NEW_LINE);
+    sb.append(SEPARATOR_EQL_STRING);
+    sb.append(NEW_LINE);
+
+    return sb.toString();
   }
 
   private StringBuilder getStackBuilder() {

@@ -11,11 +11,11 @@ import lombok.Setter;
 public class SampleUserResponse extends BaseDto {
 
   @Schema(description = "사용자 ID", example = "hong12")
-  private String userId;
+  private String mberId;
 
   @Schema(description = "이름", example = "홍길동")
-  private String name;
+  private String mberNm;
 
   @Schema(description = "이메일", example = "emailId@gmail.com")
-  private String email;
+  private String mberEmailAdres;
 }

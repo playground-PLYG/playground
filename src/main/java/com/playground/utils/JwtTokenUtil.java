@@ -21,9 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtTokenUtil {
   private static final String USER_ID = "mberId";
 
-  private static final String secretKey = "PlaygroundTestKey256SecreyKeyTestKeyYamlfhQodigka256e39djf"; // 이거 좋은 방법 없나 확인 필요
+  private static final String SECRET_KEY = "PlaygroundTestKey256SecreyKeyTestKeyYamlfhQodigka256e39djf"; // 이거 좋은 방법 없나 확인 필요
 
-  private static final SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+  private static final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
   // 토큰 생성
   public static String createToken(String userId, String name) {

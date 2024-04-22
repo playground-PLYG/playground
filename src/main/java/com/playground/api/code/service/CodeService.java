@@ -20,15 +20,13 @@ public class CodeService {
   private final CodeRepository codeRepository;
   private final ModelMapper modelMapper;
 
-
-
   /*
    * 코드조회
    */
   public List<CodeResponse> getCodePageList(CodeSearchRequest req) {
-
     CodeEntity codeEntity = modelMapper.map(req, CodeEntity.class);
     List<CodeEntity> codeRepositoryPage = codeRepository.findAll(codeSpecification.searchCondition(codeEntity));
+
     return codeRepositoryPage.stream().map(item -> modelMapper.map(item, CodeResponse.class)).toList();
   }
 
@@ -42,7 +40,6 @@ public class CodeService {
 
     log.debug("upCodeList: {}", upCodeList);
 
-
     return upCodeList.stream().map(item -> modelMapper.map(item, CodeResponse.class)).toList();
   }
 
@@ -50,19 +47,15 @@ public class CodeService {
    * 코드삭제
    */
   public void deleteCode(CodeSearchRequest req) {
-	  
-	  
-	int codeSn = Integer.parseInt(req.getCodeSn());
+    int codeSn = Integer.parseInt(req.getCodeSn());
 
     codeRepository.delete(CodeEntity.builder().codeSn(codeSn).build());
-
   }
 
   /*
    * 코드등록/수정
    */
   public CodeResponse saveCodeList(CodeSearchRequest req) {
-
     String groupCdYn = req.getGroupCodeAt();
     log.debug("groupCdYn: {}", groupCdYn);
 
@@ -80,9 +73,5 @@ public class CodeService {
     CodeEntity saveCode = codeRepository.save(codeEntity);
 
     return modelMapper.map(saveCode, CodeResponse.class);
-
   }
-
-
-
 }

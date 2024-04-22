@@ -35,7 +35,6 @@ public class MemberService {
   private final MemberRepository memberRepository;
   private final ModelMapper modelMapper;
 
-
   @Transactional
   public SignUpResponse signUp(SignUpRequest req) {
     log.debug(">>> req : {}", req);
@@ -103,7 +102,6 @@ public class MemberService {
 
   @Transactional
   public List<MemberResponse> getMemeberList(MemberSearchRequest req) {
-
     MemberEntity pgEntity = modelMapper.map(req, MemberEntity.class);
 
     log.debug(">>> pgEntity : {}", pgEntity);
@@ -121,6 +119,4 @@ public class MemberService {
 
     return ObjectUtils.isEmpty(rstMember) ? "N" : "Y";
   }
-
 }
-

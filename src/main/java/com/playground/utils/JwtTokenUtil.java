@@ -8,7 +8,7 @@ import javax.crypto.SecretKey;
 import org.springframework.util.StringUtils;
 import com.playground.api.member.model.MemberInfoResponse;
 import com.playground.constants.PlaygroundConstants;
-import com.playground.exception.CustomException;
+import com.playground.exception.BizException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -60,7 +60,7 @@ public class JwtTokenUtil {
     try {
       return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     } catch (Exception e) {
-      throw new CustomException(MessageUtils.NOT_VERIFICATION_TOKEN);
+      throw new BizException(MessageUtils.NOT_VERIFICATION_TOKEN);
     }
   }
 
@@ -71,7 +71,7 @@ public class JwtTokenUtil {
     try {
       return String.valueOf(getAllClaims(token).get("mberNm"));
     } catch (NullPointerException e) {
-      throw new CustomException(MessageUtils.NOT_VERIFICATION_TOKEN);
+      throw new BizException(MessageUtils.NOT_VERIFICATION_TOKEN);
     }
   }
 

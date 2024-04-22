@@ -33,7 +33,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import com.playground.annotation.ExcelDown;
-import com.playground.exception.CustomException;
+import com.playground.exception.BizException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -68,7 +68,7 @@ public class ExcelDownUtil<T> {
     this.dataList = dataList;
 
     if (CollectionUtils.isNotEmpty(dataList) && dataList.size() > MAX_ROWS) {
-      throw new CustomException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
+      throw new BizException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
     }
 
     workbook = new SXSSFWorkbook(FLUSH_ROWS);
@@ -117,7 +117,7 @@ public class ExcelDownUtil<T> {
     List<Field> fieldList = FieldUtils.getFieldsListWithAnnotation(clazz, ExcelDown.class);
 
     if (CollectionUtils.isEmpty(fieldList)) {
-      throw new CustomException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
+      throw new BizException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
     }
 
     columnList = fieldList.stream().map(field -> {
@@ -129,7 +129,7 @@ public class ExcelDownUtil<T> {
     }).sorted(Comparator.comparing(ColumnInfo::getOrder)).collect(Collectors.toList());
 
     if (CollectionUtils.isEmpty(columnList)) {
-      throw new CustomException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
+      throw new BizException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
     }
   }
 
@@ -191,7 +191,7 @@ public class ExcelDownUtil<T> {
           if (getMethod != null) {
             value = StringUtils.defaultString(Objects.toString(ReflectionUtils.invokeMethod(getMethod, dataObj)));
           } else {
-            throw new CustomException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
+            throw new BizException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
           }
         }
 
@@ -239,7 +239,7 @@ public class ExcelDownUtil<T> {
       bytes = bos.toByteArray();
       workbook.dispose();
     } catch (IOException e) {
-      throw new CustomException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
+      throw new BizException(MessageUtils.FAIL_EXCEL_DOWNLOAD);
     }
 
     HttpHeaders headers = new HttpHeaders();

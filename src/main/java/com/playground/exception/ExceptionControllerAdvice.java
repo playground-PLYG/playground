@@ -59,4 +59,10 @@ public class ExceptionControllerAdvice {
 
     return new BaseResponse<>(objectError.getDefaultMessage());
   }
+
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public BaseResponse<Void> internalServerErrorException(Exception e) {
+    return new BaseResponse<>("InternalServerError");
+  }
 }

@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.playground.model.BaseResponse;
 
 @ControllerAdvice
-public class CustomExceptionHandler {
+public class BizExceptionHandler {
 
-  @ExceptionHandler(CustomException.class)
-  protected ResponseEntity<BaseResponse<Void>> customException(CustomException e) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BaseResponse<>(e.getMessage()));
+  @ExceptionHandler(BizException.class)
+  protected ResponseEntity<BaseResponse<Void>> customException(BizException e) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BaseResponse<>(e));
   }
 }

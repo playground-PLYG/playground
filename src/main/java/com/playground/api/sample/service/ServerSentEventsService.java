@@ -11,7 +11,7 @@ import com.playground.api.sample.entity.ServerSentEventsEmitterEntity;
 import com.playground.api.sample.model.SseDto;
 import com.playground.api.sample.repository.SeverSentEventsInMemoryRepository;
 import com.playground.constants.RedisSubscibeChannel;
-import com.playground.exception.CustomException;
+import com.playground.exception.BizException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -62,7 +62,7 @@ public class ServerSentEventsService {
     } catch (IOException exception) {
       sseRepository.remove(id);
 
-      throw new CustomException("연결 오류!");
+      throw new BizException("연결 오류!");
     }
   }
 }

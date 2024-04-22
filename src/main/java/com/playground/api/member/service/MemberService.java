@@ -20,7 +20,7 @@ import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
 import com.playground.api.member.repository.MemberRepository;
 import com.playground.constants.CacheType;
-import com.playground.exception.CustomException;
+import com.playground.exception.BizException;
 import com.playground.utils.CryptoUtil;
 import com.playground.utils.JwtTokenUtil;
 import com.playground.utils.MessageUtils;
@@ -42,25 +42,21 @@ public class MemberService {
     MemberEntity rstMember = memberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
 
     if (!ObjectUtils.isEmpty(rstMember)) {
-      throw new CustomException(MessageUtils.DUPLICATE_USER);
+      throw new BizException(MessageUtils.DUPLICATE_USER);
     }
-    
-    MemberEntity saveMember = memberRepository.save(MemberEntity.builder()
-        .mberId(req.getMberId())
-        .mberPassword(CryptoUtil.encodePassword(req.getMberPassword()))
-        .mberNm(req.getMberNm())
-        .mberEmailAdres(req.getMberEmailAdres())
-        .build());
+
+    MemberEntity saveMember = memberRepository.save(MemberEntity.builder().mberId(req.getMberId())
+        .mberPassword(CryptoUtil.encodePassword(req.getMberPassword())).mberNm(req.getMberNm()).mberEmailAdres(req.getMberEmailAdres()).build());
 
     return modelMapper.map(saveMember, SignUpResponse.class);
   }
 
   @Transactional(readOnly = true)
   public SignInResponse signIn(SignInRequest req) {
-    MemberEntity rstMember = memberRepository.findById(req.getMberId()).orElseThrow(() -> new CustomException(MessageUtils.INVALID_USER));
+    MemberEntity rstMember = memberRepository.findById(req.getMberId()).orElseThrow(() -> new BizException(MessageUtils.INVALID_USER));
 
     if (!CryptoUtil.comparePassword(req.getMberPassword(), rstMember.getMberPassword())) {
-      throw new CustomException(MessageUtils.INVALID_PASSWD);
+      throw new BizException(MessageUtils.INVALID_PASSWD);
     }
 
     log.debug(">>> rstMember : {}", rstMember);
@@ -77,11 +73,11 @@ public class MemberService {
 
       log.debug("szs/me : {}", member);
 
-      MemberEntity memberEntity = memberRepository.findById(member.getMberId()).orElseThrow(() -> new CustomException(MessageUtils.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
+      MemberEntity memberEntity = memberRepository.findById(member.getMberId()).orElseThrow(() -> new BizException(MessageUtils.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
 
       return modelMapper.map(memberEntity, MemberInfoResponse.class);
     } else {
-      throw new CustomException(MessageUtils.INVALID_TOKEN);
+      throw new BizException(MessageUtils.INVALID_TOKEN);
     }
   }
 
@@ -118,11 +114,11 @@ public class MemberService {
 
     return member.stream().map(item -> modelMapper.map(item, MemberResponse.class)).toList();
   }
-  
+
   @Transactional
   public String getMemberDupCheck(MemberSearchRequest req) {
     MemberEntity rstMember = memberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
-    
+
     return ObjectUtils.isEmpty(rstMember) ? "N" : "Y";
   }
 

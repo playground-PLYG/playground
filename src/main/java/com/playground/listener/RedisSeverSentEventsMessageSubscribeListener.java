@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.playground.api.sample.entity.ServerSentEventsEmitterEntity;
 import com.playground.api.sample.model.SseDto;
 import com.playground.api.sample.repository.SeverSentEventsInMemoryRepository;
-import com.playground.exception.CustomException;
+import com.playground.exception.BizException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +42,7 @@ public class RedisSeverSentEventsMessageSubscribeListener implements MessageList
         } catch (IOException e) {
           sseRepository.remove(messageDto.getId());
 
-          throw new CustomException("연결 오류!");
+          throw new BizException("연결 오류!");
         }
       }
     }

@@ -25,7 +25,7 @@ public class CodeEntity extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "code_sn")
-  private Integer codeSn;
+  private String codeSn;
 
   /**
    * 코드id
@@ -58,7 +58,7 @@ public class CodeEntity extends BaseEntity {
   private Integer sortOrdr;
 
   @Builder
-  public CodeEntity(Integer codeSn, String codeId, String codeNm, String upperCodeId, String groupCodeAt, Integer sortOrdr) {
+  public CodeEntity(String codeSn, String codeId, String codeNm, String upperCodeId, String groupCodeAt, Integer sortOrdr) {
     super();
     this.codeSn = codeSn;
     this.codeId = codeId;

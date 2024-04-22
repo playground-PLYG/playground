@@ -30,4 +30,9 @@ public class BizException extends RuntimeException {
     super(msg);
     this.errCode = MessageCode.UNKNOWN;
   }
+
+  public BizException() {
+    super(MessageCode.UNKNOWN.getMessage());
+    this.errCode = MessageCode.UNKNOWN;
+  }
 }

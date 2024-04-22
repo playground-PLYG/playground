@@ -9,11 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.google.common.net.HttpHeaders;
+import com.playground.constants.MessageCode;
 import com.playground.constants.PlaygroundConstants;
 import com.playground.exception.BizException;
 import com.playground.model.LoginMemberDto;
 import com.playground.utils.JwtTokenUtil;
-import com.playground.utils.MessageUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -76,13 +76,13 @@ public class JwtFilter extends OncePerRequestFilter {
     try {
       return Jwts.parser().verifyWith(JwtTokenUtil.getKey()).build().parseSignedClaims(token).getPayload();
     } catch (Exception e) {
-      throw new BizException(MessageUtils.NOT_VERIFICATION_TOKEN);
+      throw new BizException(MessageCode.INVALID_TOKEN);
     }
   }
 
   private void validationAuthorizationHeader(String header) {
     if (header == null || !header.startsWith(PlaygroundConstants.TOKEN_PREFIX)) {
-      throw new BizException(MessageUtils.INVALID_TOKEN_BEARER);
+      throw new BizException(MessageCode.INVALID_TOKEN);
     }
   }
 

@@ -62,7 +62,7 @@ public class ServerSentEventsService {
     } catch (IOException exception) {
       sseRepository.remove(id);
 
-      throw new BizException("연결 오류!");
+      throw new BizException("SSE 연결 오류가 발생했습니다.");
     }
   }
 }

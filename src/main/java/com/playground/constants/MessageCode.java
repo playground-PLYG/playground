@@ -15,6 +15,7 @@ public enum MessageCode {
   ,INVALID_TOKEN("EC0005", "유효하지 않은 토큰입니다.")
   ,EXPIRED_TOKEN("EC0006", "만료된 토큰입니다.")
   ,ACESS_DENIED_EMAIL("EC0007", "접근 권한이 없는 사용자 요청입니다.")
+  ,FAIL_EXCEL_DOWNLOAD("EC0008", "엑셀 다운로드 처리 중 오류가 발생했습니다.")
 
   // Member Error
   ,ACCESS_NOT_USER("EM0001", "회원 가입 대상이 아닙니다.")

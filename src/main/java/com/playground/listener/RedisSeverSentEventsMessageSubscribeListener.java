@@ -42,7 +42,7 @@ public class RedisSeverSentEventsMessageSubscribeListener implements MessageList
         } catch (IOException e) {
           sseRepository.remove(messageDto.getId());
 
-          throw new BizException("연결 오류!");
+          throw new BizException("SSE 연결 오류가 발생했습니다.");
         }
       }
     }

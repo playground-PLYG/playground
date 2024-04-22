@@ -68,25 +68,14 @@ public class RedisConfig {
   }
 
   @Bean
-  public RedisMessageListenerContainer redisContainer(MessageListenerAdapter websocketMessageListener,
-      MessageListenerAdapter serverSentEventsMessageListener) {
+  public RedisMessageListenerContainer redisContainer(RedisWebSocketMessageSubscribeListener redisWebSocketMessageSubscribeListener,
+      RedisSeverSentEventsMessageSubscribeListener redisSeverSentEventsMessageSubscribeListener) {
     RedisMessageListenerContainer container = new RedisMessageListenerContainer();
     container.setConnectionFactory(redisConnectionFactory());
-    container.addMessageListener(websocketMessageListener, webSocketTopic());
-    container.addMessageListener(serverSentEventsMessageListener, serverSentEventsTopic());
+    container.addMessageListener(new MessageListenerAdapter(redisWebSocketMessageSubscribeListener), webSocketTopic());
+    container.addMessageListener(new MessageListenerAdapter(redisSeverSentEventsMessageSubscribeListener), serverSentEventsTopic());
 
     return container;
-  }
-
-  @Bean
-  public MessageListenerAdapter websocketMessageListener(RedisWebSocketMessageSubscribeListener redisWebSocketMessageSubscribeListener) {
-    return new MessageListenerAdapter(redisWebSocketMessageSubscribeListener);
-  }
-
-  @Bean
-  public MessageListenerAdapter serverSentEventsMessageListener(
-      RedisSeverSentEventsMessageSubscribeListener redisSeverSentEventsMessageSubscribeListener) {
-    return new MessageListenerAdapter(redisSeverSentEventsMessageSubscribeListener);
   }
 
   @Bean

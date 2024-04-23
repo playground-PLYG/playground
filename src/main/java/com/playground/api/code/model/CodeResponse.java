@@ -11,7 +11,7 @@ import lombok.Setter;
 public class CodeResponse extends BaseDto {
 
   @Schema(description = "코드일련번호")
-  private String codeSn;
+  private Integer codeSn;
 
   @Schema(description = "코드ID")
   private String codeId;

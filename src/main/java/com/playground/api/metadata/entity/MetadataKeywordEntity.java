@@ -18,23 +18,23 @@ public class MetadataKeywordEntity extends BaseEntity {
    * 키워드일련번호
    */
   @Id
-  @Column(name="kwrd_sn")
-  private String kwrdSn;
+  @Column(name = "kwrd_sn")
+  private Integer kwrdSn;
 
   /**
    * 키워드URL
    */
-  @Column(name="kwrd_url")
+  @Column(name = "kwrd_url")
   private String kwrdUrl;
 
   /**
    * 키워드내용
    */
-  @Column(name="kwrd_cn")
+  @Column(name = "kwrd_cn")
   private String kwrdCn;
 
   @Builder
-  public MetadataKeywordEntity(String kwrdSn, String kwrdUrl, String kwrdCn) {
+  public MetadataKeywordEntity(Integer kwrdSn, String kwrdUrl, String kwrdCn) {
     super();
     this.kwrdSn = kwrdSn;
     this.kwrdUrl = kwrdUrl;

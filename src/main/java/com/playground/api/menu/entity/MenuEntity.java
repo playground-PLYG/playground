@@ -21,7 +21,7 @@ public class MenuEntity extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "menu_sn")
-  private String menuSn;
+  private Integer menuSn;
 
   /** 메뉴명 */
   @Column(name = "menu_nm")
@@ -41,14 +41,14 @@ public class MenuEntity extends BaseEntity {
 
   /** 상위메뉴ID */
   @Column(name = "upper_menu_sn")
-  private String upperMenuSn;
+  private Integer upperMenuSn;
 
   /** 사용여부 */
   @Column(name = "use_at")
   private String useAt;
 
   @Builder
-  public MenuEntity(String menuSn, String menuNm, String menuUrl, Integer menuDepth, Integer menuSortOrdr, String upperMenuSn, String useAt) {
+  public MenuEntity(Integer menuSn, String menuNm, String menuUrl, Integer menuDepth, Integer menuSortOrdr, Integer upperMenuSn, String useAt) {
     super();
     this.menuSn = menuSn;
     this.menuNm = menuNm;

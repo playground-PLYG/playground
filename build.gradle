@@ -21,6 +21,7 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	querydsl.extendsFrom compileClasspath
 }
 
 repositories {
@@ -77,6 +78,10 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+	implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.1.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 dependencyManagement {
@@ -95,4 +100,18 @@ appengine {  // App Engine tasks configuration
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+def querydslDir = 'src/main/generated'
+
+sourceSets {
+ main.java.srcDirs += [ querydslDir ]
+}
+
+tasks.withType(JavaCompile) {
+ options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+clean {
+	delete file (querydslDir)
 }

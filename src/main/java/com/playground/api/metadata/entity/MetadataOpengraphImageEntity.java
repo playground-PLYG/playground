@@ -18,23 +18,23 @@ public class MetadataOpengraphImageEntity extends BaseEntity {
    * 미리보기이미지일련번호
    */
   @Id
-  @Column(name="prevew_image_Sn")
-  private String prevewImageSn;
+  @Column(name = "prevew_image_Sn")
+  private Integer prevewImageSn;
 
   /**
    * 미리보기이미지URL
    */
-  @Column(name="prevew_image_url")
+  @Column(name = "prevew_image_url")
   private String prevewImageUrl;
 
   /**
    * 미리보기이미지내용
    */
-  @Column(name="prevew_image_cn")
+  @Column(name = "prevew_image_cn")
   private String prevewImageCn;
 
   @Builder
-  public MetadataOpengraphImageEntity(String prevewImageSn, String prevewImageUrl, String prevewImageCn) {
+  public MetadataOpengraphImageEntity(Integer prevewImageSn, String prevewImageUrl, String prevewImageCn) {
     super();
     this.prevewImageSn = prevewImageSn;
     this.prevewImageUrl = prevewImageUrl;

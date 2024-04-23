@@ -12,7 +12,7 @@ import lombok.Setter;
 public class MenuResponse extends BaseDto {
 
   @Schema(description = "메뉴일련번호")
-  private String menuSn;
+  private Integer menuSn;
 
   @Schema(description = "메뉴명")
   private String menuNm;
@@ -27,7 +27,7 @@ public class MenuResponse extends BaseDto {
   private Integer menuSortOrdr;
 
   @Schema(description = "상위메뉴일련번호")
-  private String upperMenuSn;
+  private Integer upperMenuSn;
 
   @Schema(description = "사용여부")
   private String useAt;

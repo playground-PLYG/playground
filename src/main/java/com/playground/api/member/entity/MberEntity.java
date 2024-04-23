@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "tb_mber")
-public class MemberEntity extends BaseEntity {
+public class MberEntity extends BaseEntity {
 
   /**
    * 회원ID
@@ -73,7 +73,7 @@ public class MemberEntity extends BaseEntity {
   private String mberTelno;
 
   @Builder
-  public MemberEntity(String mberId, String mberPassword, String mberNm, String mberBymd, String mberSexdstnCode, String mberEmailAdres, String ciCn,
+  public MberEntity(String mberId, String mberPassword, String mberNm, String mberBymd, String mberSexdstnCode, String mberEmailAdres, String ciCn,
       String diCn, String mberTelno) {
     super();
     this.mberId = mberId;

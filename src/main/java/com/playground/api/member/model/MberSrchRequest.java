@@ -1,13 +1,15 @@
 package com.playground.api.member.model;
 
+import com.playground.model.BaseDto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-@Schema(name = "MemberResponse", description = "응답 데이터")
+@Schema(name = "MberSrchRequest", description = "요청 데이터")
 @Getter
 @Setter
-public class MemberResponse {
+public class MberSrchRequest  extends BaseDto {
 	
 	 @Schema(description = "회원ID")
 	 private String mberId;
@@ -25,7 +27,6 @@ public class MemberResponse {
 	 private String mberEmailAdres;
 	 
 	 @Schema(description = "회원전화번호")
-	 private String mberTelno;
-	 
+	 private String MberTelno;
 
 }

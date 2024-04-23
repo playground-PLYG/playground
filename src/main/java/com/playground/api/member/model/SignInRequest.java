@@ -9,7 +9,6 @@ import lombok.Setter;
 
 @Schema(name = "LoginRequest", description = "로그인 요청 데이터")
 @Getter
-@Setter
 public class SignInRequest extends BaseDto {
 
   @NotBlank(message = "ID는 필수 값 입니다.")

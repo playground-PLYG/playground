@@ -3,12 +3,13 @@ package com.playground.api.member.entity.specification;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
-import com.playground.api.member.entity.MemberEntity;
+
+import com.playground.api.member.entity.MberEntity;
 
 @Component
 public class MemberSpecification {
-  public Specification<MemberEntity> searchCondition(MemberEntity memberEntity) {
-    Specification<MemberEntity> spec = (root, query, criteriaBuilder) -> null;
+  public Specification<MberEntity> searchCondition(MberEntity memberEntity) {
+    Specification<MberEntity> spec = (root, query, criteriaBuilder) -> null;
 
     if (memberEntity != null) {
       if (memberEntity.getMberId() != null) {

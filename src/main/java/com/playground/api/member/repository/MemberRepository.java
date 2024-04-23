@@ -6,17 +6,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import com.playground.api.member.entity.MemberEntity;
+import com.playground.api.member.entity.MberEntity;
 
 @Repository
-public interface MemberRepository extends JpaRepository<MemberEntity, String>, JpaSpecificationExecutor<MemberEntity> {
+public interface MemberRepository extends JpaRepository<MberEntity, String>, JpaSpecificationExecutor<MberEntity> {
 
-  MemberEntity findByMberIdOrMberEmailAdres(String userId, String email);
+  MberEntity findByMberIdOrMberEmailAdres(String userId, String email);
 
-  MemberEntity findByMberNm(String name);
+  MberEntity findByMberNm(String name);
 
-  MemberEntity findByMberEmailAdres(String email);
+  MberEntity findByMberEmailAdres(String email);
 
-  List<MemberEntity> findAll(Specification<MemberEntity> searchCondition);
+  List<MberEntity> findAll(Specification<MberEntity> searchCondition);
 
 }

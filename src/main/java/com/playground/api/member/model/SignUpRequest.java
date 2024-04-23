@@ -1,16 +1,15 @@
 package com.playground.api.member.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import com.playground.annotation.Secret;
 import com.playground.model.BaseDto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
 
 @Schema(name = "SignRequest", description = "회원 가입 시 요청 데이터")
 @Getter
-@Setter
 public class SignUpRequest extends BaseDto {
 
   @NotBlank(message = "ID는 필수 값 입니다.")
@@ -30,4 +29,13 @@ public class SignUpRequest extends BaseDto {
   @NotBlank(message = "이메일은 필수 값 입니다.")
   @Schema(description = "회원이메일주소", example = "emailId@gmail.com")
   private String mberEmailAdres;
+  
+  @Schema(description = "회원성별코드", example = "M")
+  private String mberSexdstnCode;
+  
+  @Schema(description = "회원생년월일", example = "19901010")
+  private String mberBymd;
+  
+  @Schema(description = "회원전화번호", example = "01012345678")
+  private String mberTelno;
 }

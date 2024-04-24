@@ -5,11 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
 @Table(name = "tb_metdata_kwrd")
@@ -32,13 +35,4 @@ public class MetadataKeywordEntity extends BaseEntity {
    */
   @Column(name = "kwrd_cn")
   private String kwrdCn;
-
-  @Builder
-  public MetadataKeywordEntity(Integer kwrdSn, String kwrdUrl, String kwrdCn) {
-    super();
-    this.kwrdSn = kwrdSn;
-    this.kwrdUrl = kwrdUrl;
-    this.kwrdCn = kwrdCn;
-  }
-
 }

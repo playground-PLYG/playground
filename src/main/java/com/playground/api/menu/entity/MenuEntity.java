@@ -7,10 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Builder
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Getter
 @Entity
@@ -46,17 +51,4 @@ public class MenuEntity extends BaseEntity {
   /** 사용여부 */
   @Column(name = "use_at")
   private String useAt;
-
-  @Builder
-  public MenuEntity(Integer menuSn, String menuNm, String menuUrl, Integer menuDepth, Integer menuSortOrdr, Integer upperMenuSn, String useAt) {
-    super();
-    this.menuSn = menuSn;
-    this.menuNm = menuNm;
-    this.menuUrl = menuUrl;
-    this.menuDepth = menuDepth;
-    this.menuSortOrdr = menuSortOrdr;
-    this.upperMenuSn = upperMenuSn;
-    this.useAt = useAt;
-  }
-
 }

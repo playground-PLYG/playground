@@ -1,5 +1,7 @@
 package com.playground.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -15,8 +17,19 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.playground.annotation.Secret;
 import com.playground.constants.PlaygroundConstants;
 import com.playground.utils.MaskingUtil;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-public class BaseDto {
+@AllArgsConstructor
+@EqualsAndHashCode
+@Getter
+@Setter
+public class BaseDto implements Serializable {
+  @Serial
+  private static final long serialVersionUID = 1L;
+
   @Override
   public String toString() { // NOSONAR
     Map<String, Object> map = new HashMap<>();

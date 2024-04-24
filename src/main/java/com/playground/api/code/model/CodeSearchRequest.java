@@ -1,14 +1,17 @@
 package com.playground.api.code.model;
 
+import java.io.Serial;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
-@Schema(name = "CodeRequest", description = "요청 데이터")
+@Schema(name = "CodeSearchRequest", description = "요청 데이터")
+@EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
 public class CodeSearchRequest extends BaseDto {
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Schema(description = "코드일련번호")
   private Integer codeSn;

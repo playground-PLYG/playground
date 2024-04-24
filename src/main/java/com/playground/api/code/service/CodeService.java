@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.code.entity.CodeEntity;
+import com.playground.api.code.entity.CodeEntity.CodeEntityBuilder;
 import com.playground.api.code.entity.specification.CodeSpecification;
 import com.playground.api.code.model.CodeResponse;
 import com.playground.api.code.model.CodeSearchRequest;
@@ -57,18 +58,18 @@ public class CodeService {
    */
   public CodeResponse saveCodeList(CodeSearchRequest req) {
     String groupCdYn = req.getGroupCodeAt();
-    log.debug("groupCdYn: {}", groupCdYn);
+
+    CodeEntityBuilder codeEntityBuilder = CodeEntity.builder().codeSn(req.getCodeSn()).codeId(req.getCodeId()).codeNm(req.getCodeNm())
+        .groupCodeAt(groupCdYn).sortOrdr(req.getSortOrdr());
 
     if ("N".equals(groupCdYn)) {
       String up = req.getUpperCodeId();
       CodeEntity upCode = codeRepository.findByCodeNm(up);
-      log.debug("upCode: {}", upCode.getCodeId());
-      log.debug("upCode: {}", upCode);
 
-      req.setUpperCodeId(upCode.getCodeId());
+      codeEntityBuilder.upperCodeId(upCode.getCodeId());
     }
 
-    CodeEntity codeEntity = modelMapper.map(req, CodeEntity.class);
+    CodeEntity codeEntity = codeEntityBuilder.build();
 
     CodeEntity saveCode = codeRepository.save(codeEntity);
 

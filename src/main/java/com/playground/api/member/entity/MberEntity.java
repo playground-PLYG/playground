@@ -6,11 +6,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
 @Table(name = "tb_mber")
@@ -71,19 +74,4 @@ public class MberEntity extends BaseEntity {
    */
   @Column(name = "mber_telno")
   private String mberTelno;
-
-  @Builder
-  public MberEntity(String mberId, String mberPassword, String mberNm, String mberBymd, String mberSexdstnCode, String mberEmailAdres, String ciCn,
-      String diCn, String mberTelno) {
-    super();
-    this.mberId = mberId;
-    this.mberPassword = mberPassword;
-    this.mberNm = mberNm;
-    this.mberBymd = mberBymd;
-    this.mberSexdstnCode = mberSexdstnCode;
-    this.mberEmailAdres = mberEmailAdres;
-    this.ciCn = ciCn;
-    this.diCn = diCn;
-    this.mberTelno = mberTelno;
-  }
 }

@@ -7,11 +7,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
 @Table(name = "tb_mber")
@@ -34,13 +37,4 @@ public class ExcelDownEntity extends BaseEntity {
   @Column(name = "mber_email_adres")
   @ExcelDown(headerName = "이메일", width = 150)
   private String mberEmailAdres;
-
-  @Builder
-  public ExcelDownEntity(String mberId, String mberPassword, String mberNm, String mberEmailAdres) {
-    super();
-    this.mberId = mberId;
-    this.mberPassword = mberPassword;
-    this.mberNm = mberNm;
-    this.mberEmailAdres = mberEmailAdres;
-  }
 }

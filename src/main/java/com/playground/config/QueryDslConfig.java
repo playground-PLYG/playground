@@ -4,12 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
+import jakarta.persistence.PersistenceContext;
 
-@RequiredArgsConstructor
 @Configuration
 public class QueryDslConfig {
-  private final EntityManager entityManager;
+  @PersistenceContext
+  private EntityManager entityManager;
 
   @Bean
   public JPAQueryFactory jpaQueryFactory() {

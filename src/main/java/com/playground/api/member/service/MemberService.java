@@ -11,12 +11,13 @@ import org.springframework.util.ObjectUtils;
 import com.playground.api.member.entity.MberEntity;
 import com.playground.api.member.entity.specification.MemberSpecification;
 import com.playground.api.member.model.MberSrchRequest;
-import com.playground.api.member.model.MemberInfoResponse;
+import com.playground.api.member.model.MberInfoResponse;
 import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
 import com.playground.api.member.repository.MemberRepository;
+import com.playground.api.menu.entity.MenuEntity;
 import com.playground.constants.CacheType;
 import com.playground.constants.MessageCode;
 import com.playground.exception.BizException;
@@ -70,25 +71,24 @@ public class MemberService {
 
 	@Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#token", unless = "#result == null")
 	@Transactional(readOnly = true)
-	public MemberInfoResponse myInfo(String token) {
+	public MberInfoResponse getMyInfo(String token) {
 		if (!ObjectUtils.isEmpty(token)) {
-			MemberInfoResponse member = JwtTokenUtil.autholriztionCheckUser(token); // 넘겨받은 토큰 값으로 토큰에 있는 값 꺼내기
+			MberInfoResponse member = JwtTokenUtil.autholriztionCheckUser(token); // 넘겨받은 토큰 값으로 토큰에 있는 값 꺼내기
 
 			log.debug("szs/me : {}", member);
 
 			MberEntity memberEntity = memberRepository.findById(member.getMberId())
 					.orElseThrow(() -> new BizException(MessageCode.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
 
-			return modelMapper.map(memberEntity, MemberInfoResponse.class);
+			return modelMapper.map(memberEntity, MberInfoResponse.class);
 		} else {
 			throw new BizException(MessageCode.INVALID_TOKEN);
 		}
 	}
 
 	@Transactional
-	public List<MberSrchRequest> getMemeberList(MberSrchRequest req) {
-
-		MberEntity pgEntity = modelMapper.map(req, MberEntity.class);
+	public List<MberSrchRequest> getMberList(MberSrchRequest req) {
+		MberEntity pgEntity = MberEntity.builder().mberId(req.getMberId()).mberNm(req.getMberNm()).build();
 
 		log.debug(">>> pgEntity : {}", pgEntity);
 
@@ -100,7 +100,7 @@ public class MemberService {
 	}
 
 	@Transactional
-	public String getMemberDupCheck(MberSrchRequest req) {
+	public String getMberDupCeck(MberSrchRequest req) {
 		MberEntity rstMember = memberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
 
 		return ObjectUtils.isEmpty(rstMember) ? "N" : "Y";

@@ -18,7 +18,7 @@ public class MemberSpecification {
       }
 
       if (StringUtils.isNotBlank(memberEntity.getMberNm())) {
-        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("mberNm"), memberEntity.getMberNm() + "%"));
+        spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("mberNm"), "%" + memberEntity.getMberNm() + "%"));
       }
     }
 

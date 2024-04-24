@@ -2,6 +2,7 @@ package com.playground.api.member.model;
 
 import com.playground.annotation.Secret;
 import com.playground.model.BaseDto;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Schema(name = "MemberInfoResponse", description = "내 정보 조회 응답 데이터")
 @Getter
 @Setter
-public class MemberInfoResponse extends BaseDto {
+public class MberInfoResponse extends BaseDto {
 
   @Schema(description = "회원ID", example = "test1")
   private String mberId;

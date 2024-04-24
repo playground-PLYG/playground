@@ -13,9 +13,9 @@ import com.playground.api.sample.model.SampleUserResponse;
 import com.playground.api.sample.model.SampleUserSearchRequest;
 import com.playground.api.sample.model.SmpleResponse;
 import com.playground.api.sample.repository.SampleUserRepository;
-import com.playground.api.sample.repository.SmplDetailDetailRepository;
-import com.playground.api.sample.repository.SmplDetailRepository;
-import com.playground.api.sample.repository.SmplRepository;
+import com.playground.api.sample.repository.SmpleDetailDetailRepository;
+import com.playground.api.sample.repository.SmpleDetailRepository;
+import com.playground.api.sample.repository.SmpleRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,9 +23,9 @@ import lombok.RequiredArgsConstructor;
 public class SampleService {
   private final SampleSpecification sampleSpecification;
   private final SampleUserRepository sampleRepository;
-  private final SmplRepository smplRepository;
-  private final SmplDetailRepository smplDetailRepository;
-  private final SmplDetailDetailRepository smplDetailDetailRepository;
+  private final SmpleRepository smplRepository;
+  private final SmpleDetailRepository smplDetailRepository;
+  private final SmpleDetailDetailRepository smplDetailDetailRepository;
   private final ModelMapper modelMapper;
 
   public Page<SampleUserResponse> getUserPageList(SampleUserSearchRequest req, Pageable pageable) {

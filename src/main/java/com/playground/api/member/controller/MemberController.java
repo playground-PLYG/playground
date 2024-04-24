@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.playground.api.member.model.MberSrchRequest;
+import com.playground.api.member.model.MberSrchResponse;
 import com.playground.api.member.model.MberInfoResponse;
 import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
@@ -64,7 +65,7 @@ public class MemberController {
 	 */
 	@Operation(summary = "회원 조회", description = "회원 조회")
 	@PostMapping("/public/member/getMberList")
-	public List<MberSrchRequest> getMberList(@RequestBody @Valid MberSrchRequest req) {
+	public List<MberSrchResponse> getMberList(@RequestBody @Valid MberSrchRequest req) {
 
 		log.debug(">>> 회원조회 : {}", req);
 

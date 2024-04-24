@@ -15,13 +15,22 @@ public class MberSrchResponse extends BaseDto {
   @Serial
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "회원ID", example = "test1")
+  @Schema(description = "회원ID")
   private String mberId;
 
-  @Schema(description = "회원명", example = "홍길동")
+  @Schema(description = "회원명")
   private String mberNm;
 
-  @Schema(description = "회원이메일주소", example = "emailId@gmail.com")
+  @Schema(description = "회원생년월일")
+  private String mberBymd;
+
+  @Schema(description = "회원성별코드")
+  private String mberSexdstnCode;
+
+  @Schema(description = "회원이메일주소")
   private String mberEmailAdres;
+
+  @Schema(description = "회원전화번호")
+  private String mberTelno;
 
 }

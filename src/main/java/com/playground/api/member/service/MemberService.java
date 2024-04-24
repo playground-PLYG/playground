@@ -10,6 +10,7 @@ import com.playground.api.member.entity.MberEntity;
 import com.playground.api.member.entity.specification.MemberSpecification;
 import com.playground.api.member.model.MberInfoResponse;
 import com.playground.api.member.model.MberSrchRequest;
+import com.playground.api.member.model.MberSrchResponse;
 import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
@@ -79,7 +80,7 @@ public class MemberService {
   }
 
   @Transactional
-  public List<MberSrchRequest> getMberList(MberSrchRequest req) {
+  public List<MberSrchResponse> getMberList(MberSrchRequest req) {
     MberEntity pgEntity = MberEntity.builder().mberId(req.getMberId()).mberNm(req.getMberNm()).build();
 
     log.debug(">>> pgEntity : {}", pgEntity);
@@ -88,7 +89,7 @@ public class MemberService {
 
     log.debug(">>> member : {}", member);
 
-    return member.stream().map(item -> modelMapper.map(item, MberSrchRequest.class)).toList();
+    return member.stream().map(item -> modelMapper.map(item, MberSrchResponse.class)).toList();
   }
 
   @Transactional

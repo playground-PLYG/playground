@@ -4,6 +4,6 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import com.playground.api.sample.entity.SmpleEntity;
 
-public interface SmplRepository extends CrudRepository<SmpleEntity, String> {
+public interface SmpleRepository extends CrudRepository<SmpleEntity, String> {
   List<SmpleEntity> findAll();
 }

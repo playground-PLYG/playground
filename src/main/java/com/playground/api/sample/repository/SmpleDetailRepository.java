@@ -4,6 +4,6 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import com.playground.api.sample.entity.SmpleDetailEntity;
 
-public interface SmplDetailRepository extends CrudRepository<SmpleDetailEntity, String> {
+public interface SmpleDetailRepository extends CrudRepository<SmpleDetailEntity, String> {
   List<SmpleDetailEntity> findAll();
 }

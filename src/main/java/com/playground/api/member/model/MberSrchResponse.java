@@ -32,5 +32,17 @@ public class MberSrchResponse extends BaseDto {
 
   @Schema(description = "회원전화번호")
   private String mberTelno;
+  
+  @Schema(description = "등록사용자ID")
+  private String registUsrId;
+
+  @Schema(description = "등록일시")
+  private String registDt;
+
+  @Schema(description = "수정사용자ID")
+  private String updtUsrId;
+
+  @Schema(description = "수정일시")
+  private String updtDt;
 
 }

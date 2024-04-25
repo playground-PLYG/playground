@@ -1,18 +1,24 @@
 package com.playground.api.sample.model;
 
+import java.io.Serial;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@Schema(name = "SmpleDetailDetailResponse", description = "샘플 상세 상세 조회 응답 데이터")
 @Builder
 @AllArgsConstructor
-@Schema(name = "SmpleDetailDetailResponse", description = "샘플 상세 상세 조회 응답 데이터")
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 public class SmpleDetailDetailResponse extends BaseDto {
+  @Serial
+  private static final long serialVersionUID = 1L;
+
   /**
    * 샘플 일련번호
    */

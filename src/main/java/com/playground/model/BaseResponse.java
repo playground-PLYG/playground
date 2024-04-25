@@ -1,16 +1,22 @@
 package com.playground.model;
 
 
+import java.io.Serial;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.playground.constants.CommonConstants;
 import com.playground.exception.BizException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 public class BaseResponse<T> extends BaseDto {
+  @Serial
+  private static final long serialVersionUID = -5362679329439263059L;
+
   private String result;
 
   @JsonInclude(Include.NON_NULL)
@@ -19,7 +25,7 @@ public class BaseResponse<T> extends BaseDto {
   @JsonInclude(Include.NON_NULL)
   private String resultCode;
 
-  private T data;
+  private transient T data;
 
   public BaseResponse() {
     this.result = CommonConstants.SUCCESS;

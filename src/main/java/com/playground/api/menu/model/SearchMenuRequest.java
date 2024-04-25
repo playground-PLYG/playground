@@ -1,15 +1,18 @@
 package com.playground.api.menu.model;
 
+import java.io.Serial;
 import java.time.LocalDateTime;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
-@Schema(name = "SaveMenuResponse", description = "메뉴 저장 요청 데이터")
+@Schema(name = "SearchMenuRequest", description = "메뉴 저장 요청 데이터")
+@EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
 public class SearchMenuRequest extends BaseDto {
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Schema(description = "메뉴일련번호")
   private Integer menuSn;

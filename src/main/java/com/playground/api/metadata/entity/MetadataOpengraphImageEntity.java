@@ -5,11 +5,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
 @Table(name = "tb_metdata_prevew_image")
@@ -32,13 +37,4 @@ public class MetadataOpengraphImageEntity extends BaseEntity {
    */
   @Column(name = "prevew_image_cn")
   private String prevewImageCn;
-
-  @Builder
-  public MetadataOpengraphImageEntity(Integer prevewImageSn, String prevewImageUrl, String prevewImageCn) {
-    super();
-    this.prevewImageSn = prevewImageSn;
-    this.prevewImageUrl = prevewImageUrl;
-    this.prevewImageCn = prevewImageCn;
-  }
-
 }

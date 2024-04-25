@@ -6,11 +6,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Getter
 @Setter
@@ -43,13 +48,4 @@ public class SampleUserEntity extends BaseEntity {
    */
   @Column(name = "mber_email_adres")
   private String mberEmailAdres;
-
-  @Builder
-  public SampleUserEntity(String mberId, String mberPassword, String mberNm, String mberEmailAdres) {
-    super();
-    this.mberId = mberId;
-    this.mberPassword = mberPassword;
-    this.mberNm = mberNm;
-    this.mberEmailAdres = mberEmailAdres;
-  }
 }

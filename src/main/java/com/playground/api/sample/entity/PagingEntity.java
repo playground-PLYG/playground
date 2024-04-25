@@ -6,11 +6,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
 @Table(name = "member")
@@ -41,14 +44,4 @@ public class PagingEntity extends BaseEntity {
    */
   @Column
   private String email;
-
-  @Builder
-  public PagingEntity(String userId, String password, String name, String email) {
-    super();
-    this.userId = userId;
-    this.password = password;
-    this.name = name;
-    this.email = email;
-  }
-
 }

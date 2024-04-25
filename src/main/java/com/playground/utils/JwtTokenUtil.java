@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.crypto.SecretKey;
 import org.springframework.util.StringUtils;
-import com.playground.api.member.model.MemberInfoResponse;
+import com.playground.api.member.model.MberInfoResponse;
 import com.playground.constants.MessageCode;
 import com.playground.constants.PlaygroundConstants;
 import com.playground.exception.BizException;
@@ -98,9 +98,9 @@ public class JwtTokenUtil {
     return getExpirationDate(token).before(new Date());
   }
 
-  public static MemberInfoResponse autholriztionCheckUser(String token) {
+  public static MberInfoResponse autholriztionCheckUser(String token) {
     String authorization = token;
-    MemberInfoResponse rs = new MemberInfoResponse();
+    MberInfoResponse rs = new MberInfoResponse();
 
     if (StringUtils.hasText(token) && token.startsWith(PlaygroundConstants.TOKEN_PREFIX)) {
       authorization = authorization.replaceAll(PlaygroundConstants.TOKEN_PREFIX, "");

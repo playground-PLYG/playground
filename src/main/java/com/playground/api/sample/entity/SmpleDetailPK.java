@@ -1,13 +1,21 @@
 package com.playground.api.sample.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@Builder
+@AllArgsConstructor
+@EqualsAndHashCode
 @Getter
 @Setter
 public class SmpleDetailPK implements Serializable {
-  private static final long serialVersionUID = -5128058335266406815L;
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   /**
    * 샘플일련번호

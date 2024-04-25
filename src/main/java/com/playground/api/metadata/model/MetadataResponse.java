@@ -1,15 +1,21 @@
 package com.playground.api.metadata.model;
 
+import java.io.Serial;
 import java.util.List;
 import com.playground.model.BaseDto;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 public class MetadataResponse extends BaseDto {
+  @Serial
+  private static final long serialVersionUID = 1L;
+
   /**
    * 메타데이터URL
    */

@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.playground.api.member.model.MberSrchRequest;
-import com.playground.api.member.model.MemberInfoResponse;
+import com.playground.api.member.model.MberSrchResponse;
+import com.playground.api.member.model.MberInfoResponse;
 import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
@@ -36,7 +37,7 @@ public class MemberController {
 	 * 회원가입
 	 */
 	@Operation(summary = "회원가입", description = "회원 가입하기")
-	@PostMapping("/public/member/sign-up")
+	@PostMapping("/public/member/addMber")
 	public SignUpResponse addMber(@RequestBody @Valid SignUpRequest req) {
 		return memberService.addMber(req);
 	}
@@ -45,7 +46,7 @@ public class MemberController {
 	 * 로그인
 	 */
 	@Operation(summary = "인증", description = "인증 처리")
-	@PostMapping("/public/member/sign-in")
+	@PostMapping("/public/member/signIn")
 	public SignInResponse signIn(@RequestBody @Valid SignInRequest req) {
 		return memberService.signIn(req);
 	}
@@ -54,33 +55,33 @@ public class MemberController {
 	 * 내 정보 조회
 	 */
 	@Operation(summary = "내 정보 조회", description = "본인의 정보를 조회")
-	@GetMapping("/api/member/me")
-	public MemberInfoResponse getMyInfo(@RequestHeader(value = "Authorization") String token) {
-		return memberService.myInfo(token);
+	@GetMapping("/api/member/getMyInfo")
+	public MberInfoResponse getMyInfo(@RequestHeader(value = "Authorization") String token) {
+		return memberService.getMyInfo(token);
 	}
 
 	/**
 	 * 회원 조회
 	 */
 	@Operation(summary = "회원 조회", description = "회원 조회")
-	@PostMapping("/public/member/memberSearch")
-	public List<MberSrchRequest> getMemberList(@RequestBody @Valid MberSrchRequest req) {
+	@PostMapping("/public/member/getMberList")
+	public List<MberSrchResponse> getMberList(@RequestBody @Valid MberSrchRequest req) {
 
 		log.debug(">>> 회원조회 : {}", req);
 
-		return memberService.getMemeberList(req);
+		return memberService.getMberList(req);
 	}
 
 	/**
 	 * 회원 중복 조회
 	 */
 	@Operation(summary = "회원 중복 조회", description = "회원 중복 조회")
-	@PostMapping("/public/member/memberDupCheck")
-	public String getMemberDupCheck(@RequestBody @Valid MberSrchRequest req) {
+	@PostMapping("/public/member/getMberDupCeck")
+	public String getMberDupCeck(@RequestBody @Valid MberSrchRequest req) {
 
 		log.debug(">>> 회원조회 : {}", req);
 
-		return memberService.getMemberDupCheck(req);
+		return memberService.getMberDupCeck(req);
 	}
 
 }

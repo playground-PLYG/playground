@@ -60,8 +60,14 @@ public class VoteEntity extends BaseEntity {
 	private LocalDateTime voteBeginDt;
 
 	/**
-	 * 투표시작일시
+	 * 투표종료일시
 	 */
 	@Column(name = "vote_end_dt")
 	private LocalDateTime voteEndDt;
+
+	/**
+	 * 투표삭제여부
+	 */
+	@Column(name = "vote_delete_at")
+	private String voteDeleteAt;
 }

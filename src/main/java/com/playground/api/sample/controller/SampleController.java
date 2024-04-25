@@ -68,7 +68,7 @@ public class SampleController {
    * @return List<SmpleDetailResponse> - 조회한 샘플 상세 목록
    */
   @Operation(summary = "샘플 상세 목록 조회", description = "샘플 상세 테이블 정보 목록 조회")
-  @GetMapping("/public/sample/getSmpleDetailList")
+  @PostMapping("/public/sample/getSmpleDetailList")
   public List<SmpleDetailResponse> getSmpleDetailList(@RequestBody @Valid SmpleDetailRequest reqData) {
     return sampleService.getSmpleDetailList(reqData);
   }
@@ -80,7 +80,7 @@ public class SampleController {
    * @return SmpleDetailResponse - 조회한 샘플 상세 단건
    */
   @Operation(summary = "샘플 상세 단건 조회", description = "샘플 상세 테이블 정보 단건 조회")
-  @GetMapping("/public/sample/getSmpleDetailDetail")
+  @PostMapping("/public/sample/getSmpleDetailDetail")
   public SmpleDetailResponse getSmpleDetailDetail(@RequestBody @Valid SmpleDetailRequest reqData) {
     return sampleService.getSmpleDetailDetail(reqData);
   }
@@ -92,7 +92,7 @@ public class SampleController {
    * @return List<SmpleDetailDetailResponse> - 조회한 샘플 상세 상세 목록
    */
   @Operation(summary = "샘플 상세 상세 목록 조회", description = "샘플 상세 상세 테이블 정보 목록 조회")
-  @GetMapping("/public/sample/getSmpleDetailDetailList")
+  @PostMapping("/public/sample/getSmpleDetailDetailList")
   public List<SmpleDetailDetailResponse> getSmpleDetailDetailList(@RequestBody @Valid SmpleDetailDetailRequest reqData) {
     return sampleService.getSmpleDetailDetailList(reqData);
   }
@@ -104,7 +104,7 @@ public class SampleController {
    * @return SmpleDetailDetailResponse - 조회한 샘플 상세 상세 단건
    */
   @Operation(summary = "샘플 상세 상세 단건 조회", description = "샘플 상세 상세 테이블 정보 단건 조회")
-  @GetMapping("/public/sample/getSmpleDetailDetailDetail")
+  @PostMapping("/public/sample/getSmpleDetailDetailDetail")
   public SmpleDetailDetailResponse getSmpleDetailDetailDetail(@RequestBody @Valid SmpleDetailDetailRequest reqData) {
     return sampleService.getSmpleDetailDetailDetail(reqData);
   }

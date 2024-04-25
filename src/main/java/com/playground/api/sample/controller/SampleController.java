@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.sample.model.SampleUserResponse;
 import com.playground.api.sample.model.SampleUserSearchRequest;
+import com.playground.api.sample.model.SmpleRequest;
 import com.playground.api.sample.model.SmpleResponse;
 import com.playground.api.sample.service.SampleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +44,40 @@ public class SampleController {
   public List<SmpleResponse> getSmpleList() {
     return sampleService.getSmpleList();
   }
+  
+  /**
+   * 샘플 QueryDsl 실행 테스트
+   *
+   * @return SmpleResponse - 조회한 샘플 단건
+   */
+  @Operation(summary = "샘플 QueryDsl 단건 조회", description = "샘플 테이블 정보를 단건 조회")
+  @PostMapping("/public/sample/getSmpleDsl")
+  public SmpleResponse getSmpleDsl(@RequestBody SmpleRequest req) {
+    return sampleService.getSmpleDsl(req);
+  }
+  
+  /**
+   * 샘플 QueryDsl 실행 테스트
+   *
+   * @return SmpleResponse - 조회한 샘플 다건
+   */
+  @Operation(summary = "샘플 QueryDsl 다건 조회", description = "샘플 테이블 정보를 다건 조회")
+  @PostMapping("/public/sample/getSmpleDslList")
+  public List<SmpleResponse> getSmpleDslList(@RequestBody SmpleRequest req) {
+    return sampleService.getSmpleDslList(req);
+  }
+  
+  /**
+   * 샘플 QueryDsl 실행 테스트
+   *
+   * @return SmpleResponse - 조회한 샘플 페이징
+   */
+  @Operation(summary = "샘플 QueryDsl 단건 조회", description = "샘플 테이블 정보를 단건 조회")
+  @PostMapping("/public/sample/getSmpleDslPageList")
+  public Page<SmpleResponse> getSmpleDslPageList(@RequestBody SmpleRequest req, Pageable pageable) {
+    return sampleService.getSmpleDslPageList(req, pageable);
+  }
+  
 }
 
 

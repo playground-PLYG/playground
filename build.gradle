@@ -15,17 +15,19 @@ plugins {
 }
 
 group = 'com.playground'
-version = '0.0.1-SNAPSHOT'
+version = ''
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility JavaVersion.VERSION_17
 }
 
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	querydsl.extendsFrom compileClasspath
+	querydsl {
+		extendsFrom compileClasspath
+	}
 }
 
 repositories {
@@ -33,7 +35,7 @@ repositories {
 }
 
 ext {
-	set('springCloudGcpVersion', "3.4.9")
+	set('springCloudGcpVersion', '3.4.9')
 	set('snakeyaml.version', '2.0')
 	set('guava.version', '32.0.1-jre')
 }
@@ -43,7 +45,7 @@ base {
 }
 
 jar {
-    enabled = false
+    enabled false
 }
 
 dependencies {
@@ -94,8 +96,8 @@ dependencyManagement {
 apply plugin: 'com.google.cloud.tools.appengine'
 appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
-        projectId = 'august-cascade-385602' // gcloud config set project
-        version = '1'   // gcloud to generate a version
+        projectId 'august-cascade-385602' // gcloud config set project
+        version '1'   // gcloud to generate a version
     }
 }
 

@@ -49,6 +49,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     copy.getFactory().setCharacterEscapes(new HtmlCharacterEscapes());
 
-    converters.add(0, new CustomHttpMessageConverter(copy));
+    converters.add(1, new CustomHttpMessageConverter(copy));
   }
 }

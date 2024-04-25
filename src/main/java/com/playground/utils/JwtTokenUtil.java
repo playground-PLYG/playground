@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.crypto.SecretKey;
 import org.springframework.util.StringUtils;
 import com.playground.api.member.model.MberInfoResponse;
+import com.playground.api.member.model.MberInfoResponse.MberInfoResponseBuilder;
 import com.playground.constants.MessageCode;
 import com.playground.constants.PlaygroundConstants;
 import com.playground.exception.BizException;
@@ -100,7 +101,7 @@ public class JwtTokenUtil {
 
   public static MberInfoResponse autholriztionCheckUser(String token) {
     String authorization = token;
-    MberInfoResponse rs = new MberInfoResponse();
+    MberInfoResponseBuilder mberInfoResponseBuilder = MberInfoResponse.builder();
 
     if (StringUtils.hasText(token) && token.startsWith(PlaygroundConstants.TOKEN_PREFIX)) {
       authorization = authorization.replaceAll(PlaygroundConstants.TOKEN_PREFIX, "");
@@ -109,13 +110,12 @@ public class JwtTokenUtil {
 
       Claims claims = getAllClaims(authorization);
 
-      rs.setMberNm((String) claims.get("mberNm"));
-      rs.setMberId((String) claims.get(USER_ID));
+      mberInfoResponseBuilder.mberNm((String) claims.get("mberNm")).mberId((String) claims.get(USER_ID));
 
-      return rs;
+      return mberInfoResponseBuilder.build();
     }
 
-    return rs;
+    return mberInfoResponseBuilder.build();
   }
 
   public static SecretKey getKey() {

@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "tb_qestn")
+@IdClass(QestnPK.class)
 public class QestnEntity extends BaseEntity {
 
 	/**
@@ -37,7 +39,6 @@ public class QestnEntity extends BaseEntity {
 	 * 투표일련번호
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "vote_sn")
 	private Integer voteSn;
 

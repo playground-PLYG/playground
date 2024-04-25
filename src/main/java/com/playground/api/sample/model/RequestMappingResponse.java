@@ -1,5 +1,6 @@
 package com.playground.api.sample.model;
 
+import java.io.Serial;
 import java.util.List;
 import java.util.Set;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +23,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RequestMappingResponse extends BaseDto {
-  private static final long serialVersionUID = 8841795425671398474L;
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Schema(description = "request url과 동일한 메소드에 mapping된 url 목록", example = "[\"/playground/public/sample/request-mapping\"]")
   @ExcelDown(headerName = "request url", order = 1)

@@ -1,5 +1,6 @@
 package com.playground.api.sample.model;
 
+import java.io.Serial;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EncryptResponse extends BaseDto {
-  private static final long serialVersionUID = -1853085273439115848L;
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Schema(description = "암호화 요청 문자열", example = "테스트문자열123!@#")
   private String inputStr;

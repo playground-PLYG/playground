@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@Schema(name = "MberSrchresponse", description = "조회 응답 데이터")
+@Schema(name = "MberSrchResponse", description = "조회 응답 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter

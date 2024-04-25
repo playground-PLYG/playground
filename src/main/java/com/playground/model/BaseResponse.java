@@ -1,6 +1,7 @@
 package com.playground.model;
 
 
+import java.io.Serial;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.playground.constants.CommonConstants;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BaseResponse<T> extends BaseDto {
+  @Serial
   private static final long serialVersionUID = -5362679329439263059L;
 
   private String result;

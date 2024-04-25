@@ -10,10 +10,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Schema(name = "SampleResponse", description = "샘플 조회 응답 데이터")
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Schema(name = "SampleResponse", description = "샘플 조회 응답 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter

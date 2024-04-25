@@ -1,15 +1,22 @@
 package com.playground.model;
 
+import java.io.Serial;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@Schema(name = "MemberDto", description = "회원 정보")
+@Schema(name = "LoginMemberDto", description = "로그인 회원 정보")
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor
 @Getter
 @Setter
-public class LoginMemberDto {
+public class LoginMemberDto extends BaseDto {
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Schema(description = "회원ID")
   private String mberId;

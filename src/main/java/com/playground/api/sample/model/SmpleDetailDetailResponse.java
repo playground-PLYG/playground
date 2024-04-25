@@ -9,9 +9,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+@Schema(name = "SmpleDetailDetailResponse", description = "샘플 상세 상세 조회 응답 데이터")
 @Builder
 @AllArgsConstructor
-@Schema(name = "SmpleDetailDetailResponse", description = "샘플 상세 상세 조회 응답 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@Schema(name = "LoginRequest", description = "로그인 요청 데이터")
+@Schema(name = "SignInRequest", description = "로그인 요청 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 public class SignInRequest extends BaseDto {

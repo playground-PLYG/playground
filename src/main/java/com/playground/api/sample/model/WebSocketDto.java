@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.playground.constants.WebSocketMessageType;
 import com.playground.constants.WebSocketTargetType;
 import com.playground.model.BaseDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Schema(name = "WebSocketDto", description = "WebSocket 통신 데이터")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

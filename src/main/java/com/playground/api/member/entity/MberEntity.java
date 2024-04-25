@@ -10,11 +10,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+<<<<<<< HEAD
 import lombok.RequiredArgsConstructor;
+=======
+import lombok.NoArgsConstructor;
+>>>>>>> branch 'master' of https://github.com/playground-PLYG/playground.git
 
 @Builder
 @AllArgsConstructor
+<<<<<<< HEAD
 @RequiredArgsConstructor
+=======
+@NoArgsConstructor
+>>>>>>> branch 'master' of https://github.com/playground-PLYG/playground.git
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity

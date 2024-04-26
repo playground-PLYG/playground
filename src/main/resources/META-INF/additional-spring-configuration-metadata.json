@@ -58,5 +58,10 @@
     "name": "spring.datasource.slave.hikari.driver-class-name",
     "type": "java.lang.String",
     "description": "Reflication 설정을 위한 slave hikari.driver-class-name'"
+  },
+  {
+    "name": "openai-key",
+    "type": "java.lang.String",
+    "description": "A description for 'openai-key'"
   }
 ]}

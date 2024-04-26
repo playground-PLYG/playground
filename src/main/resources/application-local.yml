@@ -67,3 +67,4 @@ decorator:
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}
+openai-key: ${sm://openai-key}

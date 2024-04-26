@@ -1,6 +1,7 @@
 package com.playground.api.ai.service;
 
 import java.util.List;
+import org.springframework.ai.embedding.Embedding;
 import org.springframework.ai.embedding.EmbeddingClient;
 import org.springframework.ai.embedding.EmbeddingResponse;
 import org.springframework.stereotype.Service;
@@ -14,14 +15,18 @@ public class EmbeddingService {
   /*
    * 문자열 목록 Embedding 조회
    */
-  public EmbeddingResponse getEmbeddingList(List<String> messages) {
-    return embeddingClient.embedForResponse(messages);
+  public List<Embedding> getEmbeddingList(List<String> messages) {
+    EmbeddingResponse embeddingResponse = embeddingClient.embedForResponse(messages);
+
+    return embeddingResponse.getResults();
   }
 
   /*
    * 문자열 Embedding 조회
    */
-  public EmbeddingResponse getEmbedding(String message) {
-    return getEmbeddingList(List.of(message));
+  public Embedding getEmbedding(String message) {
+    EmbeddingResponse embeddingResponse = embeddingClient.embedForResponse(List.of(message));
+
+    return embeddingResponse.getResult();
   }
 }

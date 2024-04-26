@@ -45,6 +45,12 @@ spring:
  web:
     resources:
       add-mappings: false
+ ai:
+    openai:
+      api-key: ${sm://openai-key}
+      embedding:
+        options:
+          model: text-embedding-3-small
 
 logging:
   pattern:
@@ -67,4 +73,3 @@ decorator:
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}
-openai-key: ${sm://openai-key}

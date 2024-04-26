@@ -15,7 +15,7 @@ import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
-import com.playground.api.member.repository.MemberRepository;
+import com.playground.api.member.repository.MberRepository;
 import com.playground.constants.CacheType;
 import com.playground.constants.MessageCode;
 import com.playground.exception.BizException;
@@ -27,22 +27,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MberService {
   private final MemberSpecification memberSpecification;
-  private final MemberRepository memberRepository;
+  private final MberRepository mberRepository;
   private final ModelMapper modelMapper;
 
   @Transactional
   public SignUpResponse addMber(SignUpRequest req) {
     log.debug(">>> req : {}", req);
-    MberEntity rstMember = memberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
+    MberEntity rstMember = mberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
 
     if (!ObjectUtils.isEmpty(rstMember)) {
       throw new BizException(MessageCode.DUPLICATE_USER);
     }
 
     log.debug(">>> rstMember : {}", rstMember);
-    MberEntity saveMember = memberRepository.save(MberEntity.builder().mberId(req.getMberId())
+    MberEntity saveMember = mberRepository.save(MberEntity.builder().mberId(req.getMberId())
         .mberPassword(CryptoUtil.encodePassword(req.getMberPassword())).mberNm(req.getMberNm()).mberEmailAdres(req.getMberEmailAdres())
         .mberBymd(req.getMberBymd()).mberSexdstnCode(req.getMberSexdstnCode()).mberTelno(req.getMberTelno()).build());
 
@@ -51,7 +51,7 @@ public class MemberService {
 
   @Transactional(readOnly = true)
   public SignInResponse signIn(SignInRequest req) {
-    MberEntity rstMember = memberRepository.findById(req.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER));
+    MberEntity rstMember = mberRepository.findById(req.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER));
 
     if (!CryptoUtil.comparePassword(req.getMberPassword(), rstMember.getMberPassword())) {
       throw new BizException(MessageCode.INVALID_PASSWD);
@@ -71,7 +71,7 @@ public class MemberService {
 
       log.debug("szs/me : {}", member);
 
-      MberEntity memberEntity = memberRepository.findById(member.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
+      MberEntity memberEntity = mberRepository.findById(member.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
 
       return modelMapper.map(memberEntity, MberInfoResponse.class);
     } else {
@@ -85,7 +85,7 @@ public class MemberService {
 
     log.debug(">>> pgEntity : {}", pgEntity);
 
-    List<MberEntity> member = memberRepository.findAll(memberSpecification.searchCondition(pgEntity));
+    List<MberEntity> member = mberRepository.findAll(memberSpecification.searchCondition(pgEntity));
 
     log.debug(">>> member : {}", member);
 
@@ -94,7 +94,7 @@ public class MemberService {
 
   @Transactional
   public String getMberDupCeck(MberSrchRequest req) {
-    MberEntity rstMember = memberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
+    MberEntity rstMember = mberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
 
     return ObjectUtils.isEmpty(rstMember) ? "N" : "Y";
   }

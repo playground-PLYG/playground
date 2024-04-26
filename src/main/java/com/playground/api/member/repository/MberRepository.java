@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.playground.api.member.entity.MberEntity;
 
 @Repository
-public interface MemberRepository extends JpaRepository<MberEntity, String>, JpaSpecificationExecutor<MberEntity> {
+public interface MberRepository extends JpaRepository<MberEntity, String>, JpaSpecificationExecutor<MberEntity> {
 
   MberEntity findByMberIdOrMberEmailAdres(String userId, String email);
 

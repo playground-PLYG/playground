@@ -16,7 +16,7 @@ import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
-import com.playground.api.member.service.MemberService;
+import com.playground.api.member.service.MberService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,9 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/playground")
-public class MemberController {
+public class MberController {
 
-	private final MemberService memberService;
+	private final MberService mberService;
 
 	/**
 	 * 회원가입
@@ -39,7 +39,7 @@ public class MemberController {
 	@Operation(summary = "회원가입", description = "회원 가입하기")
 	@PostMapping("/public/member/addMber")
 	public SignUpResponse addMber(@RequestBody @Valid SignUpRequest req) {
-		return memberService.addMber(req);
+		return mberService.addMber(req);
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class MemberController {
 	@Operation(summary = "인증", description = "인증 처리")
 	@PostMapping("/public/member/signIn")
 	public SignInResponse signIn(@RequestBody @Valid SignInRequest req) {
-		return memberService.signIn(req);
+		return mberService.signIn(req);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class MemberController {
 	@Operation(summary = "내 정보 조회", description = "본인의 정보를 조회")
 	@GetMapping("/api/member/getMyInfo")
 	public MberInfoResponse getMyInfo(@RequestHeader(value = "Authorization") String token) {
-		return memberService.getMyInfo(token);
+		return mberService.getMyInfo(token);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class MemberController {
 
 		log.debug(">>> 회원조회 : {}", req);
 
-		return memberService.getMberList(req);
+		return mberService.getMberList(req);
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class MemberController {
 
 		log.debug(">>> 회원조회 : {}", req);
 
-		return memberService.getMberDupCeck(req);
+		return mberService.getMberDupCeck(req);
 	}
 
 }

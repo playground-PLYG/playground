@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.sample.entity.SampleUserEntity;
 import com.playground.api.sample.entity.SmpleDetailDetailEntity;
 import com.playground.api.sample.entity.SmpleDetailDetailPK;
@@ -38,7 +39,6 @@ public class SampleService {
   private final SmpleDetailRepository smpleDetailRepository;
   private final SmpleDetailDetailRepository smpleDetailDetailRepository;
   private final ModelMapper modelMapper;
-  private final SmpleRepositoryCustom smpleRepositoryCustom;
 
   public Page<SampleUserResponse> getUserPageList(SampleUserSearchRequest req, Pageable pageable) {
     SampleUserEntity sampleUserEntity = modelMapper.map(req, SampleUserEntity.class);
@@ -152,7 +152,7 @@ public class SampleService {
    */
   public SmpleResponse getSmpleDsl(SmpleRequest req) {
     
-    SmpleEntity smpleEntity = smpleRepositoryCustom.getSmpleSn(req.getSampleContent1(), req.getSampleContent2(), req.getSampleContent3());
+    SmpleEntity smpleEntity = smpleRepository.getSmpleSn(req.getSampleContent1(), req.getSampleContent2(), req.getSampleContent3());
 
     return SmpleResponse.builder()
         .sampleContent1(smpleEntity.getSmpleFirstCn())
@@ -167,7 +167,7 @@ public class SampleService {
    */
   public List<SmpleResponse> getSmpleDslList(SmpleRequest req) {
     
-    List<SmpleEntity> smpleEntityList = smpleRepositoryCustom.getSmpleSnList(req.getSampleContent1(), req.getSampleContent2(), req.getSampleContent3());
+    List<SmpleEntity> smpleEntityList = smpleRepository.getSmpleSnList(req.getSampleContent1(), req.getSampleContent2(), req.getSampleContent3());
   
     return smpleEntityList.stream().map(entity -> SmpleResponse.builder().sampleSsno(entity.getSmpleSn()).sampleContent1(entity.getSmpleFirstCn())
         .sampleContent2(entity.getSmpleSeconCn()).sampleContent3(entity.getSmpleThrdCn()).build()).toList();
@@ -180,7 +180,7 @@ public class SampleService {
    */
   public Page<SmpleResponse> getSmpleDslPageList(SmpleRequest req, Pageable pageable) {
     
-    Page<SmpleEntity> smplePageList = smpleRepositoryCustom.getSmpleSnPageList(req.getSampleContent1(), req.getSampleContent2(), req.getSampleContent3(), pageable);
+    Page<SmpleEntity> smplePageList = smpleRepository.getSmpleSnPageList(req.getSampleContent1(), req.getSampleContent2(), req.getSampleContent3(), pageable);
     
     List<SmpleResponse> sampleList =
         smplePageList.getContent().stream().map(entity -> SmpleResponse.builder()

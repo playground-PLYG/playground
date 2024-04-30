@@ -1,13 +1,13 @@
 package com.playground.api.restaurant.entity;
 
-
+import java.math.BigDecimal;
 import com.playground.entity.BaseEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,42 +22,38 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Entity
 @Table(name = "tb_rstrnt_menu")
+@IdClass(RstrntMenuPK.class)
 public class RstrntMenuEntity extends BaseEntity {
   /**
-   * 일련번호
+   * 식당일련번호
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "code_sn")
-  private Integer codeSn;
+  @Column(name = "rstrnt_sn")
+  private Integer rstrntSn;
 
   /**
-   * 코드id
+   * 식당메뉴일련번호
    */
-  @Column(name = "code_id")
-  private String codeId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tb_rstrnt_menu_rstrnt_menu_sn_seq")
+  @Column(name = "rstrnt_menu_sn")
+  private Integer rstrntMenuSn;
 
   /**
-   * 코드명
+   * 식당메뉴명
    */
-  @Column(name = "code_nm")
-  private String codeNm;
+  @Column(name = "rstrnt_menu_nm")
+  private String rstrntMenuNm;
 
   /**
-   * 상위코드id
+   * 식당이미지 URL
    */
-  @Column(name = "upper_code_id")
-  private String upperCodeId;
+  @Column(name = "rstrnt_menu_image_url")
+  private String rstrntMenuImageUrl;
 
   /**
-   * 그룹코드여부
+   * 식당메뉴가격
    */
-  @Column(name = "group_code_at")
-  private String groupCodeAt;
-
-  /**
-   * 정렬 순번
-   */
-  @Column(name = "sort_ordr")
-  private Integer sortOrdr;
+  @Column(name = "rstrnt_menu_pc")
+  private BigDecimal rstrntMenuPc;
 }

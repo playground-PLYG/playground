@@ -10,22 +10,21 @@ import com.playground.api.restaurant.entity.RstrntMenuEntity;
 import com.playground.api.restaurant.entity.RstrntMenuEntity.RstrntMenuEntityBuilder;
 import com.playground.api.restaurant.entity.RstrntMenuPK;
 import com.playground.api.restaurant.model.RstrntMenuAddRequest;
-import com.playground.api.restaurant.model.RstrntMenuDetailSrchRequest;
+import com.playground.api.restaurant.model.RstrntMenuDetailRequest;
+import com.playground.api.restaurant.model.RstrntMenuListRequest;
 import com.playground.api.restaurant.model.RstrntMenuModifyRequest;
 import com.playground.api.restaurant.model.RstrntMenuRemoveRequest;
 import com.playground.api.restaurant.model.RstrntMenuResponse;
 import com.playground.api.restaurant.repository.RstrntMenuRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RstrntMenuService {
   private final RstrntMenuRepository rstrntMenuRepository;
 
   @Transactional(readOnly = true)
-  public List<RstrntMenuResponse> getRstrntMenuList(RstrntMenuDetailSrchRequest reqData) {
+  public List<RstrntMenuResponse> getRstrntMenuList(RstrntMenuListRequest reqData) {
     RstrntMenuEntityBuilder rstrntMenuEntityBuilder = RstrntMenuEntity.builder();
 
     rstrntMenuEntityBuilder.rstrntSn(reqData.getRestaurantSerialNo());
@@ -51,7 +50,7 @@ public class RstrntMenuService {
   }
 
   @Transactional(readOnly = true)
-  public RstrntMenuResponse getRstrntMenuDetail(RstrntMenuDetailSrchRequest reqData) {
+  public RstrntMenuResponse getRstrntMenuDetail(RstrntMenuDetailRequest reqData) {
     RstrntMenuEntity rstrntMenuEntity = rstrntMenuRepository
         .findById(RstrntMenuPK.builder().rstrntSn(reqData.getRestaurantSerialNo()).rstrntMenuSn(reqData.getRestaurantMenuSerialNo()).build())
         .orElse(null);

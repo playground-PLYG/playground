@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.restaurant.model.RstrntMenuAddRequest;
-import com.playground.api.restaurant.model.RstrntMenuDetailSrchRequest;
+import com.playground.api.restaurant.model.RstrntMenuDetailRequest;
+import com.playground.api.restaurant.model.RstrntMenuListRequest;
 import com.playground.api.restaurant.model.RstrntMenuModifyRequest;
 import com.playground.api.restaurant.model.RstrntMenuRemoveRequest;
 import com.playground.api.restaurant.model.RstrntMenuResponse;
@@ -28,7 +29,7 @@ public class RstrntMenuController {
    */
   @Operation(summary = "식당 메뉴 리스트 조회", description = "식당의 메뉴 목록 조회")
   @PostMapping("public/restaurant/getRstrntMenuList")
-  public List<RstrntMenuResponse> getRstrntMenuList(@RequestBody @Valid RstrntMenuDetailSrchRequest reqData) {
+  public List<RstrntMenuResponse> getRstrntMenuList(@RequestBody @Valid RstrntMenuListRequest reqData) {
     return rstrntService.getRstrntMenuList(reqData);
   }
 
@@ -37,7 +38,7 @@ public class RstrntMenuController {
    */
   @Operation(summary = "식당 메뉴 단건 조회", description = "식당 메뉴 단건 조회")
   @PostMapping("public/restaurant/getRstrntMenuDetail")
-  public RstrntMenuResponse getRstrntMenuDetail(@RequestBody @Valid RstrntMenuDetailSrchRequest reqData) {
+  public RstrntMenuResponse getRstrntMenuDetail(@RequestBody @Valid RstrntMenuDetailRequest reqData) {
     return rstrntService.getRstrntMenuDetail(reqData);
   }
 

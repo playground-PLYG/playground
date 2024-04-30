@@ -2,6 +2,9 @@ package com.playground.api.menu.service;
 
 import java.util.List;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +33,13 @@ public class MenuService {
 
   /** 전체 메뉴 목록 조회 */
   @Transactional(readOnly = true)
-  public List<MenuResponse> selectAllMenu() {
-    List<MenuEntity> entityList = menuRepository.findAllByOrderByMenuSn();
-    return entityList.stream().map(item -> modelMapper.map(item, MenuResponse.class)).toList();
+  public Page<MenuEntity> selectAllMenu(SearchMenuRequest req) {
+    Sort sort1 = Sort.by("menuSn").ascending();
+    Pageable pageable = PageRequest.of(req.getPage(), req.getSize(), sort1);
+    return menuRepository.findAll(pageable);
+
+    // List<MenuEntity> entityList = menuRepository.findAllByOrderByMenuSn();
+    // return entityList.stream().map(item -> modelMapper.map(item, MenuResponse.class)).toList();
   }
 
   /** 메뉴 저장 */

@@ -1,11 +1,13 @@
 package com.playground.api.menu.controller;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.menu.entity.MenuEntity;
 import com.playground.api.menu.model.MenuResponse;
 import com.playground.api.menu.model.SaveMenuRequest;
 import com.playground.api.menu.model.SearchMenuRequest;
@@ -40,9 +42,9 @@ public class MenuController {
    * @return List<MenuResponse> 메뉴 리스트
    */
   @Operation(summary = "전체 메뉴 목록 조회", description = "전체 메뉴 목록 조회")
-  @GetMapping("/public/menu/select-all")
-  public List<MenuResponse> selectAllMenu() {
-    return menuService.selectAllMenu();
+  @PostMapping("/public/menu/select-all")
+  public Page<MenuEntity> selectAllMenu(@RequestBody @Valid SearchMenuRequest req) {
+    return menuService.selectAllMenu(req);
   }
 
   /**

@@ -47,4 +47,9 @@ public class SearchMenuRequest extends BaseDto {
   @Schema(description = "수정일시")
   private LocalDateTime updtDt;
 
+  @Schema(description = "조회페이지")
+  private Integer page;
+
+  @Schema(description = "조회사이즈")
+  private Integer size;
 }

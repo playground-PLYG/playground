@@ -1,6 +1,7 @@
 package com.playground.api.restaurant.model;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
@@ -22,4 +23,13 @@ public class RstrntMenuAddRequest extends RstrntMenuRequest {
   @Null
   @Schema(description = "식당메뉴일련번호", hidden = true)
   private Integer restaurantMenuSerialNo;
+
+  @Schema(description = "메뉴명")
+  private String menuName;
+
+  @Schema(description = "메뉴가격")
+  private BigDecimal menuPrice;
+
+
+
 }

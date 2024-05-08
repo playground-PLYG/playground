@@ -72,6 +72,7 @@ public class SmpleRepositoryImpl implements SmpleRepositoryCustom {
         .leftJoin(smpleDetailEntity)
         .on(smpleEntity.smpleSn.eq(smpleDetailEntity.smpleSn))
         .where(fstCnEq(fstCn), secCnEq(secCn), thrdCnEq(thrdCn))
+        .orderBy(smpleEntity.smpleSn.asc(), smpleDetailEntity.smpleDetailSn.asc())
         .transform(groupBy(smpleEntity.smpleSn).list(
             Projections.fields(GroupByResponse.class,
                 smpleEntity.smpleSn

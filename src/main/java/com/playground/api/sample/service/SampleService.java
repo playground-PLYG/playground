@@ -15,6 +15,8 @@ import com.playground.api.sample.entity.SmpleDetailEntity;
 import com.playground.api.sample.entity.SmpleDetailPK;
 import com.playground.api.sample.entity.SmpleEntity;
 import com.playground.api.sample.entity.specification.SampleSpecification;
+import com.playground.api.sample.model.GroupByResponse;
+import com.playground.api.sample.model.JoinResponse;
 import com.playground.api.sample.model.SampleUserResponse;
 import com.playground.api.sample.model.SampleUserSearchRequest;
 import com.playground.api.sample.model.SmpleDetailDetailRequest;
@@ -27,7 +29,6 @@ import com.playground.api.sample.repository.SampleUserRepository;
 import com.playground.api.sample.repository.SmpleDetailDetailRepository;
 import com.playground.api.sample.repository.SmpleDetailRepository;
 import com.playground.api.sample.repository.SmpleRepository;
-import com.playground.api.sample.repository.dsl.SmpleRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -59,8 +60,13 @@ public class SampleService {
   public List<SmpleResponse> getSmpleList() {
     List<SmpleEntity> smpleEntityList = smpleRepository.findAll();
 
-    return smpleEntityList.stream().map(entity -> SmpleResponse.builder().sampleSsno(entity.getSmpleSn()).sampleContent1(entity.getSmpleFirstCn())
-        .sampleContent2(entity.getSmpleSeconCn()).sampleContent3(entity.getSmpleThrdCn()).build()).toList();
+    return smpleEntityList.stream().map(entity -> SmpleResponse.builder()
+        .sampleSsno(entity.getSmpleSn())
+        .sampleContent1(entity.getSmpleFirstCn())
+        .sampleContent2(entity.getSmpleSeconCn())
+        .sampleContent3(entity.getSmpleThrdCn())
+        .build())
+        .toList();
   }
 
   /**
@@ -192,6 +198,48 @@ public class SampleService {
         .toList();
     
     return new PageImpl<>(sampleList, smplePageList.getPageable(), smplePageList.getTotalElements());
+  }
+  
+  /**
+   * 샘플 QueryDsl 실행 테스트
+   *
+   * @return List<SmpleResponse> - 조회한 샘플 다건
+   */
+  public List<JoinResponse> getSmpleDslJoinList(SmpleRequest req) {
+    return smpleRepository.getSmpleSnJoinList(req.getSampleContent1(), req.getSampleContent2(), req.getSampleContent3());
+  }
+  
+  /**
+   * 샘플 QueryDsl 실행 테스트
+   *
+   * @return List<SmpleResponse> - 조회한 샘플 다건
+   */
+  @Transactional
+  public List<GroupByResponse> getSmpleDslGroupbyList(SmpleRequest req) {
+    return smpleRepository.getSmpleDslGroupbyList(req.getSampleContent1(), req.getSampleContent2(), req.getSampleContent3());
+  }
+  
+  /**
+   * 샘플 QueryDsl 실행 테스트
+   *
+   * @return List<SmpleResponse> - 조회한 샘플 다건
+   */
+  public SmpleDetailResponse addSmpleDetail(SmpleDetailRequest req) {
+    
+    SmpleDetailEntity res = smpleDetailRepository.save(SmpleDetailEntity.builder()
+        .smpleSn(req.getSampleSsno())
+        .smpleDetailFirstCn(req.getSampleDetailContent1())
+        .smpleDetailSeconCn(req.getSampleDetailContent2())
+        .smpleDetailThrdCn(req.getSampleDetailContent3())
+        .build()); 
+    
+    return SmpleDetailResponse.builder()
+        .sampleSsno(res.getSmpleSn())
+        .sampleDetailSsno(res.getSmpleDetailSn())
+        .sampleDetailContent1(res.getSmpleDetailFirstCn())
+        .sampleDetailContent2(res.getSmpleDetailSeconCn())
+        .sampleDetailContent3(res.getSmpleDetailThrdCn())
+        .build();
   }
   
 }

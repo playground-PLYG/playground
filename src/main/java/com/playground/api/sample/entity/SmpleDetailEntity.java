@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,12 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Table(name = "tb_smple_detail")
 @IdClass(SmpleDetailPK.class)
+@SequenceGenerator(
+    name = "smple_detail_sn_seq",
+      sequenceName = "tb_smple_detail_smple_detail_sn_seq",
+      initialValue = 1,
+      allocationSize = 1
+  )
 public class SmpleDetailEntity extends BaseEntity {
   /**
    * 샘플일련번호
@@ -34,7 +41,7 @@ public class SmpleDetailEntity extends BaseEntity {
    * 샘플상세일련번호
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="smple_detail_sn_seq")
   @Column(name = "smple_detail_sn")
   private Integer smpleDetailSn;
 
@@ -55,4 +62,7 @@ public class SmpleDetailEntity extends BaseEntity {
    */
   @Column(name = "smple_detail_thrd_cn")
   private String smpleDetailThrdCn;
+  
 }
+
+  

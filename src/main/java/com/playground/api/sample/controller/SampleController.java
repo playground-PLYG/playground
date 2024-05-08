@@ -5,11 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.playground.api.sample.entity.SmpleEntity;
+import com.playground.api.sample.model.GroupByResponse;
+import com.playground.api.sample.model.JoinResponse;
 import com.playground.api.sample.model.SampleUserResponse;
 import com.playground.api.sample.model.SampleUserSearchRequest;
 import com.playground.api.sample.model.SmpleDetailDetailRequest;
@@ -143,6 +143,39 @@ public class SampleController {
   @PostMapping("/public/sample/getSmpleDslPageList")
   public Page<SmpleResponse> getSmpleDslPageList(@RequestBody SmpleRequest req, Pageable pageable) {
     return sampleService.getSmpleDslPageList(req, pageable);
+  }
+  
+  /**
+   * 샘플 QueryDsl 실행 테이블 두개 조회
+   *
+   * @return SmpleResponse - 조회한 샘플 페이징
+   */
+  @Operation(summary = "샘플 QueryDsl 테이블 두개 조회", description = "샘플 테이블 정보 두개 조인 조회")
+  @PostMapping("/public/sample/getSmpleDslJoinList")
+  public List<JoinResponse> getSmpleDslJoinList(@RequestBody SmpleRequest req) {
+    return sampleService.getSmpleDslJoinList(req);
+  }
+  
+  /**
+   * 샘플 QueryDsl 실행 테이블 두개 조회
+   *
+   * @return SmpleResponse - 조회한 샘플 페이징
+   */
+  @Operation(summary = "샘플 QueryDsl Group by 조회", description = "샘플 테이블 정보 두개 group by 조회")
+  @PostMapping("/public/sample/getSmpleDslGroupbyList")
+  public List<GroupByResponse> getSmpleDslGroupbyList(@RequestBody SmpleRequest req) {
+    return sampleService.getSmpleDslGroupbyList(req);
+  }
+  
+  /**
+   * 샘플 QueryDsl 실행 테이블 두개 조회
+   *
+   * @return SmpleResponse - 조회한 샘플 페이징
+   */
+  @Operation(summary = "샘플 SmpleDetail Add", description = "샘플 Detail 테이블 저장")
+  @PostMapping("/public/sample/addSmpleDetail")
+  public SmpleDetailResponse addSmpleDetail(@RequestBody SmpleDetailRequest req) {
+    return sampleService.addSmpleDetail(req);
   }
   
 }

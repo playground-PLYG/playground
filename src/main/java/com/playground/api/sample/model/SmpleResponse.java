@@ -1,8 +1,11 @@
 package com.playground.api.sample.model;
 
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -44,4 +47,10 @@ public class SmpleResponse extends BaseDto {
    */
   @Schema(description = "샘플 세번째 내용", example = "test3")
   private String sampleContent3;
+  
+  /**
+   * detail List
+   */
+  @OneToMany(mappedBy = "tb_smple")
+  private List<SmpleDetailResponse> smpleDetailResponseList = new ArrayList<>();
 }

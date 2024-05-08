@@ -1,7 +1,6 @@
 package com.playground.api.vote.entity;
 
 import com.playground.entity.BaseEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,31 +26,31 @@ import lombok.Setter;
 @IdClass(QestnPK.class)
 public class QestnEntity extends BaseEntity {
 
-	/**
-	 * 질문일련번호
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "qestn_sn")
-	private Integer qestnSn;
+  /**
+   * 질문일련번호
+   */
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "qestn_sn")
+  private Integer qestnSn;
 
-	/**
-	 * 투표일련번호
-	 */
-	@Id
-	@Column(name = "vote_sn")
-	private Integer voteSn;
+  /**
+   * 투표일련번호
+   */
+  @Id
+  @Column(name = "vote_sn")
+  private Integer voteSn;
 
-	/**
-	 * 질문내용
-	 */
-	@Column(name = "qestn_cn")
-	private String qestnCn;
+  /**
+   * 질문내용
+   */
+  @Column(name = "qestn_cn")
+  private String qestnCn;
 
-	/**
-	 * 복수선택여부
-	 */
-	@Column(name = "compno_choise_at")
-	private String compnoChoiseAt;
+  /**
+   * 복수선택여부
+   */
+  @Column(name = "compno_choise_at")
+  private String compnoChoiseAt;
 
 }

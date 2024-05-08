@@ -1,15 +1,10 @@
 package com.playground.api.vote.repository;
 
-import java.util.List;
-
-import org.springframework.data.repository.CrudRepository;
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.playground.api.vote.entity.VoteEntity;
+import com.playground.api.vote.repository.dsl.VoteRepositoryCustom;
 
-public interface VoteRepository extends CrudRepository<VoteEntity, Integer>{
-	List<VoteEntity> findAll();
-	
-	
-	
-	
+public interface VoteRepository extends JpaRepository<VoteEntity, String>, VoteRepositoryCustom{
+ 
+
 }

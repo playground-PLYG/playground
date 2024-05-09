@@ -2,6 +2,9 @@ package com.playground.api.restaurant.model;
 
 import java.io.Serial;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import com.playground.api.hashtag.model.HashtagRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +32,9 @@ public class RstrntMenuAddRequest extends RstrntMenuRequest {
 
   @Schema(description = "메뉴가격")
   private BigDecimal menuPrice;
+  
+  @Schema(description = "해시태그리스트")
+  private List<String> hashtagList = new ArrayList<>();
 
 
 

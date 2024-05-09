@@ -51,6 +51,5 @@ public class SmpleResponse extends BaseDto {
   /**
    * detail List
    */
-  @OneToMany(mappedBy = "tb_smple")
-  private List<SmpleDetailResponse> smpleDetailResponseList = new ArrayList<>();
+  private final List<SmpleDetailResponse> smpleDetailResponseList = new ArrayList<>();
 }

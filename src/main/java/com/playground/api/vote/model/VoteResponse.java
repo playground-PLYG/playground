@@ -2,6 +2,7 @@ package com.playground.api.vote.model;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -72,43 +73,6 @@ public class VoteResponse extends BaseDto {
   @Schema(description = "실행결과", example = "1")
   private String excuteResult;
 
-  /** ==================================== QestnResponse ====================================*/
-  /**
-   * 질문내용
-   */
-  @Schema(description = "질문내용", example = "회식 가능한 날짜를 선택해주세요")
-  private String questionContents;
-  
-  /**
-   * 질문일련번호
-   */
-  @Schema(description = "질문일련번호", example = "1234567890")
-  private Integer questionSsno;
-  
-  /**
-   * 복수선택여부
-   */
-  @Schema(description = "복수선택여부", example = "Y")
-  private String compoundNumberChoiceAlternative;
-  
-  /** ==================================== VoteIemResponse ====================================*/
-  /**
-   * 항목ID
-   */
-  @Schema(description = "항목ID", example = "0000123456")
-  private String itemId;
-  
-  /**
-   * 항목명
-   */
-  @Schema(description = "항목명", example = "또성골뱅이")
-  private String itemName;
-  /** =========================================================================================*/
-  
-  
-  @Schema(name = "qestnList",description = "질문객체", example = "qestnResponse")
+  @Schema(description = "질문객체", example = "qestnResponse")
   private List<QestnResponse> qestnResponseList;
-  
-  @Schema(name = "voteIemList" ,description = "항목객체", example = "voteIemResponse")
-  private List<VoteIemResponse> voteIemResponseList;
 }

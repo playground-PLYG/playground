@@ -1,6 +1,7 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
+import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
@@ -57,8 +58,11 @@ public class VoteRequest extends BaseDto {
   private String voteDeleteAlternative;
 
   /**
-   * 질문 객체
+   * 질문일련번호
    */
-  @Schema(description = "질문 객체", example = "qestnRequest")
-  private QestnRequest qestnRequest;
+  @Schema(description = "질문일련번호", example = "1234567890")
+  private Integer questionSsno;
+  
+  @Schema(description = "질문객체", example = "qestnRequest")
+  private List<QestnRequest> qestnRequestList;
 }

@@ -1,6 +1,5 @@
 package com.playground.api.vote.controller;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +40,7 @@ public class VoteController {
    */
   @Operation(summary = "투표내용 상세조회", description = "투표 정보를 상세하게 조회")
   @PostMapping("/api/vote/getVoteDetail")
-  public List<VoteResponse> getVoteDetail(@RequestBody @Valid VoteRequest reqData) {
+  public VoteResponse getVoteDetail(@RequestBody @Valid VoteRequest reqData) {
     return voteService.getVoteDetail(reqData);
   }
 

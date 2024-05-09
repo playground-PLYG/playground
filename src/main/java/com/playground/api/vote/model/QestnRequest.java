@@ -1,9 +1,8 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
-
+import java.util.List;
 import com.playground.model.BaseDto;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -39,4 +38,10 @@ public class QestnRequest extends BaseDto {
 	 */
 	@Schema(description = "복수선택여부", example = "Y")
 	private String compoundNumberChoiceAlternative;
+	
+    /**
+     * 투표항목 객체
+     */
+    @Schema(description = "항목객체", example = "voteIemRequest")
+    private List<VoteIemRequest> voteIemRequestList;
 }

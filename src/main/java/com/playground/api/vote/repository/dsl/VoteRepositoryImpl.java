@@ -4,6 +4,8 @@ package com.playground.api.vote.repository.dsl;
 import static com.playground.api.vote.entity.QQestnEntity.qestnEntity;
 import static com.playground.api.vote.entity.QVoteEntity.voteEntity;
 import static com.playground.api.vote.entity.QVoteIemEntity.voteIemEntity;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -14,12 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
+import com.playground.api.vote.entity.QestnEntity;
 import com.playground.api.vote.entity.VoteEntity;
+import com.playground.api.vote.entity.VoteIemEntity;
 import com.playground.api.vote.model.QestnResponse;
 import com.playground.api.vote.model.VoteIemResponse;
 import com.playground.api.vote.model.VoteRequest;
-import com.playground.api.vote.model.VoteResponse;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -60,62 +62,46 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   }
 
   @Override
-  public List<VoteResponse> getVoteDetail(VoteRequest reqData) {
-    return queryFactory
-        .select(
-            Projections.fields(
-                VoteResponse.class, 
-                voteEntity.voteSn.as("voteSsno"), 
-                voteEntity.voteKndCode.as("voteKindCode"),
-                voteEntity.voteSj.as("voteSubject"), 
-                voteEntity.annymtyVoteAt.as("anonymityVoteAlternative"), 
-                voteEntity.voteBeginDt.as("voteBeginDate"),
-                voteEntity.voteEndDt.as("voteEndDate"),
-                voteEntity.voteDeleteAt.as("voteDeleteAlternative"),
-                GroupBy.list(
-                    Projections.fields(
-                        QestnResponse.class, 
-                        qestnEntity.qestnCn.as("questionContents"), 
-                        qestnEntity.qestnSn.as("questionSsno"),
-                        qestnEntity.compnoChoiseAt.as("compoundNumberChoiceAlternative")
-                        )).as("qestnList"),
-                GroupBy.list(
-                    Projections.fields(
-                        VoteIemResponse.class, 
-                        voteIemEntity.iemId.as("itemId"),
-                        voteIemEntity.iemNm.as("itemName")
-                        )).as("voteIemList")
-        ))
-        .from(voteEntity)
-        .join(qestnEntity)
-          .on(voteEntity.voteSn.eq(qestnEntity.voteSn))
-        .join(voteIemEntity)
-          .on(qestnEntity.voteSn.eq(voteIemEntity.voteSn).and(qestnEntity.qestnSn.eq(voteIemEntity.qestnSn)))
-        .where(qestnEntity.qestnSn.eq(reqData.getQestnRequest().getQuestionSsno())
-            .and(qestnEntity.voteSn.eq(reqData.getVoteSsno()))).fetch();
-//    return queryFactory
-//        .select(
-//            Projections.fields(
-//                VoteResponse.class, 
-//                voteEntity.voteSn.as("voteSsno"), 
-//                voteEntity.voteKndCode.as("voteKindCode"),
-//                voteEntity.voteSj.as("voteSubject"), 
-//                voteEntity.annymtyVoteAt.as("anonymityVoteAlternative"), 
-//                voteEntity.voteBeginDt.as("voteBeginDate"),
-//                voteEntity.voteEndDt.as("voteEndDate"),
-//                voteEntity.voteDeleteAt.as("voteDeleteAlternative"),
-//                qestnEntity.qestnCn.as("questionContents"), 
-//                qestnEntity.qestnSn.as("questionSsno"),
-//                qestnEntity.compnoChoiseAt.as("compoundNumberChoiceAlternative"),
-//                voteIemEntity.iemId.as("itemId"),
-//                voteIemEntity.iemNm.as("itemName")))
-//        .from(voteEntity)
-//        .join(qestnEntity)
-//          .on(voteEntity.voteSn.eq(qestnEntity.voteSn))
-//        .join(voteIemEntity)
-//          .on(qestnEntity.voteSn.eq(voteIemEntity.voteSn).and(qestnEntity.qestnSn.eq(voteIemEntity.qestnSn)))
-//        .where(qestnEntity.qestnSn.eq(reqData.getQestnRequest().getQuestionSsno())
-//            .and(qestnEntity.voteSn.eq(reqData.getVoteSsno()))).fetch();
+  public List<QestnResponse> getQestnDetail(Integer voteSsno, Integer questionSsno) {
+    return queryFactory.select(qestnEntity)
+                .from(qestnEntity)
+                .leftJoin(voteIemEntity).on(qestnEntity.voteSn.eq(voteIemEntity.voteSn).and(qestnEntity.qestnSn.eq(voteIemEntity.qestnSn)))
+                .where(qestnEntity.qestnSn.eq(questionSsno).and(qestnEntity.voteSn.eq(voteSsno)))
+                .orderBy(qestnEntity.voteSn.asc(), qestnEntity.qestnSn.asc())
+                .transform(groupBy(qestnEntity.voteSn, qestnEntity.qestnSn).list(
+                    Projections.fields(QestnResponse.class, 
+                        qestnEntity.voteSn.as("voteSsno")
+                        ,qestnEntity.qestnSn.as("questionSsno")
+                        ,qestnEntity.qestnCn.as("questionContents")
+                        ,qestnEntity.compnoChoiseAt.as("compoundNumberChoiceAlternative")
+                        ,list(Projections.fields(VoteIemResponse.class, 
+                                voteIemEntity.iemId.as("itemId")
+                                ,voteIemEntity.iemNm.as("itemName")
+                                )).as("voteIemResponseList")
+                        )));
+  }
+  
+  @Override
+  public QestnResponse addQestnDetail(QestnEntity requestEntity) {
+    Long resultVal = queryFactory.insert(qestnEntity)
+                                  .columns(qestnEntity.voteSn, qestnEntity.qestnCn, qestnEntity.compnoChoiseAt, qestnEntity.registUsrId, qestnEntity.updtUsrId)
+                                  .values(requestEntity.getVoteSn(),
+                                          requestEntity.getQestnCn(),
+                                          requestEntity.getCompnoChoiseAt(),
+                                          "anno",
+                                          "anno"
+                                        ).execute();
+
+    log.debug("reseultVal ::::::::::::::::::::: {}", resultVal);
+
+    // QestnResponse 객체에 questionSsno, voteSsno 세팅해서 return 해주기
+    return new QestnResponse();
+  }
+  
+  @Override
+  public Integer addVoteIemDetail(VoteIemEntity voteIemEntity) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
   /* 동적쿼리를 위한 함수 */
@@ -176,5 +162,7 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
       return Expressions.allOf(isGoeStartDate, isLoeEndDate);
     }
   }
+
+
 
 }

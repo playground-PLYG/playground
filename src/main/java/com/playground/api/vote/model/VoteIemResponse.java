@@ -31,18 +31,6 @@ public class VoteIemResponse extends BaseDto {
 	private String itemId;
 
 	/**
-	 * 투표일련번호
-	 */
-	@Schema(description = "투표일련번호", example = "1234567890")
-	private Integer voteSsno;
-
-	/**
-	 * 질문일련번호
-	 */
-	@Schema(description = "질문일련번호", example = "1234567890")
-	private Integer questionSsno;
-
-	/**
 	 * 항목명
 	 */
 	@Schema(description = "항목명", example = "또성골뱅이")

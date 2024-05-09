@@ -1,6 +1,7 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,6 +51,6 @@ public class QestnResponse extends BaseDto {
   /**
    * 투표항목 객체
    */
-  @Schema(name = "voteIemList", description = "투표항목 객체", example = "voteIemResponse")
-  private List<VoteIemResponse> voteIemResponseList;
+  @Schema(description = "항목객체", example = "voteIemResponse")
+  private final List<VoteIemResponse> voteIemResponseList = new ArrayList<>();
 }

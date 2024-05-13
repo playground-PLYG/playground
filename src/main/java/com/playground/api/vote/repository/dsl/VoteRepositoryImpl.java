@@ -138,6 +138,26 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
     }
   }
 
+  @Override
+  public Long updateByIdForVote(VoteRequest reqData) {
+    LocalDateTime nowDateTime =  LocalDateTime.now();
+    return queryFactory.update(voteEntity)
+        .set(voteEntity.voteDeleteAt, reqData.getVoteDeleteAlternative())
+        .set(voteEntity.updtDt, nowDateTime)
+        .where(voteEntity.voteSn.eq(reqData.getVoteSsno()))
+        .execute();
+  }
+
+  @Override
+  public Long deleteByVoteSnForQestn(Integer voteSsno) {
+    return queryFactory.delete(qestnEntity).where(qestnEntity.voteSn.eq(voteSsno)).execute();
+  }
+  
+  @Override
+  public Long deleteByVoteSnForVoteIem(Integer voteSsno) {
+    return queryFactory.delete(voteIemEntity).where(voteIemEntity.voteSn.eq(voteSsno)).execute();
+  }
+
 
 
 }

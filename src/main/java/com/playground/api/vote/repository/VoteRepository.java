@@ -8,6 +8,5 @@ import com.playground.api.vote.repository.dsl.VoteRepositoryCustom;
 public interface VoteRepository extends JpaRepository<VoteEntity, Integer>, VoteRepositoryCustom{
   
   Optional<VoteEntity> findById(Integer voteSn);
- 
 
 }

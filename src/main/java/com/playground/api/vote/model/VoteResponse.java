@@ -2,7 +2,6 @@ package com.playground.api.vote.model;
 
 import java.io.Serial;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;

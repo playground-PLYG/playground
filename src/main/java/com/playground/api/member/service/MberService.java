@@ -63,7 +63,7 @@ public class MberService {
     return SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).build();
   }
 
-  @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#token", unless = "#result == null")
+  @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#p0", unless = "#result == null")
   @Transactional(readOnly = true)
   public MberInfoResponse getMyInfo(String token) {
     if (!ObjectUtils.isEmpty(token)) {
@@ -73,13 +73,13 @@ public class MberService {
 
       MberEntity memberEntity = mberRepository.findById(member.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
 
-      return modelMapper.map(memberEntity, MberInfoResponse.class);
+      return MberInfoResponse.builder().mberId(memberEntity.getMberId()).mberNm(memberEntity.getMberNm()).mberEmailAdres(memberEntity.getMberEmailAdres()).build();
     } else {
       throw new BizException(MessageCode.INVALID_TOKEN);
     }
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public List<MberSrchResponse> getMberList(MberSrchRequest req) {
     MberEntity pgEntity = MberEntity.builder().mberId(req.getMberId()).mberNm(req.getMberNm()).build();
 
@@ -92,7 +92,7 @@ public class MberService {
     return member.stream().map(item -> modelMapper.map(item, MberSrchResponse.class)).toList();
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public String getMberDupCeck(MberSrchRequest req) {
     MberEntity rstMember = mberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
 

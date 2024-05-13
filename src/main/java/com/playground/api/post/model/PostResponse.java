@@ -1,13 +1,24 @@
 package com.playground.api.post.model;
 
+import java.util.List;
+
+import com.playground.api.post.entity.PostEntity.PostEntityBuilder;
+import com.playground.api.sample.model.SmpleDetailResponse;
+import com.playground.api.sample.model.SmpleResponse;
 import com.playground.model.BaseDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Schema(name = "PostResponse", description = "게시물 CRUD")
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
@@ -34,4 +45,7 @@ public class PostResponse extends BaseDto {
 
 	@Schema(description = "수정사용자ID")
 	private String updtUsrId;
+	
+	
 }
+

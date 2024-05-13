@@ -10,13 +10,13 @@
    - @Transactional annotaion의 readonly 속성을 사용하여 read/write이면 Master로 readonly인 경우 Slave로 DataSource를 결정해서 connection 함
 
 > 관련 소스
-   - [application.yml](https://github.com/hsm0711/playground/blob/master/src/main/resources/application.yml#L25)
+   - [application.yml](https://github.com/playground-PLYG/playground/blob/master/src/main/resources/application.yml#L25)
    : master/slave jdbc 관련 설정
-   - [DataSourceConfig.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/config/DataSourceConfig.java)
+   - [DataSourceConfig.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/config/DataSourceConfig.java)
    : yaml 파일에 설정한 jdbc 설정 정보로 DataSource를 반환하는 bean 생성
-   - [RoutingDataSource.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/config/RoutingDataSource.java)
+   - [RoutingDataSource.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/config/RoutingDataSource.java)
    : Transaction의 readonly여부에 따라 master/slave 판단
-   - [RoutingDataSourceConfig.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/config/RoutingDataSourceConfig.java)
+   - [RoutingDataSourceConfig.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/config/RoutingDataSourceConfig.java)
    : LazyConnection으로 RoutingDataSource에서 판단된 DataSource로 connection
 
 
@@ -31,9 +31,9 @@
      - Confluence에 개발 환경 - Google Secret Manager 환경 변수 참조
 
 > 관련 소스
-   - [application.yml](https://github.com/hsm0711/playground/blob/master/src/main/resources/application.yml#L21)
+   - [application.yml](https://github.com/playground-PLYG/playground/blob/master/src/main/resources/application.yml#L21)
    : ${sm://jdbc-url} 와 같은 형태로 사용
-   - [build.gradle](https://github.com/hsm0711/playground/blob/master/build.gradle#L40)
+   - [build.gradle](https://github.com/playground-PLYG/playground/blob/master/build.gradle#L40)
    : spring-cloud-gcp-starter, spring-cloud-gcp-starter-secretmanager
 
 > 참고 링크
@@ -50,13 +50,13 @@
 
 
 > 관련 소스
-   - [JwtFilter.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/filter/JwtFilter.java#L67)
+   - [JwtFilter.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/filter/JwtFilter.java#L67)
    : MDC 셋팅
-   - [application.yml](https://github.com/hsm0711/playground/blob/master/src/main/resources/application.yml#L59)
+   - [application.yml](https://github.com/playground-PLYG/playground/blob/master/src/main/resources/application.yml#L59)
    : default pattern에 userId 추가
-   - [BaseEntity.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/entity/BaseEntity.java)
+   - [BaseEntity.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/entity/BaseEntity.java)
    : 민감정보 로그에 표출되지 않도록 마스킹 처리를 위해 ToString Override
-   - [BaseDto.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/model/BaseDto.java)
+   - [BaseDto.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/model/BaseDto.java)
    : 민감정보 로그에 표출되지 않도록 마스킹 처리를 위해 ToString Override
 
 
@@ -91,15 +91,15 @@
 
 
 > 관련 소스
-   - [application-local.yml](https://github.com/hsm0711/playground/blob/master/src/main/resources/application-local.yml#L18)
+   - [application-local.yml](https://github.com/playground-PLYG/playground/blob/master/src/main/resources/application-local.yml#L18)
    : redis 접속 정보 셋팅
-   - [RedisConfig.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/config/RedisConfig.java)
+   - [RedisConfig.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/config/RedisConfig.java)
    : 기본 client로 Lettuce를 사용하기 위해 LettuceConnectionFactory를 활용해 redis 접속 환경 구성
-   - [CacheConfig.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/config/CacheConfig.java)
+   - [CacheConfig.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/config/CacheConfig.java)
    : redis를 Cache로 활용하기 위해 CacheManager 설정 구성
-   - [RedisController.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/api/sample/RedisController.java)
+   - [RedisController.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/api/sample/RedisController.java)
    : redis 활용 샘플 api
-   - [MemberService.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/api/playground/service/playgroundService.java#L88)
+   - [MemberService.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/api/playground/service/playgroundService.java#L88)
    : redis 활용 캐싱 api
 
 
@@ -114,11 +114,11 @@
 
 
 > 관련 소스
-   - [ExcelDown.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/annotation/ExcelDown.java)
+   - [ExcelDown.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/annotation/ExcelDown.java)
    : Excel 다운로드를 위해 해더, width, 순서 등 설정
-   - [ExcelDownUtil.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/utils/ExcelDownUtil.java)
+   - [ExcelDownUtil.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/utils/ExcelDownUtil.java)
    : Excel 다운로드를 처리를 하는 Util
-   - [ExcelController.java](https://github.com/hsm0711/playground/blob/master/src/main/java/com/playground/api/sample/ExcelController.java)
+   - [ExcelController.java](https://github.com/playground-PLYG/playground/blob/master/src/main/java/com/playground/api/sample/ExcelController.java)
    : Excel 다운로드를 샘플 api
 
 

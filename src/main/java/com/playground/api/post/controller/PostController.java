@@ -52,16 +52,6 @@ public class PostController {
 		return postService.modifyPost(postRequest);
 	}
 	
-	/** 
-	@Operation(summary = "", description ="")
-	@PostMapping("/api/post/getTestUpdate")
-	public List<PostResponse> getTestModi(@RequestBody PostRequest PostRequest) {
-		
-		
-		return postService.testModi(PostRequest);
-	}
-	*/
-	
 	/**
 	 * 게시물 삭제
 	 *

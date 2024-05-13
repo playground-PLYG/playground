@@ -37,7 +37,6 @@ public class PostService {
 		
 	}
 	
-	
 	/** 게시물 생성 */
 	public PostResponse addPost(PostRequest postRequest) {
 		PostEntity postEntity = PostEntity.builder()
@@ -85,8 +84,6 @@ public class PostService {
 	@Transactional
 	public void removePost(PostRequest postRequest) {
 		postRepository.deleteByNttNo(postRequest.getNttNo());
-		
-		//return modelMapper.map(postRequest, PostResponse.class);
 	}
 	
 }

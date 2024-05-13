@@ -21,20 +21,22 @@ import lombok.extern.slf4j.Slf4j;
 @UtilityClass
 public class JwtTokenUtil {
   private static final String USER_ID = "mberId";
+  
+  private static final String USER_NM = "mberNm";
 
   private static final String SECRET_KEY = "PlaygroundTestKey256SecreyKeyTestKeyYamlfhQodigka256e39djf"; // 이거 좋은 방법 없나 확인 필요
 
   private static final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
   // 토큰 생성
-  public static String createToken(String userId, String name) {
+  public static String createToken(String userId, String userNm) {
 
     Map<String, Object> payloads = new HashMap<>();
 
     // API 용도에 맞게 properties로 관리하여 사용하는것을 권장한다.
     payloads.put(USER_ID, userId);
-    payloads.put("name", name);
-
+    payloads.put(USER_NM, userNm);
+ 
     // 토큰 유효 시간 (30분)
     long expiredTime = 1000 * 60 * 30L;
 
@@ -71,7 +73,7 @@ public class JwtTokenUtil {
    */
   public static String getUsernameFromToken(String token) {
     try {
-      return String.valueOf(getAllClaims(token).get("mberNm"));
+      return String.valueOf(getAllClaims(token).get(USER_NM));
     } catch (NullPointerException e) {
       throw new BizException(MessageCode.INVALID_TOKEN);
     }

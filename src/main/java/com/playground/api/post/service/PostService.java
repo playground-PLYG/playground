@@ -2,16 +2,14 @@ package com.playground.api.post.service;
 
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.playground.api.post.entity.PostEntity;
 import com.playground.api.post.model.PostRequest;
 import com.playground.api.post.model.PostResponse;
 import com.playground.api.post.repository.PostRepository;
-import com.playground.api.sample.model.SmpleResponse;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,9 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PostService {
 	private final PostRepository postRepository;
-	private final ModelMapper modelMapper;
 
 	/** 전체 게시물 목록 조회 */
+	@Transactional(readOnly = true)
 	public List<PostResponse> getPostList(String bbsId) {
 		List<PostEntity> postEntity = postRepository.findAllByBbsId(bbsId);
 		return postEntity.stream().map(entity -> PostResponse.builder()
@@ -34,10 +32,10 @@ public class PostService {
 				.updtUsrId(entity.getUpdtUsrId())
 		        .build())
 		        .toList();
-		
 	}
 	
 	/** 게시물 생성 */
+	@Transactional
 	public PostResponse addPost(PostRequest postRequest) {
 		PostEntity postEntity = PostEntity.builder()
 				.bbsId(postRequest.getBbsId())
@@ -58,6 +56,7 @@ public class PostService {
 	}
 	
 	/**  게시물 수정  */ 
+	@Transactional
 	public PostResponse modifyPost(PostRequest postRequest) {
 		PostEntity postEntity = PostEntity.builder()
 				.nttNo(postRequest.getNttNo())

@@ -113,8 +113,7 @@ public class VoteService {
     voteResponse = modelMapper.map(voteEntity, VoteResponse.class);
 
     List<QestnResponse> setQestnList = new ArrayList<>();
-
-    if (reqData.getQestnRequestList().size() != 0) {
+    if(!ObjectUtils.isEmpty(reqData.getQestnRequestList())) {
       List<QestnRequest> qestnReList = reqData.getQestnRequestList();
       qestnReList.forEach(qestn -> {
         QestnEntity qestnRes = qestnRepository.save(QestnEntity.builder()
@@ -130,7 +129,7 @@ public class VoteService {
             .compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt())
             .build();
 
-        if (qestn.getVoteIemRequestList().size() != 0) {
+        if (!ObjectUtils.isEmpty(qestn.getVoteIemRequestList())) {
           List<VoteIemEntity> iemEntities = new ArrayList<>();
           qestn.getVoteIemRequestList().forEach(voteIem -> {
             iemEntities.add(VoteIemEntity.builder()
@@ -184,7 +183,7 @@ public class VoteService {
    
    List<QestnResponse> setQestnList = new ArrayList<>();
 
-   if (reqData.getQestnRequestList().size() != 0) {
+   if (!ObjectUtils.isEmpty(reqData.getQestnRequestList())) {
      List<QestnRequest> qestnReList = reqData.getQestnRequestList();
      qestnReList.forEach(qestn -> {
        QestnEntity qestnRes = qestnRepository.save(QestnEntity.builder()
@@ -201,7 +200,7 @@ public class VoteService {
            .compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt())
            .build();
 
-       if (qestn.getVoteIemRequestList().size() != 0) {
+       if (!ObjectUtils.isEmpty(qestn.getVoteIemRequestList())) {
          List<VoteIemEntity> iemEntities = new ArrayList<>();
          qestn.getVoteIemRequestList().forEach(voteIem -> {
            iemEntities.add(VoteIemEntity.builder()

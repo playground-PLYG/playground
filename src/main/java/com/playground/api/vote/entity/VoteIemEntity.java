@@ -3,8 +3,6 @@ package com.playground.api.vote.entity;
 import com.playground.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
@@ -30,7 +28,6 @@ public class VoteIemEntity extends BaseEntity {
    * 항목ID
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "iem_id")
   private String iemId;
 

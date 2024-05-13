@@ -52,5 +52,6 @@ public class QestnResponse extends BaseDto {
    * 투표항목 객체
    */
   @Schema(description = "항목객체", example = "voteIemResponse")
-  private final List<VoteIemResponse> voteIemResponseList = new ArrayList<>();
+  @Builder.Default
+  private List<VoteIemResponse> voteIemResponseList = new ArrayList<>();
 }

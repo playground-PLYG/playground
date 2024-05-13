@@ -16,9 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
-import com.playground.api.vote.entity.QestnEntity;
 import com.playground.api.vote.entity.VoteEntity;
-import com.playground.api.vote.entity.VoteIemEntity;
 import com.playground.api.vote.model.QestnResponse;
 import com.playground.api.vote.model.VoteIemResponse;
 import com.playground.api.vote.model.VoteRequest;
@@ -81,29 +79,6 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
                         )));
   }
   
-  @Override
-  public QestnResponse addQestnDetail(QestnEntity requestEntity) {
-    Long resultVal = queryFactory.insert(qestnEntity)
-                                  .columns(qestnEntity.voteSn, qestnEntity.qestnCn, qestnEntity.compnoChoiseAt, qestnEntity.registUsrId, qestnEntity.updtUsrId)
-                                  .values(requestEntity.getVoteSn(),
-                                          requestEntity.getQestnCn(),
-                                          requestEntity.getCompnoChoiseAt(),
-                                          "anno",
-                                          "anno"
-                                        ).execute();
-
-    log.debug("reseultVal ::::::::::::::::::::: {}", resultVal);
-
-    // QestnResponse 객체에 questionSsno, voteSsno 세팅해서 return 해주기
-    return new QestnResponse();
-  }
-  
-  @Override
-  public Integer addVoteIemDetail(VoteIemEntity voteIemEntity) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   /* 동적쿼리를 위한 함수 */
   private BooleanExpression firstCnLike(String firstCn) {
     if (ObjectUtils.isEmpty(firstCn)) {

@@ -12,4 +12,10 @@ public interface VoteRepositoryCustom {
 
   List<QestnResponse> getQestnDetail(Integer voteSsno, Integer questionSsno);
 
+  Long updateByIdForVote(VoteRequest reqData);
+
+  Long deleteByVoteSnForQestn(Integer voteSsno);
+
+  Long deleteByVoteSnForVoteIem(Integer voteSsno);
+
 }

@@ -114,7 +114,7 @@ public class VoteService {
 
     List<QestnResponse> setQestnList = new ArrayList<>();
 
-    if (reqData.getQestnRequestList().size() != 0) {
+    if (!ObjectUtils.isEmpty(reqData.getQestnRequestList()) && reqData.getQestnRequestList().size() != 0) {
       List<QestnRequest> qestnReList = reqData.getQestnRequestList();
       qestnReList.forEach(qestn -> {
         QestnEntity qestnRes = qestnRepository.save(QestnEntity.builder()
@@ -130,7 +130,7 @@ public class VoteService {
             .compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt())
             .build();
 
-        if (qestn.getVoteIemRequestList().size() != 0) {
+        if (!ObjectUtils.isEmpty(qestn.getVoteIemRequestList()) && qestn.getVoteIemRequestList().size() != 0) {
           List<VoteIemEntity> iemEntities = new ArrayList<>();
           qestn.getVoteIemRequestList().forEach(voteIem -> {
             iemEntities.add(VoteIemEntity.builder()
@@ -160,20 +160,100 @@ public class VoteService {
   
   @Transactional
   public VoteResponse modifyVote(VoteRequest reqData) {
+    log.debug("VoteService.modifyVote ::::: voteRequestData ::::: {}", reqData);
+    
+    VoteEntity voteEntity = voteRepository.save(VoteEntity.builder()
+        .voteSn(reqData.getVoteSsno())
+        .voteKndCode(reqData.getVoteKindCode())
+        .voteSj(reqData.getVoteSubject())
+        .annymtyVoteAt(reqData.getAnonymityVoteAlternative())
+        .voteBeginDt(this.stringToLocalDateTime(reqData.getVoteBeginDate()))
+        .voteEndDt(this.stringToLocalDateTime(reqData.getVoteEndDate()))
+        .voteDeleteAt(reqData.getVoteDeleteAlternative())
+        .build());
 
+   VoteResponse resData = VoteResponse.builder()
+       .voteSsno(voteEntity.getVoteSn())
+       .voteKindCode(voteEntity.getVoteKndCode())
+       .voteSubject(voteEntity.getVoteSj())
+       .anonymityVoteAlternative(voteEntity.getAnnymtyVoteAt())
+       .voteBeginDate(voteEntity.getVoteBeginDt())
+       .voteEndDate(voteEntity.getVoteEndDt())
+       .voteDeleteAlternative(voteEntity.getVoteDeleteAt())
+       .build();
+   
+   List<QestnResponse> setQestnList = new ArrayList<>();
 
+   if (!ObjectUtils.isEmpty(reqData.getQestnRequestList()) && reqData.getQestnRequestList().size() != 0) {
+     List<QestnRequest> qestnReList = reqData.getQestnRequestList();
+     qestnReList.forEach(qestn -> {
+       QestnEntity qestnRes = qestnRepository.save(QestnEntity.builder()
+           .qestnSn(qestn.getQuestionSsno())
+           .voteSn(voteEntity.getVoteSn())
+           .qestnCn(qestn.getQuestionContents())
+           .compnoChoiseAt(qestn.getCompoundNumberChoiceAlternative())
+           .build());
 
-    String tempExcuteResult = "1";
-    return VoteResponse.builder().excuteResult(tempExcuteResult).build();
+       QestnResponse setQestn = QestnResponse.builder()
+           .questionSsno(qestnRes.getQestnSn())
+           .voteSsno(qestnRes.getVoteSn())
+           .questionContents(qestnRes.getQestnCn())
+           .compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt())
+           .build();
+
+       if (!ObjectUtils.isEmpty(qestn.getVoteIemRequestList()) && qestn.getVoteIemRequestList().size() != 0) {
+         List<VoteIemEntity> iemEntities = new ArrayList<>();
+         qestn.getVoteIemRequestList().forEach(voteIem -> {
+           iemEntities.add(VoteIemEntity.builder()
+               .voteSn(qestnRes.getVoteSn())
+               .qestnSn(qestnRes.getQestnSn())
+               .iemId(voteIem.getItemId())
+               .iemNm(voteIem.getItemName())
+               .build());
+         });
+
+         List<VoteIemEntity> saveAllIemEntities = voteIemRepository.saveAll(iemEntities);
+         setQestn.setVoteIemResponseList(saveAllIemEntities.stream()
+             .map(entity -> VoteIemResponse.builder()
+                 .itemId(entity.getIemId())
+                 .itemName(entity.getIemNm())
+                 .build())
+             .toList());
+       }
+       setQestnList.add(setQestn);
+     });
+     resData.setQestnResponseList(setQestnList);
+   }
+   
+   return resData;
   }
 
   @Transactional
   public VoteResponse removeVote(VoteRequest reqData) {
-
-
-
-    String tempExcuteResult = "1";
-    return VoteResponse.builder().excuteResult(tempExcuteResult).build();
+    log.debug("VoteService.removeVote ::::: voteRequest ::::: {}", reqData);
+    if (!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
+      Long upValVote = voteRepository.updateByIdForVote(reqData);
+      Long delValQestn = voteRepository.deleteByVoteSnForQestn(reqData.getVoteSsno());
+      Long delValVoteIem = voteRepository.deleteByVoteSnForVoteIem(reqData.getVoteSsno());
+      log.debug("VoteService.removeVote ::::: delValQestn, delValVoteIem ::::: {}{}", delValQestn,delValVoteIem);
+      
+      if(upValVote >= 1L) {
+        VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
+        return VoteResponse.builder()
+            .voteSsno(voteEntity.getVoteSn())
+            .voteKindCode(voteEntity.getVoteKndCode())
+            .voteSubject(voteEntity.getVoteSj())
+            .anonymityVoteAlternative(voteEntity.getAnnymtyVoteAt())
+            .voteBeginDate(voteEntity.getVoteBeginDt())
+            .voteEndDate(voteEntity.getVoteEndDt())
+            .voteDeleteAlternative(voteEntity.getVoteDeleteAt())
+            .build();
+      }else {
+        return new VoteResponse();
+      }
+    } else {
+      return new VoteResponse();
+    }
   }
 
   private LocalDateTime stringToLocalDateTime(String strDate) {

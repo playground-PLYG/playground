@@ -1,9 +1,7 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
-
 import com.playground.model.BaseDto;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,4 +33,16 @@ public class VoteIemResponse extends BaseDto {
 	 */
 	@Schema(description = "항목명", example = "또성골뱅이")
 	private String itemName;
-}
+
+    /**
+     * 질문일련번호
+     */
+    @Schema(description = "질문일련번호", example = "1234567890")
+    private Integer questionSsno;
+
+    /**
+     * 투표일련번호
+     */
+    @Schema(description = "투표일련번호", example = "1234567890")
+    private Integer voteSsno;
+  }

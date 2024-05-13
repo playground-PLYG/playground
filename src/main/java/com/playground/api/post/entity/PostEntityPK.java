@@ -21,7 +21,7 @@ public class PostEntityPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/** 게시물 번호 */
-	private Integer nttNo;
+	private int nttNo;
 	
 	/** 게시판ID */
 	private String bbsId;

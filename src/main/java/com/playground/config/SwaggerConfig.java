@@ -32,6 +32,11 @@ public class SwaggerConfig {
   }
 
   @Bean
+  public GroupedOpenApi sampleApi() {
+    return GroupedOpenApi.builder().group("sample").displayName("샘플 API").pathsToMatch("/playground/**/sample/**").build();
+  }
+
+  @Bean
   public OpenAPI openAPI(ServerProperties serverProperties, ProfileUtil profileUtil) {
 
     Info info = new Info().version("v1.0.0").title("Playground API").description("playground 프로젝트 API 명세서");

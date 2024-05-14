@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,13 +26,19 @@ import lombok.Setter;
 @Entity
 @Table(name = "tb_qestn_answer")
 @IdClass(QestnAnswerPK.class)
+@SequenceGenerator(
+    name = "answer_sn_seq",
+    sequenceName = "tb_qestn_answer_answer_sn_seq",
+    initialValue = 1,
+    allocationSize = 1
+    )
 public class QestnAnswerEntity extends BaseEntity {
 
 	/**
 	 * 답변일련번호
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_sn_seq")
 	@Column(name = "answer_sn")
 	private Integer answerSn;
 

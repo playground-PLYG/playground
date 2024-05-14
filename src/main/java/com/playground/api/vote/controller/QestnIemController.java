@@ -28,7 +28,7 @@ public class QestnIemController {
    * 질문등록
    */
   @Operation(summary = "질문등록", description = "관리자가 질문을 등록")
-  @PostMapping("/api/qestn/modifyQestn")
+  @PostMapping("/api/qestn/addQestn")
   public List<QestnResponse> addQestn(@RequestBody @Valid List<QestnRequest> qestnReqList) {
     return qestnIemService.addQestn(qestnReqList);
   }

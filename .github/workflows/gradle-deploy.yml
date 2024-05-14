@@ -88,7 +88,10 @@ jobs:
       ENVIRONMENT: ${{ github.event.deployment.environment }}
       DEPLOY_ID: ${{ github.event.deployment.id}}
     
-    steps:      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
     - name: Auth to GCP
       uses: google-github-actions/auth@v2
       with:

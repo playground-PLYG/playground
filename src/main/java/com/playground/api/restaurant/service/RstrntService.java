@@ -5,9 +5,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.restaurant.entity.RstrntEntity;
+import com.playground.api.restaurant.entity.RstrntMenuEntity;
+import com.playground.api.restaurant.entity.RstrntMenuPK;
 import com.playground.api.restaurant.entity.specification.RstrntSpecification;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
+import com.playground.api.restaurant.repository.RstrntMenuRepository;
 import com.playground.api.restaurant.repository.RstrntRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ public class RstrntService {
   private final RstrntSpecification rstrntSpecification;
   private final RstrntRepository rstrntRepository;
   private final ModelMapper modelMapper;
+  private final RstrntMenuRepository rstrntMenuRepository;
 
   @Transactional
   public List<RstrntSrchResponse> getRstrntList(RstrntSrchRequest req) {
@@ -47,13 +51,21 @@ public class RstrntService {
   @Transactional
   public void removeRstrnt(List<RstrntSrchRequest> req) {
 
-    for (int i = 0; i < req.size(); i++) {
+    req.forEach(rstrnt -> {
+      rstrntRepository.delete(RstrntEntity.builder().rstrntSn(rstrnt.getRstrntSn()).build());
 
-      Integer rstrntSn = 0;
-      rstrntSn = req.get(i).getRstrntSn();
+      // 식당이 삭제 되었으니 해당 식당 메뉴를 삭제한다 !
+      List<RstrntMenuEntity> rstrntMenuEntityList =
+          rstrntMenuRepository.findAllList(RstrntMenuEntity.builder().rstrntSn(rstrnt.getRstrntSn()).build());
 
-      rstrntRepository.delete(RstrntEntity.builder().rstrntSn(rstrntSn).build());
-    }
+      log.debug(" 삭 제 메 뉴  :::: {}", rstrntMenuEntityList);
+
+      rstrntMenuEntityList.forEach(menu -> {
+        rstrntMenuRepository.deleteById(RstrntMenuPK.builder().rstrntSn(menu.getRstrntSn()).rstrntMenuSn(menu.getRstrntMenuSn()).build());
+      });
+
+    });
+
   }
 
 }

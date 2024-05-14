@@ -2,6 +2,7 @@ package com.playground.api.vote.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -43,8 +44,8 @@ public class AnswerService {
     reqDataList.forEach(req -> {
       resEntityList.add(QestnAnswerEntity.builder()
           .voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno())
-          .iemId(req.getItemId()).answerUserId(stringNvl(req.getAnswerUserId()))
-          .answerCn(stringNvl(req.getAnswerContents()))
+          .iemId(req.getItemId()).answerUserId(StringUtils.defaultString(req.getAnswerUserId()))
+          .answerCn(StringUtils.defaultString(req.getAnswerContents()))
           .build());
     });
 
@@ -64,8 +65,8 @@ public class AnswerService {
     reqDataList.forEach(req -> {
       QestnAnswerEntity reqAnswer = QestnAnswerEntity.builder()
           .answerSn(req.getAnswerSsno()).voteSn(req.getVoteSsno())
-          .qestnSn(req.getQuestionSsno()).answerUserId(stringNvl(req.getAnswerUserId()))
-          .iemId(req.getItemId()).answerCn(stringNvl(req.getAnswerContents()))
+          .qestnSn(req.getQuestionSsno()).answerUserId(StringUtils.defaultString(req.getAnswerUserId()))
+          .iemId(req.getItemId()).answerCn(StringUtils.defaultString(req.getAnswerContents()))
           .build();
       
        QestnAnswerEntity resAnswer = qestnAnswerRepository.selectByEntity(reqAnswer);
@@ -96,14 +97,4 @@ public class AnswerService {
       return 0L;
     }
   }
-  
-  private String stringNvl(String str) {
-    String reStr ="";
-    if(!ObjectUtils.isEmpty(str)) {
-      return str;
-    }else {
-      return reStr;
-    }
-  }
-  
 }

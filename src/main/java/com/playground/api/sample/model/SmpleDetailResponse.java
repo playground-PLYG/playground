@@ -3,8 +3,6 @@ package com.playground.api.sample.model;
 import java.io.Serial;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -53,6 +51,4 @@ public class SmpleDetailResponse extends BaseDto {
   @Schema(description = "샘플 상세 세번째 내용", example = "test3")
   private String sampleDetailContent3;
   
-  @ManyToOne(fetch = FetchType.LAZY)
-  private SmpleResponse smpleResponse;
 }

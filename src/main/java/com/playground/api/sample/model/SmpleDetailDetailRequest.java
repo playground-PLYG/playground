@@ -35,17 +35,17 @@ public class SmpleDetailDetailRequest extends BaseDto {
    * 샘플 상세 상세 첫번째 내용
    */
   @Schema(description = "샘플 상세 상세 첫번째 내용", example = "test1")
-  private String sampleDetailContent1;
+  private String sampleDetailDetailContent1;
 
   /**
    * 샘플 상세 상세 두번째 내용
    */
   @Schema(description = "샘플 상세 상세 두번째 내용", example = "test2")
-  private String sampleDetailContent2;
+  private String sampleDetailDetailContent2;
 
   /**
    * 샘플 상세 상세 세번째 내용
    */
   @Schema(description = "샘플 상세 상세 세번째 내용", example = "test3")
-  private String sampleDetailContent3;
+  private String sampleDetailDetailContent3;
 }

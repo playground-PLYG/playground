@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.sample.entity.SampleUserEntity;
 import com.playground.api.sample.entity.SmpleDetailDetailEntity;
-import com.playground.api.sample.entity.SmpleDetailDetailPK;
 import com.playground.api.sample.entity.SmpleDetailEntity;
 import com.playground.api.sample.entity.SmpleDetailPK;
 import com.playground.api.sample.entity.SmpleEntity;
@@ -109,10 +108,12 @@ public class SampleService {
    */
   public SmpleDetailResponse getSmpleDetailDetail(SmpleDetailRequest reqData) {
     SmpleDetailEntity smpleDetailEntity =
-        smpleDetailRepository.findById(SmpleDetailPK.builder().smpleSn(reqData.getSampleSsno()).smpleDetailSn(reqData.getSampleDetailSsno()).build())
+        smpleDetailRepository.findById(SmpleDetailPK.builder()
+            .smpleEntity(reqData.getSampleDetailSsno())
+            .smpleDetailSn(reqData.getSampleDetailSsno()).build())
             .orElse(SmpleDetailEntity.builder().build());
 
-    return SmpleDetailResponse.builder().sampleSsno(smpleDetailEntity.getSmpleSn()).sampleDetailSsno(smpleDetailEntity.getSmpleDetailSn())
+    return SmpleDetailResponse.builder().sampleSsno(smpleDetailEntity.getSmpleEntity().getSmpleSn()).sampleDetailSsno(smpleDetailEntity.getSmpleDetailSn())
         .sampleDetailContent1(smpleDetailEntity.getSmpleDetailFirstCn()).sampleDetailContent2(smpleDetailEntity.getSmpleDetailSeconCn())
         .sampleDetailContent3(smpleDetailEntity.getSmpleDetailThrdCn()).build();
   }
@@ -139,6 +140,7 @@ public class SampleService {
    * @return SmpleDetailDetailResponse - 조회한 샘플 상세 상세 단건 목록
    */
   public SmpleDetailDetailResponse getSmpleDetailDetailDetail(SmpleDetailDetailRequest reqData) {
+    /*
     SmpleDetailDetailEntity smpleDetailDetailEntity = smpleDetailDetailRepository
         .findById(SmpleDetailDetailPK.builder().smpleSn(reqData.getSampleSsno()).smpleDetailSn(reqData.getSampleDetailSsno())
             .smpleDetailDetailSn(reqData.getSampleDetailDetailSsno()).build())
@@ -149,6 +151,8 @@ public class SampleService {
         .sampleDetailDetailContent1(smpleDetailDetailEntity.getSmpleDetailDetailFirstCn())
         .sampleDetailDetailContent2(smpleDetailDetailEntity.getSmpleDetailDetailSeconCn())
         .sampleDetailDetailContent3(smpleDetailDetailEntity.getSmpleDetailDetailThrdCn()).build();
+        */
+    return null;
   }
   
   /**
@@ -227,19 +231,85 @@ public class SampleService {
   public SmpleDetailResponse addSmpleDetail(SmpleDetailRequest req) {
     
     SmpleDetailEntity res = smpleDetailRepository.save(SmpleDetailEntity.builder()
-        .smpleSn(req.getSampleSsno())
+        .smpleEntity(SmpleEntity.builder().smpleSn(req.getSampleSsno()).build())
         .smpleDetailFirstCn(req.getSampleDetailContent1())
         .smpleDetailSeconCn(req.getSampleDetailContent2())
         .smpleDetailThrdCn(req.getSampleDetailContent3())
         .build()); 
     
     return SmpleDetailResponse.builder()
-        .sampleSsno(res.getSmpleSn())
+        .sampleSsno(res.getSmpleEntity().getSmpleSn())
         .sampleDetailSsno(res.getSmpleDetailSn())
         .sampleDetailContent1(res.getSmpleDetailFirstCn())
         .sampleDetailContent2(res.getSmpleDetailSeconCn())
         .sampleDetailContent3(res.getSmpleDetailThrdCn())
         .build();
+  }
+  
+  public SmpleDetailResponse modifySmpleDetail(SmpleDetailRequest req) {
+    SmpleDetailEntity res = smpleDetailRepository.save(SmpleDetailEntity.builder()
+        .smpleEntity(SmpleEntity.builder().smpleSn(req.getSampleSsno()).build())
+        .smpleDetailSn(req.getSampleDetailSsno())
+        .smpleDetailFirstCn(req.getSampleDetailContent1())
+        .smpleDetailSeconCn(req.getSampleDetailContent2())
+        .smpleDetailThrdCn(req.getSampleDetailContent3())
+        .build()); 
+    
+    return SmpleDetailResponse.builder()
+        .sampleSsno(res.getSmpleEntity().getSmpleSn())
+        .sampleDetailSsno(res.getSmpleDetailSn())
+        .sampleDetailContent1(res.getSmpleDetailFirstCn())
+        .sampleDetailContent2(res.getSmpleDetailSeconCn())
+        .sampleDetailContent3(res.getSmpleDetailThrdCn())
+        .build();
+  
+  }
+  
+  public void removeSmpleDetail(SmpleDetailRequest req) {
+    smpleDetailRepository.deleteById(SmpleDetailPK.builder()
+        .smpleEntity(req.getSampleSsno())
+        .smpleDetailSn(req.getSampleDetailSsno())
+        .build());
+  }
+  
+  public SmpleDetailDetailResponse addSmpleDetailDetail(SmpleDetailDetailRequest req) {
+    SmpleDetailDetailEntity res = smpleDetailDetailRepository.save(SmpleDetailDetailEntity.builder()
+        .smpleDetailEntity(SmpleDetailEntity.builder().smpleEntity(SmpleEntity.builder().smpleSn(req.getSampleSsno()).build())
+            .smpleDetailSn(req.getSampleDetailSsno()).build())
+        .smpleDetailDetailFirstCn(req.getSampleDetailDetailContent1())
+        .smpleDetailDetailSeconCn(req.getSampleDetailDetailContent2())
+        .smpleDetailDetailThrdCn(req.getSampleDetailDetailContent3())
+        .build());
+    
+    return SmpleDetailDetailResponse.builder()
+        .sampleSsno(res.getSmpleDetailEntity().getSmpleEntity().getSmpleSn())
+        .sampleDetailSsno(res.getSmpleDetailEntity().getSmpleDetailSn())
+        .sampleDetailDetailSsno(res.getSmpleDetailDetailSn())
+        .sampleDetailDetailContent1(res.getSmpleDetailDetailFirstCn())
+        .sampleDetailDetailContent2(res.getSmpleDetailDetailSeconCn())
+        .sampleDetailDetailContent3(res.getSmpleDetailDetailThrdCn())
+        .build();
+  }
+  
+  public SmpleDetailDetailResponse modifySmpleDetailDetail(SmpleDetailDetailRequest req) {
+    SmpleDetailDetailEntity res = smpleDetailDetailRepository.save(SmpleDetailDetailEntity.builder()
+        .smpleDetailEntity(SmpleDetailEntity.builder().smpleEntity(SmpleEntity.builder().smpleSn(req.getSampleSsno()).build())
+            .smpleDetailSn(req.getSampleDetailSsno()).build())
+        .smpleDetailDetailSn(req.getSampleDetailDetailSsno())
+        .smpleDetailDetailFirstCn(req.getSampleDetailDetailContent1())
+        .smpleDetailDetailSeconCn(req.getSampleDetailDetailContent2())
+        .smpleDetailDetailThrdCn(req.getSampleDetailDetailContent3())
+        .build());
+    
+    return SmpleDetailDetailResponse.builder()
+        .sampleSsno(res.getSmpleDetailEntity().getSmpleEntity().getSmpleSn())
+        .sampleDetailSsno(res.getSmpleDetailEntity().getSmpleDetailSn())
+        .sampleDetailDetailSsno(res.getSmpleDetailDetailSn())
+        .sampleDetailDetailContent1(res.getSmpleDetailDetailFirstCn())
+        .sampleDetailDetailContent2(res.getSmpleDetailDetailSeconCn())
+        .sampleDetailDetailContent3(res.getSmpleDetailDetailThrdCn())
+        .build();
+    
   }
   
 }

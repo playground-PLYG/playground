@@ -46,4 +46,5 @@ public class SmpleEntity extends BaseEntity {
    */
   @Column(name = "smple_thrd_cn")
   private String smpleThrdCn;
+  
 }

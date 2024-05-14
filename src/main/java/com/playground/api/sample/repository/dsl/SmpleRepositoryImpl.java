@@ -59,7 +59,7 @@ public class SmpleRepositoryImpl implements SmpleRepositoryCustom {
                 ,smpleDetailEntity.smpleDetailThrdCn
                 ))
         .from(smpleEntity)
-        .innerJoin(smpleDetailEntity).on(smpleEntity.smpleSn.eq(smpleDetailEntity.smpleSn))
+        .innerJoin(smpleDetailEntity).on(smpleEntity.smpleSn.eq(smpleDetailEntity.smpleEntity.smpleSn))
         .where(fstCnEq(fstCn), secCnEq(secCn), thrdCnEq(thrdCn))
         .fetch();
   }
@@ -70,7 +70,7 @@ public class SmpleRepositoryImpl implements SmpleRepositoryCustom {
     return queryFactory.select(smpleEntity)
         .from(smpleEntity)
         .leftJoin(smpleDetailEntity)
-        .on(smpleEntity.smpleSn.eq(smpleDetailEntity.smpleSn))
+        .on(smpleEntity.smpleSn.eq(smpleDetailEntity.smpleEntity.smpleSn))
         .where(fstCnEq(fstCn), secCnEq(secCn), thrdCnEq(thrdCn))
         .orderBy(smpleEntity.smpleSn.asc(), smpleDetailEntity.smpleDetailSn.asc())
         .transform(groupBy(smpleEntity.smpleSn).list(

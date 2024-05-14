@@ -20,9 +20,9 @@ public class SmpleDetailPK implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 샘플일련번호
+   * 샘플일련번호 SmpleDetailEntity에 관계 지정한 필드와 일치해야함
    */
-  private Integer smpleSn;
+  private Integer smpleEntity;
 
   /**
    * 샘플상세일련번호

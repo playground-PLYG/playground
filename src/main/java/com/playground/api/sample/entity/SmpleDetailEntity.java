@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,13 +32,15 @@ import lombok.RequiredArgsConstructor;
       allocationSize = 1
   )
 public class SmpleDetailEntity extends BaseEntity {
-  /**
-   * 샘플일련번호
+
+  /*
+   * 다대일 관계 매핑 해당 필드명은 SmpleDetailPK에 있는 FK로 잡은 필드와 일치해야함
    */
   @Id
-  @Column(name = "smple_sn")
-  private Integer smpleSn;
-
+  @ManyToOne
+  @JoinColumn(name="smple_sn")
+  private SmpleEntity smpleEntity;
+  
   /**
    * 샘플상세일련번호
    */
@@ -62,6 +66,8 @@ public class SmpleDetailEntity extends BaseEntity {
    */
   @Column(name = "smple_detail_thrd_cn")
   private String smpleDetailThrdCn;
+  
+  
   
 }
 

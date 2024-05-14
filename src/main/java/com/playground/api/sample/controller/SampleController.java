@@ -168,14 +168,58 @@ public class SampleController {
   }
   
   /**
-   * 샘플 QueryDsl 실행 테이블 두개 조회
+   * 샘플 Detail 테이블 insert
    *
-   * @return SmpleResponse - 조회한 샘플 페이징
+   * @return SmpleDetailResponse - 샘플 디테일 
    */
   @Operation(summary = "샘플 SmpleDetail Add", description = "샘플 Detail 테이블 저장")
   @PostMapping("/public/sample/addSmpleDetail")
   public SmpleDetailResponse addSmpleDetail(@RequestBody SmpleDetailRequest req) {
     return sampleService.addSmpleDetail(req);
+  }
+  
+  /**
+   * 샘플 Detail 테이블 update
+   *
+   * @return SmpleDetailResponse - 샘플 디테일 수정
+   */
+  @Operation(summary = "샘플 SmpleDetail modify", description = "샘플 Detail 테이블 수정")
+  @PostMapping("/public/sample/modifySmpleDetail")
+  public SmpleDetailResponse modifySmpleDetail(@RequestBody SmpleDetailRequest req) {
+    return sampleService.modifySmpleDetail(req);
+  }
+  
+  /**
+   * 샘플 Detail 테이블 delete
+   *
+   * @return SmpleDetailResponse - 샘플 디테일 삭제
+   */
+  @Operation(summary = "샘플 SmpleDetail remove", description = "샘플 Detail 테이블 삭제")
+  @PostMapping("/public/sample/removeSmpleDetail")
+  public void removeSmpleDetail(@RequestBody SmpleDetailRequest req) {
+    sampleService.removeSmpleDetail(req);
+  }
+  
+  /**
+   * 샘플 Detail 테이블 insert
+   *
+   * @return SmpleDetailResponse - 샘플 디테일 
+   */
+  @Operation(summary = "샘플 SmpleDetailDetail Add", description = "샘플 DetailDetail 테이블 저장")
+  @PostMapping("/public/sample/addSmpleDetailDetail")
+  public SmpleDetailDetailResponse addSmpleDetailDetail(@RequestBody SmpleDetailDetailRequest req) {
+    return sampleService.addSmpleDetailDetail(req);
+  }
+  
+  /**
+   * 샘플 Detail 테이블 update
+   *
+   * @return SmpleDetailResponse - 샘플 디테일 수정
+   */
+  @Operation(summary = "샘플 SmpleDetailDetail modify", description = "샘플 DetailDetail 테이블 수정")
+  @PostMapping("/public/sample/modifySmpleDetailDetail")
+  public SmpleDetailDetailResponse modifySmpleDetailDetail(@RequestBody SmpleDetailDetailRequest req) {
+    return sampleService.modifySmpleDetailDetail(req);
   }
   
 }

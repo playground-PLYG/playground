@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-@EnableRedisRepositories
+@EnableRedisRepositories(basePackages = "com.playground.api.*.repository.redis")
 public class RedisConfig {
 
   @Value("${spring.data.redis.host}")
@@ -57,7 +57,6 @@ public class RedisConfig {
     StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
     GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper());
 
-
     redisTemplate.setConnectionFactory(redisConnectionFactory());
     redisTemplate.setKeySerializer(stringRedisSerializer);
     redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
@@ -72,20 +71,12 @@ public class RedisConfig {
       RedisSeverSentEventsMessageSubscribeListener redisSeverSentEventsMessageSubscribeListener) {
     RedisMessageListenerContainer container = new RedisMessageListenerContainer();
     container.setConnectionFactory(redisConnectionFactory());
-    container.addMessageListener(new MessageListenerAdapter(redisWebSocketMessageSubscribeListener), webSocketTopic());
-    container.addMessageListener(new MessageListenerAdapter(redisSeverSentEventsMessageSubscribeListener), serverSentEventsTopic());
+    container.addMessageListener(new MessageListenerAdapter(redisWebSocketMessageSubscribeListener),
+        new ChannelTopic(RedisSubscibeChannel.WEBSOCKET_TOPIC.name()));
+    container.addMessageListener(new MessageListenerAdapter(redisSeverSentEventsMessageSubscribeListener),
+        new ChannelTopic(RedisSubscibeChannel.SSE_TOPIC.name()));
 
     return container;
-  }
-
-  @Bean
-  public ChannelTopic webSocketTopic() {
-    return new ChannelTopic(RedisSubscibeChannel.WEBSOCKET_TOPIC.name());
-  }
-
-  @Bean
-  public ChannelTopic serverSentEventsTopic() {
-    return new ChannelTopic(RedisSubscibeChannel.SSE_TOPIC.name());
   }
 
   private ObjectMapper objectMapper() {

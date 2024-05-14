@@ -1,4 +1,4 @@
-package com.playground.api.sample.repository;
+package com.playground.api.sample.repository.redis;
 
 import java.util.List;
 

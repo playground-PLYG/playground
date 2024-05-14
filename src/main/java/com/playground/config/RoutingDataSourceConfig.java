@@ -5,7 +5,9 @@ import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
@@ -16,7 +18,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import com.playground.constants.DataSourceType;
 
-@EnableJpaRepositories(basePackages = "com.playground.api")
+@EnableJpaRepositories(basePackages = "com.playground.api.*.repository",
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASPECTJ, pattern = "com.playground.api.*.repository.redis.*"))
 @Configuration
 public class RoutingDataSourceConfig {
 

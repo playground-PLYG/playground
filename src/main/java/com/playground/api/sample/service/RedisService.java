@@ -4,7 +4,7 @@ package com.playground.api.sample.service;
 import com.playground.api.sample.entity.RedisPublishEntity;
 import com.playground.api.sample.entity.RedisRepositoryEntity;
 import com.playground.api.sample.entity.RedisTemplateEntity;
-import com.playground.api.sample.repository.RedisRepository;
+import com.playground.api.sample.repository.redis.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.redis.core.RedisTemplate;

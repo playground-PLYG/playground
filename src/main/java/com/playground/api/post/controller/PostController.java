@@ -41,14 +41,12 @@ public class PostController {
 	@Operation(summary = "게시물 생성", description = "게시물 생성")
 	@PostMapping("/api/post/addPost")
 	public PostResponse addPost(@RequestBody PostRequest postRequest) {
-		
 		return postService.addPost(postRequest);
 	}
 	
 	@Operation(summary = "게시물 수정", description = "게시물 수정")
-	@PostMapping("/api/post/addPostTest")
+	@PostMapping("/api/post/modifyPost")
 	public PostResponse modifyPost(@RequestBody PostRequest postRequest) {
-		
 		return postService.modifyPost(postRequest);
 	}
 	

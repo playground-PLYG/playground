@@ -24,12 +24,10 @@ public class PostService {
 	public List<PostResponse> getPostList(String bbsId) {
 		List<PostEntity> postEntity = postRepository.findAllByBbsId(bbsId);
 		return postEntity.stream().map(entity -> PostResponse.builder()
-				.nttNo(entity.getNttNo())
-				.bbsId(entity.getBbsId())
-				.nttSj(entity.getNttSj())
-				.nttCn(entity.getNttCn())
-				.registUsrId(entity.getRegistUsrId())
-				.updtUsrId(entity.getUpdtUsrId())
+				.noticeNo(entity.getNttNo())
+				.boardId(entity.getBbsId())
+				.noticeSj(entity.getNttSj())
+				.noticeCn(entity.getNttCn())
 		        .build())
 		        .toList();
 	}
@@ -38,20 +36,16 @@ public class PostService {
 	@Transactional
 	public PostResponse addPost(PostRequest postRequest) {
 		PostEntity postEntity = PostEntity.builder()
-				.bbsId(postRequest.getBbsId())
-				.nttSj(postRequest.getNttSj())
-				.nttCn(postRequest.getNttCn())
-				.registUsrId(postRequest.getRegistUsrId())
-				.updtUsrId(postRequest.getUpdtUsrId())
+				.bbsId(postRequest.getBoardId())
+				.nttSj(postRequest.getNoticeSj())
+				.nttCn(postRequest.getNoticeCn())
 				.build();
 		postRepository.save(postEntity);
 		
 		return PostResponse.builder()
-				.bbsId(postEntity.getBbsId())
-				.nttSj(postEntity.getNttSj())
-				.nttCn(postEntity.getNttCn())
-				.registUsrId(postEntity.getRegistUsrId())
-				.updtUsrId(postEntity.getUpdtUsrId())
+				.boardId(postEntity.getBbsId())
+				.noticeSj(postEntity.getNttSj())
+				.noticeCn(postEntity.getNttCn())
 				.build();
 	}
 	
@@ -59,22 +53,18 @@ public class PostService {
 	@Transactional
 	public PostResponse modifyPost(PostRequest postRequest) {
 		PostEntity postEntity = PostEntity.builder()
-				.nttNo(postRequest.getNttNo())
-				.bbsId(postRequest.getBbsId())
-				.nttSj(postRequest.getNttSj())
-				.nttCn(postRequest.getNttCn())
-				.registUsrId(postRequest.getRegistUsrId())
-				.updtUsrId(postRequest.getUpdtUsrId())
+				.nttNo(postRequest.getNoticeNo())
+				.bbsId(postRequest.getBoardId())
+				.nttSj(postRequest.getNoticeSj())
+				.nttCn(postRequest.getNoticeCn())
 				.build();
 		postRepository.save(postEntity);
 		
 		return PostResponse.builder()
-				.nttNo(postEntity.getNttNo())
-				.bbsId(postEntity.getBbsId())
-				.nttSj(postEntity.getNttSj())
-				.nttCn(postEntity.getNttCn())
-				.registUsrId(postEntity.getRegistUsrId())
-				.updtUsrId(postEntity.getUpdtUsrId())
+				.noticeNo(postEntity.getNttNo())
+				.boardId(postEntity.getBbsId())
+				.noticeSj(postEntity.getNttSj())
+				.noticeCn(postEntity.getNttCn())
 				.build();
 	}
 	
@@ -82,7 +72,7 @@ public class PostService {
 	/** 게시판 삭제*/
 	@Transactional
 	public void removePost(PostRequest postRequest) {
-		postRepository.deleteByNttNo(postRequest.getNttNo());
+		postRepository.deleteByNttNo(postRequest.getNoticeNo());
 	}
 	
 }

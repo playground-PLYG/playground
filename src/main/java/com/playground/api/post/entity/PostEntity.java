@@ -47,12 +47,4 @@ public class PostEntity extends BaseEntity{
 	@Column(name = "ntt_cn")
 	private String nttCn;
 	
-
-	@Column(name = "regist_usr_id")
-	private String registUsrId;
-	
-	@Column(name = "updt_usr_id")
-	private String updtUsrId;
-	
-	
 }

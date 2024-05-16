@@ -2,6 +2,7 @@ package com.playground.api.menu.controller;
 
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,8 +44,8 @@ public class MenuController {
    */
   @Operation(summary = "전체 메뉴 목록 조회", description = "전체 메뉴 목록 조회")
   @PostMapping("/public/menu/select-all")
-  public Page<MenuEntity> selectAllMenu(@RequestBody @Valid SearchMenuRequest req) {
-    return menuService.selectAllMenu(req);
+  public Page<MenuEntity> selectAllMenu(Pageable pageable) {
+    return menuService.selectAllMenu(pageable);
   }
 
   /**

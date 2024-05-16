@@ -8,4 +8,6 @@ import com.playground.api.post.entity.PostEntity;
 
 public interface PostRepository extends JpaRepository< PostEntity, Integer >{
 	List<PostEntity> findAllByBbsId(String postNo);
+	
+	List<PostEntity> deleteByNttNo(int nttNo);
 }

@@ -1,4 +1,4 @@
-package com.playground.api.post.entity;
+package com.playground.api.comment.entity;
 
 import com.playground.entity.BaseEntity;
 
@@ -22,18 +22,22 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
-@Table(name = "tb_post")
-@IdClass(PostEntityPK.class)
+@Table(name = "tb_comment")
+@IdClass(CommentEntityPK.class)
 @SequenceGenerator(
-	    name = "ntt_no_seq",
-	      sequenceName = "tb_post_ntt_no_seq",
+	    name = "cmnt_no_seq",
+	      sequenceName = "tb_comment_cmnt_no_seq",
 	      initialValue = 1,
 	      allocationSize = 1
 	  )
-public class PostEntity extends BaseEntity{
-
+public class CommentEntity extends BaseEntity{
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ntt_no_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="cmnt_no_seq")
+	@Column(name = "cmnt_no")
+	private int cmntNo;
+	
+	@Id
 	@Column(name = "ntt_no")
 	private int nttNo;
 	
@@ -41,18 +45,11 @@ public class PostEntity extends BaseEntity{
 	@Column(name = "bbs_id")
 	private String bbsId;
 	
-	@Column(name = "ntt_sj")
-	private String nttSj;
+	@Column(name = "cmnt_cn")
+	private String cmntCn;
 	
-	@Column(name = "ntt_cn")
-	private String nttCn;
-	
-
-	@Column(name = "regist_usr_id")
-	private String registUsrId;
-	
-	@Column(name = "updt_usr_id")
-	private String updtUsrId;
+	@Column(name = "upper_cmnt_no")
+	private int upperCmntNo;
 	
 	
 }

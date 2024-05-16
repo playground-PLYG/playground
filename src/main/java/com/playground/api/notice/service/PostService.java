@@ -1,14 +1,14 @@
-package com.playground.api.post.service;
+package com.playground.api.notice.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.playground.api.post.entity.PostEntity;
-import com.playground.api.post.model.PostRequest;
-import com.playground.api.post.model.PostResponse;
-import com.playground.api.post.repository.PostRepository;
+import com.playground.api.notice.entity.PostEntity;
+import com.playground.api.notice.model.PostRequest;
+import com.playground.api.notice.model.PostResponse;
+import com.playground.api.notice.repository.PostRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

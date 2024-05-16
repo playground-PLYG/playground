@@ -1,10 +1,5 @@
-package com.playground.api.post.model;
+package com.playground.api.notice.model;
 
-import java.util.List;
-
-import com.playground.api.post.entity.PostEntity.PostEntityBuilder;
-import com.playground.api.sample.model.SmpleDetailResponse;
-import com.playground.api.sample.model.SmpleResponse;
 import com.playground.model.BaseDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;

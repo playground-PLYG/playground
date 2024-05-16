@@ -1,14 +1,14 @@
-package com.playground.api.comment.service;
+package com.playground.api.notice.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.playground.api.comment.entity.CommentEntity;
-import com.playground.api.comment.model.CommentRequest;
-import com.playground.api.comment.model.CommentResponse;
-import com.playground.api.comment.repository.CommentRepository;
+import com.playground.api.notice.entity.CommentEntity;
+import com.playground.api.notice.model.CommentRequest;
+import com.playground.api.notice.model.CommentResponse;
+import com.playground.api.notice.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

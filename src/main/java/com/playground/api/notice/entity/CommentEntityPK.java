@@ -1,4 +1,4 @@
-package com.playground.api.comment.entity;
+package com.playground.api.notice.entity;
 
 import java.io.Serializable;
 

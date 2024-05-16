@@ -1,10 +1,10 @@
-package com.playground.api.post.repository;
+package com.playground.api.notice.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.playground.api.post.entity.PostEntity;
+import com.playground.api.notice.entity.PostEntity;
 
 public interface PostRepository extends JpaRepository< PostEntity, Integer >{
 	List<PostEntity> findAllByBbsId(String postNo);

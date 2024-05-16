@@ -1,10 +1,10 @@
-package com.playground.api.comment.repository;
+package com.playground.api.notice.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.playground.api.comment.entity.CommentEntity;
+import com.playground.api.notice.entity.CommentEntity;
 
 public interface CommentRepository extends JpaRepository<CommentEntity, Integer >{
 	List<CommentEntity> findAllByNttNo(int nttNo);

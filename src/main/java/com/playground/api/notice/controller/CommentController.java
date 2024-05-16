@@ -1,4 +1,4 @@
-package com.playground.api.comment.controller;
+package com.playground.api.notice.controller;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.playground.api.comment.model.CommentRequest;
-import com.playground.api.comment.model.CommentResponse;
-import com.playground.api.comment.service.CommentService;
+import com.playground.api.notice.model.CommentRequest;
+import com.playground.api.notice.model.CommentResponse;
+import com.playground.api.notice.service.CommentService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

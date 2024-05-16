@@ -28,11 +28,4 @@ public class NoticeEntity extends BaseEntity{
 	@Column(name = "bbs_nm")
 	private String bbsNm;
 	
-	@Column(name = "regist_usr_id")
-	private String registUsrId;
-	
-	@Column(name = "updt_usr_id")
-	private String updtUsrId;
-
-	
 }

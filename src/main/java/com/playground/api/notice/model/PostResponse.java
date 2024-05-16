@@ -1,20 +1,28 @@
-package com.playground.api.post.model;
+package com.playground.api.notice.model;
 
 import com.playground.model.BaseDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Schema(name = "PostRequest", description = "게시물 CRUD")
+@Schema(name = "PostResponse", description = "게시물 CRUD")
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public class PostRequest extends BaseDto{
+@Setter
+public class PostResponse extends BaseDto {
 	/**
-	 * 
-	 */
+	* 
+	*/
 	private static final long serialVersionUID = 1L;
-	
+
 	@Schema(description = "게시물번호")
 	private int nttNo;
 
@@ -23,13 +31,16 @@ public class PostRequest extends BaseDto{
 
 	@Schema(description = "게시물제목")
 	private String nttSj;
-	
+
 	@Schema(description = "게시물내용")
 	private String nttCn;
-	
+
 	@Schema(description = "등록사용자ID")
 	private String registUsrId;
-	
+
 	@Schema(description = "수정사용자ID")
 	private String updtUsrId;
+	
+	
 }
+

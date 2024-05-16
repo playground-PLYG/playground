@@ -24,7 +24,7 @@ public class RstrntService {
   private final ModelMapper modelMapper;
   private final RstrntMenuRepository rstrntMenuRepository;
 
-  @Transactional
+  @Transactional(readOnly = true)
   public List<RstrntSrchResponse> getRstrntList(RstrntSrchRequest req) {
 
     RstrntEntity getRstrnt = RstrntEntity.builder().rstrntKndCode(req.getRstrntKndCode()).rstrntNm(req.getRstrntNm()).build();

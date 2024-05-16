@@ -30,10 +30,8 @@ public class NoticeService {
 	/** 게시판 생성 */
 	public NoticeResponse addNotice(NoticeRequest noticeRequest) {
 		NoticeEntity noticeEntity = NoticeEntity.builder()
-				.bbsId(noticeRequest.getBbsId())
-				.bbsNm(noticeRequest.getBbsNm())
-				.registUsrId(noticeRequest.getRegistUsrId())
-				.updtUsrId(noticeRequest.getUpdtUsrId())
+				.bbsId(noticeRequest.getBoardId())
+				.bbsNm(noticeRequest.getBoardNm())
 				.build();
 		noticeRepository.save(noticeEntity);
 		return modelMapper.map(noticeEntity, NoticeResponse.class);
@@ -41,7 +39,7 @@ public class NoticeService {
 	
 	/** 게시판 삭제*/
 	public NoticeResponse removeNotice(NoticeRequest noticeRequest) {
-		noticeRepository.deleteById(noticeRequest.getBbsId());
+		noticeRepository.deleteById(noticeRequest.getBoardId());
 		return modelMapper.map(noticeRequest, NoticeResponse.class);
 	}
 	

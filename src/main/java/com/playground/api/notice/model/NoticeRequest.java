@@ -15,14 +15,9 @@ public class NoticeRequest extends BaseDto{/**
 	private static final long serialVersionUID = 1L;
 
 	@Schema(description = "게시판ID")
-	private String bbsId;
+	private String boardId;
 	
 	@Schema(description = "게시판명")
-	private String bbsNm;
+	private String boardNm;
 	
-	@Schema(description = "등록사용자ID")
-	private String registUsrId;
-	
-	@Schema(description = "수정사용자ID")
-	private String updtUsrId;
 }

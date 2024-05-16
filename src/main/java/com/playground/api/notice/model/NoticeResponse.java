@@ -20,21 +20,10 @@ public class NoticeResponse extends BaseDto{
 	private static final long serialVersionUID = 1L;
 	
 	@Schema(description = "게시판ID")
-	private String bbsID;
+	private String boardId;
 	
 	@Schema(description = "게시판명")
-	private String bbsNm;
+	private String boardNm;
 	
-	@Schema(description = "등록사용자ID")
-	private String registUsrId;
-	
-	@Schema(description = "등록일시")
-	private LocalDateTime registDt;
-	
-	@Schema(description = "수정사용자ID")
-	private String updtUsrId;
-	
-	@Schema(description = "수정일시")
-	private LocalDateTime updtDt;
 	
 }

@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.playground.api.notice.entity.NoticeEntity;
 import com.playground.api.notice.entity.PostEntity;
+import com.playground.api.notice.entity.PostEntityPK;
 import com.playground.api.notice.model.PostRequest;
 import com.playground.api.notice.model.PostResponse;
 import com.playground.api.notice.repository.PostRepository;
@@ -21,11 +22,17 @@ public class PostService {
 
 	/** 전체 게시물 목록 조회 */
 	@Transactional(readOnly = true)
-	public List<PostResponse> getPostList(String bbsId) {
-		List<PostEntity> postEntity = postRepository.findAllByBbsId(bbsId);
+	public List<PostResponse> getPostList(PostRequest req) {
+	  
+	  PostEntityPK pk = PostEntityPK.builder()
+	  .noticeEntity(req.getBbsId())
+	  .nttNo(req.getNttNo())
+	  .build();
+	  
+		List<PostEntity> postEntity = postRepository.findByNoticeEntity(pk);
 		return postEntity.stream().map(entity -> PostResponse.builder()
 				.nttNo(entity.getNttNo())
-				.bbsId(entity.getBbsId())
+				.bbsId(entity.getNoticeEntity().getBbsId())
 				.nttSj(entity.getNttSj())
 				.nttCn(entity.getNttCn())
 				.registUsrId(entity.getRegistUsrId())
@@ -38,16 +45,14 @@ public class PostService {
 	@Transactional
 	public PostResponse addPost(PostRequest postRequest) {
 		PostEntity postEntity = PostEntity.builder()
-				.bbsId(postRequest.getBbsId())
+		    .noticeEntity(NoticeEntity.builder().bbsId(postRequest.getBbsId()).build())
 				.nttSj(postRequest.getNttSj())
 				.nttCn(postRequest.getNttCn())
-				.registUsrId(postRequest.getRegistUsrId())
-				.updtUsrId(postRequest.getUpdtUsrId())
 				.build();
 		postRepository.save(postEntity);
 		
 		return PostResponse.builder()
-				.bbsId(postEntity.getBbsId())
+				.bbsId(postEntity.getNoticeEntity().getBbsId())
 				.nttSj(postEntity.getNttSj())
 				.nttCn(postEntity.getNttCn())
 				.registUsrId(postEntity.getRegistUsrId())
@@ -60,17 +65,15 @@ public class PostService {
 	public PostResponse modifyPost(PostRequest postRequest) {
 		PostEntity postEntity = PostEntity.builder()
 				.nttNo(postRequest.getNttNo())
-				.bbsId(postRequest.getBbsId())
+				.noticeEntity(NoticeEntity.builder().bbsId(postRequest.getBbsId()).build())
 				.nttSj(postRequest.getNttSj())
 				.nttCn(postRequest.getNttCn())
-				.registUsrId(postRequest.getRegistUsrId())
-				.updtUsrId(postRequest.getUpdtUsrId())
 				.build();
 		postRepository.save(postEntity);
 		
 		return PostResponse.builder()
 				.nttNo(postEntity.getNttNo())
-				.bbsId(postEntity.getBbsId())
+				.bbsId(postEntity.getNoticeEntity().getBbsId())
 				.nttSj(postEntity.getNttSj())
 				.nttCn(postEntity.getNttCn())
 				.registUsrId(postEntity.getRegistUsrId())
@@ -82,7 +85,7 @@ public class PostService {
 	/** 게시판 삭제*/
 	@Transactional
 	public void removePost(PostRequest postRequest) {
-		postRepository.deleteByNttNo(postRequest.getNttNo());
+		//postRepository.deleteByNttNo(postRequest.getNttNo());
 	}
 	
 }

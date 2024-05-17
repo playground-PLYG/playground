@@ -1,15 +1,17 @@
 package com.playground.api.notice.service;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.playground.api.notice.entity.CommentEntity;
+import com.playground.api.notice.entity.CommentEntityPK;
+import com.playground.api.notice.entity.NoticeEntity;
+import com.playground.api.notice.entity.PostEntity;
+import com.playground.api.notice.entity.PostEntityPK;
 import com.playground.api.notice.model.CommentRequest;
 import com.playground.api.notice.model.CommentResponse;
 import com.playground.api.notice.repository.CommentRepository;
-
+import com.playground.api.notice.repository.dsl.CommentRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,29 +19,37 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-	final private CommentRepository commentRepository;
+  private final CommentRepository commentRepository;
 	
 	/** 댓글 조회 */
 	@Transactional(readOnly = true)
-	public List<CommentResponse> getCommentList (int nttNo){
-		List<CommentEntity> commentEntity = commentRepository.findAllByNttNo(nttNo);
-		
-		return commentEntity.stream().map(entity -> CommentResponse.builder()
-				.commentNo(entity.getCmntNo())
-				.noticeNo(entity.getNttNo())
-				.boardId(entity.getBbsId())
-				.commentCn(entity.getCmntCn())
-				.upperCommentNo(entity.getUpperCmntNo())
-				.build())
-		        .toList();
+	public List<CommentEntity> getCommentList (CommentRequest req){
+	  try {
+	    CommentEntityPK pk = CommentEntityPK.builder().postEntity(
+	        PostEntityPK.builder()
+	        .noticeEntity(req.getBoardId())
+	        .nttNo(req.getNoticeNo())
+	        .build())
+	        .build();
+	    return commentRepository.getCommentList(pk);
+	  }catch(Exception e) {
+	    e.printStackTrace();
+	  }
+	  
+	  return null;
+	  
 	}
 	
 	/** 댓글 생성 */
 	@Transactional
 	public List<CommentResponse> addComment (CommentRequest commentRequest){
 		CommentEntity commentEntity = CommentEntity.builder()
-				.nttNo(commentRequest.getNoticeNo())
-				.bbsId(commentRequest.getBoardId())
+		    .postEntity(PostEntity.builder()
+		        .noticeEntity(NoticeEntity.builder()
+		            .bbsId(commentRequest.getBoardId())
+		            .build())
+		        .nttNo(commentRequest.getNoticeNo())
+		        .build())
 				.cmntCn(commentRequest.getCommentCn())
 				.upperCmntNo(commentRequest.getUpperCommentNo())
 				.build();
@@ -52,9 +62,13 @@ public class CommentService {
 	@Transactional
 	public void modifyComment (CommentRequest commentRequest) {
 		CommentEntity commentEntity = CommentEntity.builder()
+		    .postEntity(PostEntity.builder()
+            .noticeEntity(NoticeEntity.builder()
+                .bbsId(commentRequest.getBoardId())
+                .build())
+            .nttNo(commentRequest.getNoticeNo())
+            .build())
 				.cmntNo(commentRequest.getCommentNo())
-				.nttNo(commentRequest.getNoticeNo())
-				.bbsId(commentRequest.getBoardId())
 				.cmntCn(commentRequest.getCommentCn())
 				.upperCmntNo(commentRequest.getUpperCommentNo())
 				.build();
@@ -64,7 +78,7 @@ public class CommentService {
 	/** 임시 댓글 삭제 */ 
 	@Transactional
 	public void removeComment (CommentRequest commentRequest) {
-		commentRepository.deleteByCmntNo(commentRequest.getCommentNo());
-		commentRepository.deleteByUpperCmntNo(commentRequest.getCommentNo());
+		//commentRepository.deleteByCmntNo(commentRequest.getCommentNo());
+		//commentRepository.deleteByUpperCmntNo(commentRequest.getCommentNo());
 	}
 }

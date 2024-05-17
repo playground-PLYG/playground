@@ -19,4 +19,7 @@ public class SignInResponse extends BaseDto {
 
   @Schema(description = "토큰", example = "JWT 토큰")
   private final String token;
+  
+  @Schema(description = "회원ID", example = "abc12")
+  private String mberId;
 }

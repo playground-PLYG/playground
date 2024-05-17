@@ -24,7 +24,6 @@ public class CommentService {
 	/** 댓글 조회 */
 	@Transactional(readOnly = true)
 	public List<CommentEntity> getCommentList (CommentRequest req){
-	  try {
 	    CommentEntityPK pk = CommentEntityPK.builder().postEntity(
 	        PostEntityPK.builder()
 	        .noticeEntity(req.getBoardId())
@@ -32,12 +31,6 @@ public class CommentService {
 	        .build())
 	        .build();
 	    return commentRepository.getCommentList(pk);
-	  }catch(Exception e) {
-	    e.printStackTrace();
-	  }
-	  
-	  return null;
-	  
 	}
 	
 	/** 댓글 생성 */

@@ -30,9 +30,9 @@ public class PostController {
 	 *
 	 */
 	@Operation(summary = "게시물 전체 조회", description = "게시물 조회")
-	@GetMapping("/public/post/getPostList/{bbsId}")
-	public List<PostResponse> getPostList(@PathVariable("bbsId") String bbsId) {
-		return postService.getPostList(bbsId);
+	@PostMapping("/public/post/getPostList")
+	public List<PostResponse> getPostList(@RequestBody PostRequest req) {
+		return postService.getPostList(req);
 	}
 	
 	/**

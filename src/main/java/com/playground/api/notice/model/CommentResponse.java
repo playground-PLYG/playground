@@ -1,7 +1,7 @@
 package com.playground.api.notice.model;
 
+import java.util.List;
 import com.playground.model.BaseDto;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +43,8 @@ public class CommentResponse extends BaseDto{
 
 	@Schema(description = "수정사용자ID")
 	private String updtUsrId;
+	
+	private List<CommentResponse> commentList;
 	
 	
 }

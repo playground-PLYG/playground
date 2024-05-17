@@ -1,9 +1,7 @@
 package com.playground.api.notice.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
-
-import com.playground.api.sample.entity.SmpleDetailPK;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,12 +16,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostEntityPK implements Serializable {
-	private static final long serialVersionUID = 1L;
+	@Serial
+  private static final long serialVersionUID = 1L;
 	
 	/** 게시물 번호 */
-	private int nttNo;
+	private Integer nttNo;
 	
 	/** 게시판ID */
-	private String bbsId;
+	private String noticeEntity;
 	
 }

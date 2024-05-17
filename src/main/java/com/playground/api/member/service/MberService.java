@@ -60,7 +60,8 @@ public class MberService {
     log.debug(">>> rstMember : {}", rstMember);
 
     // 토큰 발급 및 로그인 처리
-    return SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).build();
+    return SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId())
+        .build();
   }
 
   @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#p0", unless = "#result == null")

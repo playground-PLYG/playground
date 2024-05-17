@@ -20,10 +20,15 @@ public class RstrntMenuHashtagMapngPK implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
+   * 식당일련번호
+   */
+  private Integer rstrntSn;
+
+  /**
    * 식당메뉴일련번호
    */
   private Integer rstrntMenuSn;
-  
+
   /**
    * 식당메뉴일련번호
    */

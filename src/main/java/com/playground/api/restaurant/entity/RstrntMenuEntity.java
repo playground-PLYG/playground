@@ -1,13 +1,17 @@
 package com.playground.api.restaurant.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
+import org.hibernate.annotations.Type;
 import com.playground.entity.BaseEntity;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Entity
 @Table(name = "tb_rstrnt_menu")
+@SequenceGenerator(name = "tb_rstrnt_menu_rstrnt_menu_sn_seq", sequenceName = "tb_rstrnt_menu_rstrnt_menu_sn_seq", initialValue = 1,
+    allocationSize = 1)
 @IdClass(RstrntMenuPK.class)
 public class RstrntMenuEntity extends BaseEntity {
   /**
@@ -56,4 +62,15 @@ public class RstrntMenuEntity extends BaseEntity {
    */
   @Column(name = "rstrnt_menu_pc")
   private BigDecimal rstrntMenuPc;
+
+  /**
+   * embedding
+   */
+  @Type(JsonType.class)
+  @Column(name = "embedding", columnDefinition = "vector")
+  private List<Double> embedding;
+
+  public void changeEmbedding(List<Double> embedding) {
+    this.embedding = embedding;
+  }
 }

@@ -23,17 +23,24 @@ import lombok.RequiredArgsConstructor;
 public class RstrntMenuHashtagMapngEntity extends BaseEntity {
 
   /**
+   * 식당일련번호
+   */
+  @Id
+  @Column(name = "rstrnt_sn")
+  private Integer rstrntSn;
+
+  /**
    * 식당메뉴일련번호
    */
   @Id
   @Column(name = "rstrnt_menu_sn")
   private Integer rstrntMenuSn;
-  
+
   /**
    * 해시태그일련번호
    */
   @Id
   @Column(name = "hashtag_sn")
   private Integer hashtagSn;
-  
+
 }

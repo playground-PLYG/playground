@@ -9,5 +9,5 @@ import com.playground.api.restaurant.repository.dsl.RstrntMenuRepositoryCustom;
 
 @Repository
 public interface RstrntMenuRepository extends JpaRepository<RstrntMenuEntity, RstrntMenuPK>, RstrntMenuRepositoryCustom {
-  Optional<RstrntMenuEntity> findById(RstrntMenuPK entityPk);
+  Optional<RstrntMenuEntity> findById(RstrntMenuPK id);
 }

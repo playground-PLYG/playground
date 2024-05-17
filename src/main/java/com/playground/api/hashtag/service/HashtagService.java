@@ -8,72 +8,51 @@ import com.playground.api.hashtag.model.HashtagRequest;
 import com.playground.api.hashtag.model.HashtagResponse;
 import com.playground.api.hashtag.repository.HashtagRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class HashtagService {
 
   private final HashtagRepository hashtagRepository;
-  
+
   @Transactional(readOnly = true)
   public List<HashtagResponse> getHashtagList() {
     List<HashtagEntity> resList = hashtagRepository.findAll();
-    
-    return resList.stream().map(entity -> HashtagResponse.builder()
-        .hashtagNo(entity.getHashtagSn())
-        .hashtagData(entity.getHashtagNm())
-        .build())
+
+    return resList.stream().map(entity -> HashtagResponse.builder().hashtagNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
         .toList();
   }
-  
+
   @Transactional(readOnly = true)
   public HashtagResponse getHashtagDetail(HashtagRequest req) {
-    HashtagEntity resDetail = hashtagRepository.findByHashtagSn(req.getHashtagNo());
-    
-    return HashtagResponse.builder()
-        .hashtagNo(resDetail.getHashtagSn())
-        .hashtagData(resDetail.getHashtagNm())
-        .build();
+    HashtagEntity resDetail = hashtagRepository.findById(req.getHashtagNo()).orElseGet(HashtagEntity::new);
+
+    return HashtagResponse.builder().hashtagNo(resDetail.getHashtagSn()).hashtagName(resDetail.getHashtagNm()).build();
   }
-  
+
   @Transactional
   public HashtagResponse addHashtag(HashtagRequest req) {
-    HashtagEntity saveEntity = HashtagEntity.builder()
-        .hashtagNm(req.getHashtagData())
-        .build();
-    
+    HashtagEntity saveEntity = HashtagEntity.builder().hashtagNm(req.getHashtagData()).build();
+
     HashtagEntity result = hashtagRepository.save(saveEntity);
-    
-    return HashtagResponse.builder()
-        .hashtagNo(result.getHashtagSn())
-        .hashtagData(result.getHashtagNm())
-        .build();
+
+    return HashtagResponse.builder().hashtagNo(result.getHashtagSn()).hashtagName(result.getHashtagNm()).build();
   }
-  
+
   @Transactional
   public HashtagResponse modifyHashtag(HashtagRequest req) {
-    HashtagEntity updateEntity = HashtagEntity.builder()
-        .hashtagSn(req.getHashtagNo())
-        .hashtagNm(req.getHashtagData())
-        .build();
-    
+    HashtagEntity updateEntity = HashtagEntity.builder().hashtagSn(req.getHashtagNo()).hashtagNm(req.getHashtagData()).build();
+
     HashtagEntity result = hashtagRepository.save(updateEntity);
-    
-    return HashtagResponse.builder()
-        .hashtagNo(result.getHashtagSn())
-        .hashtagData(result.getHashtagNm())
-        .build();
+
+    return HashtagResponse.builder().hashtagNo(result.getHashtagSn()).hashtagName(result.getHashtagNm()).build();
   }
-  
+
   @Transactional
   public void removeHashtag(HashtagRequest req) {
-    HashtagEntity deleteEntity = HashtagEntity.builder()
-        .hashtagSn(req.getHashtagNo())
-        .build();
-    
+    HashtagEntity deleteEntity = HashtagEntity.builder().hashtagSn(req.getHashtagNo()).build();
+
     hashtagRepository.delete(deleteEntity);
   }
-  
+
 }

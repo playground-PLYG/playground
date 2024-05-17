@@ -15,7 +15,7 @@ public class RstrntMenuRepositoryImpl implements RstrntMenuRepositoryCustom {
   QRstrntMenuEntity tbRstrntMenu = QRstrntMenuEntity.rstrntMenuEntity;
 
   @Override
-  public List<RstrntMenuEntity> findAllList(RstrntMenuEntity entity) {
+  public List<RstrntMenuEntity> findAll(RstrntMenuEntity entity) {
     return queryFactory.selectFrom(tbRstrntMenu)
         .where(tbRstrntMenu.rstrntSn.eq(entity.getRstrntSn()), rstrntMenuNmLike(entity.getRstrntMenuNm()), rstrntMenuPcEq(entity.getRstrntMenuPc()))
         .fetch();

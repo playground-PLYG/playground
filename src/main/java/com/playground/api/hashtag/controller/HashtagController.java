@@ -2,7 +2,6 @@ package com.playground.api.hashtag.controller;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Tag(name = "hashtag", description = "hashtag API")
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HashtagController {
 
   private final HashtagService hashtagService;
-  
+
   /**
    * 해시태그 목록 조회
    */
@@ -34,7 +31,7 @@ public class HashtagController {
   public List<HashtagResponse> getHashtagList() {
     return hashtagService.getHashtagList();
   }
-  
+
   /**
    * 해시태그 등록
    */
@@ -43,7 +40,7 @@ public class HashtagController {
   public HashtagResponse getHashtagDetail(@RequestBody @Valid HashtagRequest req) {
     return hashtagService.getHashtagDetail(req);
   }
-  
+
   /**
    * 해시태그 등록
    */
@@ -52,7 +49,7 @@ public class HashtagController {
   public HashtagResponse addHashtag(@RequestBody @Valid HashtagRequest req) {
     return hashtagService.addHashtag(req);
   }
-  
+
   /**
    * 해시태그 등록
    */
@@ -61,7 +58,7 @@ public class HashtagController {
   public HashtagResponse modifyHashtag(@RequestBody @Valid HashtagRequest req) {
     return hashtagService.modifyHashtag(req);
   }
-  
+
   /**
    * 해시태그 등록
    */
@@ -70,6 +67,6 @@ public class HashtagController {
   public void removeHashtag(@RequestBody @Valid HashtagRequest req) {
     hashtagService.removeHashtag(req);
   }
-  
-  
+
+
 }

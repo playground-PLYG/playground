@@ -55,14 +55,12 @@ public class RstrntService {
       rstrntRepository.delete(RstrntEntity.builder().rstrntSn(rstrnt.getRstrntSn()).build());
 
       // 식당이 삭제 되었으니 해당 식당 메뉴를 삭제한다 !
-      List<RstrntMenuEntity> rstrntMenuEntityList =
-          rstrntMenuRepository.findAllList(RstrntMenuEntity.builder().rstrntSn(rstrnt.getRstrntSn()).build());
+      List<RstrntMenuEntity> rstrntMenuEntityList = rstrntMenuRepository.findAll(RstrntMenuEntity.builder().rstrntSn(rstrnt.getRstrntSn()).build());
 
       log.debug(" 삭 제 메 뉴  :::: {}", rstrntMenuEntityList);
 
-      rstrntMenuEntityList.forEach(menu -> {
-        rstrntMenuRepository.deleteById(RstrntMenuPK.builder().rstrntSn(menu.getRstrntSn()).rstrntMenuSn(menu.getRstrntMenuSn()).build());
-      });
+      rstrntMenuEntityList.forEach(
+          menu -> rstrntMenuRepository.deleteById(RstrntMenuPK.builder().rstrntSn(menu.getRstrntSn()).rstrntMenuSn(menu.getRstrntMenuSn()).build()));
 
     });
 

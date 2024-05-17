@@ -37,9 +37,16 @@ public class ControllerLoggingAspect {
       log.debug("  Parameter Type  : no parameter");
       log.debug("  Parameter Value : no parameter");
     } else {
-      for (Object arg : args) {
-        log.debug("  Parameter Type  : {}", arg.getClass().getName());
-        log.debug("  Parameter Value : {}", arg);
+      for (int i = 0; i < args.length; i++) {
+        Object arg = args[i];
+
+        if (arg == null) {
+          log.debug("  Parameter Type[{}]  : null");
+          log.debug("  Parameter Value[{}] : null");
+        } else {
+          log.debug("  Parameter Type[{}]  : {}", i, arg.getClass().getName());
+          log.debug("  Parameter Value[{}] : {}", i, arg);
+        }
       }
     }
 
@@ -63,9 +70,16 @@ public class ControllerLoggingAspect {
       log.debug("  Parameter Type  : no parameter");
       log.debug("  Parameter Value : no parameter");
     } else {
-      for (Object arg : args) {
-        log.debug("  Parameter Type  : {}", arg.getClass().getName());
-        log.debug("  Parameter Value : {}", arg);
+      for (int i = 0; i < args.length; i++) {
+        Object arg = args[i];
+
+        if (arg == null) {
+          log.debug("  Parameter Type[{}]  : null");
+          log.debug("  Parameter Value[{}] : null");
+        } else {
+          log.debug("  Parameter Type[{}]  : {}", i, arg.getClass().getName());
+          log.debug("  Parameter Value[{}] : {}", i, arg);
+        }
       }
     }
 

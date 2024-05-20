@@ -7,6 +7,6 @@ import com.playground.api.notice.entity.CommentEntityPK;
 import com.playground.api.notice.repository.dsl.CommentRepositoryCustom;
 
 public interface CommentRepository extends JpaRepository<CommentEntity, CommentEntityPK >, CommentRepositoryCustom{
-	List<CommentEntity> deleteByCmntNo(Integer cmntNo);
-	List<CommentEntity> deleteByUpperCmntNo(Integer upperCmntNo);
+	List<CommentEntity> deleteByCmntSn(Integer cmntNo);
+	List<CommentEntity> deleteByUpperCmntSn(Integer upperCmntNo);
 }

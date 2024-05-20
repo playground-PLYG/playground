@@ -10,55 +10,16 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class CommentRepositoryImpl implements CommentRepositoryCustom{
-  
+public class CommentRepositoryImpl implements CommentRepositoryCustom {
+
   private final JPAQueryFactory queryFactory;
-  
+
   @Override
   public List<CommentEntity> getCommentList(CommentEntityPK request) {
-    /*
-    List<CommentResponse> res = new ArrayList<>();
-    
-    List<CommentEntity> comments = queryFactory
-        .selectFrom(commentEntity)
-        .innerJoin(commentEntity.postEntity.noticeEntity, noticeEntity)
-        .innerJoin(commentEntity.postEntity, postEntity)
-        .where(commentEntity.postEntity.noticeEntity.bbsId.eq(request.getPostEntity().getNoticeEntity())
-            ,commentEntity.postEntity.nttNo.eq(request.getPostEntity().getNttNo()).and(commentEntity.parent.upperCmntNo.eq(0)))
-        .orderBy(commentEntity.cmntNo.asc())
-        .fetch();
-    
-    List<CommentEntity> childComments = queryFactory
-        .selectFrom(commentEntity)
-        .innerJoin(commentEntity.postEntity.noticeEntity, noticeEntity)
-        .innerJoin(commentEntity.postEntity, postEntity)
-        .where(commentEntity.postEntity.noticeEntity.bbsId.eq(request.getPostEntity().getNoticeEntity())
-            ,commentEntity.postEntity.nttNo.eq(request.getPostEntity().getNttNo()).and(commentEntity.parent.cmntNo.ne(0)))
-        .fetch();
-    
-    comments.stream()
-    .forEach(parent -> {
-        CommentEntity.builder().children(childComments.stream()
-                .filter(child -> child.getUpperCmntNo().equals(parent.getCmntNo()))
-                .collect(Collectors.toList())).build();
-    });
-    
-    
-    return res;
-    */
-    
     return queryFactory.selectFrom(commentEntity)
-        .leftJoin(commentEntity.parent)
-        .fetchJoin()
         .where(commentEntity.postEntity.noticeEntity.bbsId.eq(request.getPostEntity().getNoticeEntity())
-            .and(commentEntity.postEntity.nttNo.eq(request.getPostEntity().getNttNo())))
-        .orderBy(
-            commentEntity.parent.upperCmntNo.asc().nullsFirst()
-            ,commentEntity.registDt.asc())
-        .fetch();
-        
-     
-    
+            .and(commentEntity.postEntity.nttSn.eq(request.getPostEntity().getNttSn())))
+        .orderBy(commentEntity.upperCmntSn.asc().nullsFirst(), commentEntity.cmntSn.asc()).fetch();
   }
 
 }

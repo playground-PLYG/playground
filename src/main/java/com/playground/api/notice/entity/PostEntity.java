@@ -26,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 @Table(name = "tb_post")
 @IdClass(PostEntityPK.class)
 @SequenceGenerator(
-	    name = "ntt_no_seq",
-	      sequenceName = "tb_post_ntt_no_seq",
+	    name = "tb_post_ntt_sn_seq",
+	      sequenceName = "tb_post_ntt_sn_seq",
 	      initialValue = 1,
 	      allocationSize = 1
 	  )
@@ -39,9 +39,9 @@ public class PostEntity extends BaseEntity{
   private NoticeEntity noticeEntity;
   
   @Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ntt_no_seq")
-	@Column(name = "ntt_no")
-	private Integer nttNo;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="tb_post_ntt_sn_seq")
+	@Column(name = "ntt_sn")
+	private Integer nttSn;
 	
 	@Column(name = "ntt_sj")
 	private String nttSj;

@@ -8,5 +8,5 @@ import com.playground.api.notice.entity.PostEntityPK;
 public interface PostRepository extends JpaRepository< PostEntity, PostEntityPK >{
 	List<PostEntity> findByNoticeEntity(PostEntityPK req);
 	
-	List<PostEntity> deleteByNttNo(Integer nttNo);
+	List<PostEntity> deleteByNttSn(Integer nttNo);
 }

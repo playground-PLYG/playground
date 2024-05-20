@@ -7,7 +7,9 @@ import com.playground.api.notice.entity.CommentEntity;
 import com.playground.api.notice.entity.CommentEntityPK;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class CommentRepositoryImpl implements CommentRepositoryCustom{
@@ -47,17 +49,55 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
     return res;
     */
     
-    return queryFactory.selectFrom(commentEntity)
-        .leftJoin(commentEntity.parent)
-        .fetchJoin()
+    log.debug("request.getPostEntity().getNoticeEntity() ::: {}", request.getPostEntity().getNoticeEntity());
+    log.debug("request.getPostEntity().getNttSn() ::: {}", request.getPostEntity().getNttSn());
+    return queryFactory
+        .selectFrom(commentEntity)
         .where(commentEntity.postEntity.noticeEntity.bbsId.eq(request.getPostEntity().getNoticeEntity())
-            .and(commentEntity.postEntity.nttNo.eq(request.getPostEntity().getNttNo())))
+            .and(commentEntity.postEntity.nttSn.eq(request.getPostEntity().getNttSn())))
         .orderBy(
-            commentEntity.parent.upperCmntNo.asc().nullsFirst()
-            ,commentEntity.registDt.asc())
+            commentEntity.upperCmntSn.asc().nullsFirst()
+            ,commentEntity.cmntSn.asc())
+        .fetch();
+    
+    /*
+    List<CommentResponse> query = queryFactory
+    .select(Projections.fields(CommentResponse.class
+        ,commentEntity.cmntSn.as("commentNo")
+        ,commentEntity.postEntity.noticeEntity.bbsId.as("boardId")
+        ,commentEntity.postEntity.nttSn.as("noticeNo")
+        ,commentEntity.cmntCn.as("commentCn")
+        ,commentEntity.upperCmntSn.as("upperCommentNo")
+        ))
+    .from(commentEntity)
+    .leftJoin(commentEntity.parent)
+    .where(commentEntity.postEntity.noticeEntity.bbsId.eq(request.getPostEntity().getNoticeEntity())
+        .and(commentEntity.postEntity.nttSn.eq(request.getPostEntity().getNttSn())))
+    .orderBy(
+        commentEntity.parent.upperCmntSn.asc().nullsFirst()
+        ,commentEntity.registDt.asc())
+    .fetch();
+    */
+    /*
+    QCommentEntity parent = new QCommentEntity("parent");
+    QCommentEntity child = new QCommentEntity("child");
+    
+     queryFactory
+        .selectFrom(parent)
+        .distinct()
+        .leftJoin(parent.children, child)
+        .fetchJoin()
+        .where(parent.postEntity.noticeEntity.bbsId.eq(request.getPostEntity().getNoticeEntity())
+            .and(parent.postEntity.nttSn.eq(request.getPostEntity().getNttSn()))
+            .and(parent.upperCmntSn.eq(0))
+            )
+        .orderBy(
+            parent.upperCmntSn.asc().nullsFirst()
+            ,parent.registDt.asc())
         .fetch();
         
-     
+     return null;
+     */
     
   }
 

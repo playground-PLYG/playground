@@ -26,12 +26,12 @@ public class PostService {
 	  
 	  PostEntityPK pk = PostEntityPK.builder()
 	  .noticeEntity(req.getBbsId())
-	  .nttNo(req.getNttNo())
+	  .nttSn(req.getNttSn())
 	  .build();
 	  
 		List<PostEntity> postEntity = postRepository.findByNoticeEntity(pk);
 		return postEntity.stream().map(entity -> PostResponse.builder()
-				.nttNo(entity.getNttNo())
+				.nttSn(entity.getNttSn())
 				.bbsId(entity.getNoticeEntity().getBbsId())
 				.nttSj(entity.getNttSj())
 				.nttCn(entity.getNttCn())
@@ -64,7 +64,7 @@ public class PostService {
 	@Transactional
 	public PostResponse modifyPost(PostRequest postRequest) {
 		PostEntity postEntity = PostEntity.builder()
-				.nttNo(postRequest.getNttNo())
+				.nttSn(postRequest.getNttSn())
 				.noticeEntity(NoticeEntity.builder().bbsId(postRequest.getBbsId()).build())
 				.nttSj(postRequest.getNttSj())
 				.nttCn(postRequest.getNttCn())
@@ -72,7 +72,7 @@ public class PostService {
 		postRepository.save(postEntity);
 		
 		return PostResponse.builder()
-				.nttNo(postEntity.getNttNo())
+				.nttSn(postEntity.getNttSn())
 				.bbsId(postEntity.getNoticeEntity().getBbsId())
 				.nttSj(postEntity.getNttSj())
 				.nttCn(postEntity.getNttCn())

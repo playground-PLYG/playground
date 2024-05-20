@@ -23,6 +23,6 @@ public class CommentEntityPK implements Serializable {
 	private PostEntityPK postEntity;
 	
 	/** 댓글번호 */
-	private Integer cmntNo;
+	private Integer cmntSn;
 	
 }

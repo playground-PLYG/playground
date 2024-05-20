@@ -24,7 +24,7 @@ public class PostResponse extends BaseDto {
 	private static final long serialVersionUID = 1L;
 
 	@Schema(description = "게시물번호")
-	private int nttNo;
+	private Integer nttSn;
 
 	@Schema(description = "게시판ID")
 	private String bbsId;

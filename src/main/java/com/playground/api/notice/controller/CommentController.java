@@ -13,7 +13,9 @@ import com.playground.api.notice.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Tag(name = "commnet", description = "댓글")
 @RestController
 @RequiredArgsConstructor
@@ -26,8 +28,11 @@ public class CommentController {
 	*/ 
 	@Operation(summary = "댓글 조회", description = "댓글 조회")
 	@PostMapping("/public/comment/getCommentList")
-	public List<CommentEntity> getCommentList(@RequestBody CommentRequest req) {
-		return commentService.getCommentList(req);
+	public List<CommentResponse> getCommentList(@RequestBody CommentRequest req) {
+		
+	  List<CommentResponse> res = commentService.getCommentList(req); 
+	  
+	  return res;
 	}
 	
 	/**

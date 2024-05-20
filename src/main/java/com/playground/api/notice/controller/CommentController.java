@@ -6,61 +6,56 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.playground.api.notice.entity.CommentEntity;
 import com.playground.api.notice.model.CommentRequest;
 import com.playground.api.notice.model.CommentResponse;
 import com.playground.api.notice.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Tag(name = "commnet", description = "댓글")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/playground")
 public class CommentController {
 
-	private final CommentService commentService;
-	/**
-	 * 댓글 조회
-	*/ 
-	@Operation(summary = "댓글 조회", description = "댓글 조회")
-	@PostMapping("/public/comment/getCommentList")
-	public List<CommentResponse> getCommentList(@RequestBody CommentRequest req) {
-		
-	  List<CommentResponse> res = commentService.getCommentList(req); 
-	  
-	  return res;
-	}
-	
-	/**
-	 * 댓글저장
-	 */
-	@Operation(summary = "댓글저장" , description = "댓글저장")
-	@PostMapping("/api/comment/addComment")
-	public List<CommentResponse> addComment(@RequestBody CommentRequest commentRequest){
-		return commentService.addComment(commentRequest);
-	}
-	
-	/**
-	 * 댓들 수정
-	 */
-	@Operation(summary = "댓글수정", description = "댓글수정")
-	@PostMapping("/api/comment/modifyComment")
-	public void modifyComment(@RequestBody CommentRequest commentRequest) {
-		commentService.modifyComment(commentRequest);
-	}
-	
-	/*
-	 * 댓글삭제
-	 */
-	@Operation(summary = "댓글삭제", description = "댓글삭제")
-	@DeleteMapping("/api/comment/removeComment")
-	public void removeComment(@RequestBody CommentRequest commentRequest) {
-		commentService.removeComment(commentRequest);
-	}
-	
-	
+  private final CommentService commentService;
+
+  /**
+   * 댓글 조회
+   */
+  @Operation(summary = "댓글 조회", description = "댓글 조회")
+  @PostMapping("/public/comment/getCommentList")
+  public List<CommentResponse> getCommentList(@RequestBody CommentRequest req) {
+    return commentService.getCommentList(req);
+  }
+
+  /**
+   * 댓글저장
+   */
+  @Operation(summary = "댓글저장", description = "댓글저장")
+  @PostMapping("/api/comment/addComment")
+  public List<CommentResponse> addComment(@RequestBody CommentRequest commentRequest) {
+    return commentService.addComment(commentRequest);
+  }
+
+  /**
+   * 댓들 수정
+   */
+  @Operation(summary = "댓글수정", description = "댓글수정")
+  @PostMapping("/api/comment/modifyComment")
+  public void modifyComment(@RequestBody CommentRequest commentRequest) {
+    commentService.modifyComment(commentRequest);
+  }
+
+  /*
+   * 댓글삭제
+   */
+  @Operation(summary = "댓글삭제", description = "댓글삭제")
+  @DeleteMapping("/api/comment/removeComment")
+  public void removeComment(@RequestBody CommentRequest commentRequest) {
+    commentService.removeComment(commentRequest);
+  }
+
+
 }

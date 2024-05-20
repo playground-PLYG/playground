@@ -23,7 +23,7 @@ public class HashtagResponse extends BaseDto {
   private static final long serialVersionUID = 1L;
 
   @Schema(description = "해시태그일련번호")
-  private Integer hashtagNo;
+  private Integer hashtagSerialNo;
 
   @Schema(description = "해시태그명")
   private String hashtagName;

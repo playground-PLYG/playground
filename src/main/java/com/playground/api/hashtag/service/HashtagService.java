@@ -19,7 +19,7 @@ public class HashtagService {
   public List<HashtagResponse> getHashtagList() {
     List<HashtagEntity> resList = hashtagRepository.findAll();
 
-    return resList.stream().map(entity -> HashtagResponse.builder().hashtagNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
+    return resList.stream().map(entity -> HashtagResponse.builder().hashtagSerialNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
         .toList();
   }
 
@@ -27,7 +27,7 @@ public class HashtagService {
   public HashtagResponse getHashtagDetail(HashtagRequest req) {
     HashtagEntity resDetail = hashtagRepository.findById(req.getHashtagNo()).orElseGet(HashtagEntity::new);
 
-    return HashtagResponse.builder().hashtagNo(resDetail.getHashtagSn()).hashtagName(resDetail.getHashtagNm()).build();
+    return HashtagResponse.builder().hashtagSerialNo(resDetail.getHashtagSn()).hashtagName(resDetail.getHashtagNm()).build();
   }
 
   @Transactional
@@ -36,7 +36,7 @@ public class HashtagService {
 
     HashtagEntity result = hashtagRepository.save(saveEntity);
 
-    return HashtagResponse.builder().hashtagNo(result.getHashtagSn()).hashtagName(result.getHashtagNm()).build();
+    return HashtagResponse.builder().hashtagSerialNo(result.getHashtagSn()).hashtagName(result.getHashtagNm()).build();
   }
 
   @Transactional
@@ -45,7 +45,7 @@ public class HashtagService {
 
     HashtagEntity result = hashtagRepository.save(updateEntity);
 
-    return HashtagResponse.builder().hashtagNo(result.getHashtagSn()).hashtagName(result.getHashtagNm()).build();
+    return HashtagResponse.builder().hashtagSerialNo(result.getHashtagSn()).hashtagName(result.getHashtagNm()).build();
   }
 
   @Transactional

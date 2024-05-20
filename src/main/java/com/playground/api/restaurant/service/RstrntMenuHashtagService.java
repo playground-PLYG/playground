@@ -18,13 +18,12 @@ import com.playground.api.restaurant.entity.RstrntMenuHashtagMapngPK;
 import com.playground.api.restaurant.entity.RstrntMenuPK;
 import com.playground.api.restaurant.model.RstrntMenuDetailRequest;
 import com.playground.api.restaurant.model.RstrntMenuHashtagAddRequest;
+import com.playground.api.restaurant.model.RstrntMenuHashtagRemoveRequest;
 import com.playground.api.restaurant.model.RstrntMenuHashtagSrchRequest;
 import com.playground.api.restaurant.repository.RstrntMenuHashtagMapngRepository;
 import com.playground.api.restaurant.repository.RstrntMenuRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RstrntMenuHashtagService {
@@ -38,7 +37,7 @@ public class RstrntMenuHashtagService {
     List<HashtagEntity> resList = hashtagRepository.findRstrntMenuHashtag(
         RstrntMenuEntity.builder().rstrntSn(reqData.getRestaurantSerialNo()).rstrntMenuSn(reqData.getRestaurantMenuSerialNo()).build());
 
-    return resList.stream().map(entity -> HashtagResponse.builder().hashtagNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
+    return resList.stream().map(entity -> HashtagResponse.builder().hashtagSerialNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
         .toList();
   }
 
@@ -53,7 +52,7 @@ public class RstrntMenuHashtagService {
       resList = hashtagRepository.findByHashtagNmContains(reqData.getRestaurantSerialNo(), reqData.getRestaurantMenuSerialNo(), searchKeyword);
     }
 
-    return resList.stream().map(entity -> HashtagResponse.builder().hashtagNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
+    return resList.stream().map(entity -> HashtagResponse.builder().hashtagSerialNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
         .toList();
   }
 
@@ -85,9 +84,18 @@ public class RstrntMenuHashtagService {
       List<HashtagEntity> resList = hashtagRepository.findRstrntMenuHashtag(
           RstrntMenuEntity.builder().rstrntSn(reqData.getRestaurantSerialNo()).rstrntMenuSn(reqData.getRestaurantMenuSerialNo()).build());
 
-      return resList.stream().map(entity -> HashtagResponse.builder().hashtagNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
-          .toList();
+      return resList.stream()
+          .map(entity -> HashtagResponse.builder().hashtagSerialNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build()).toList();
     }
+
+    return excuteMenuEmbedding(RstrntMenuDetailRequest.builder().restaurantSerialNo(reqData.getRestaurantSerialNo())
+        .restaurantMenuSerialNo(reqData.getRestaurantMenuSerialNo()).build());
+  }
+
+  @Transactional
+  public List<HashtagResponse> removeMenuHashtag(RstrntMenuHashtagRemoveRequest reqData) {
+    rstrntMenuHashtagMapngRepository.deleteById(RstrntMenuHashtagMapngPK.builder().rstrntSn(reqData.getRestaurantSerialNo())
+        .rstrntMenuSn(reqData.getRestaurantMenuSerialNo()).hashtagSn(reqData.getHashtagSerialNo()).build());
 
     return excuteMenuEmbedding(RstrntMenuDetailRequest.builder().restaurantSerialNo(reqData.getRestaurantSerialNo())
         .restaurantMenuSerialNo(reqData.getRestaurantMenuSerialNo()).build());
@@ -112,8 +120,8 @@ public class RstrntMenuHashtagService {
       // 임베딩값 업데이트
       rstrntMenuEntity.changeEmbedding(embedding.getOutput());
 
-      return resList.stream().map(entity -> HashtagResponse.builder().hashtagNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build())
-          .toList();
+      return resList.stream()
+          .map(entity -> HashtagResponse.builder().hashtagSerialNo(entity.getHashtagSn()).hashtagName(entity.getHashtagNm()).build()).toList();
     } else {
       return new ArrayList<>();
     }

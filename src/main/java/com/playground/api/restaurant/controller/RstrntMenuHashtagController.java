@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.hashtag.model.HashtagResponse;
 import com.playground.api.restaurant.model.RstrntMenuDetailRequest;
 import com.playground.api.restaurant.model.RstrntMenuHashtagAddRequest;
+import com.playground.api.restaurant.model.RstrntMenuHashtagRemoveRequest;
 import com.playground.api.restaurant.model.RstrntMenuHashtagSrchRequest;
 import com.playground.api.restaurant.service.RstrntMenuHashtagService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,5 +48,14 @@ public class RstrntMenuHashtagController {
   @PostMapping("/public/restaurant/addMenuHashtag")
   public List<HashtagResponse> addMenuHashtag(@RequestBody @Valid RstrntMenuHashtagAddRequest reqData) {
     return rstrntMenuHashtagService.addMenuHashtag(reqData);
+  }
+
+  /**
+   * 메뉴 해시태그 저장
+   */
+  @Operation(summary = "메뉴 해시태그 삭제", description = "메뉴 해시태그 삭제")
+  @PostMapping("/public/restaurant/removeMenuHashtag")
+  public List<HashtagResponse> removeMenuHashtag(@RequestBody @Valid RstrntMenuHashtagRemoveRequest reqData) {
+    return rstrntMenuHashtagService.removeMenuHashtag(reqData);
   }
 }

@@ -16,13 +16,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostEntityPK implements Serializable {
-	@Serial
+  @Serial
   private static final long serialVersionUID = 1L;
-	
-	/** 게시물 번호 */
-	private Integer nttSn;
-	
-	/** 게시판ID */
-	private String noticeEntity;
-	
+
+  /** 게시물 번호 */
+  private Integer nttSn;
+
+  /** 게시판ID */
+  private String noticeEntity;
+
 }

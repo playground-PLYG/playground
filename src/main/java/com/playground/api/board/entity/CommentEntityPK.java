@@ -1,4 +1,4 @@
-package com.playground.api.notice.entity;
+package com.playground.api.board.entity;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -16,13 +16,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CommentEntityPK implements Serializable {
-	
-  @Serial
-	private static final long serialVersionUID = 1L;
 
-	private PostEntityPK postEntity;
-	
-	/** 댓글번호 */
-	private Integer cmntSn;
-	
+  @Serial
+  private static final long serialVersionUID = 1L;
+
+  private PostEntityPK postEntity;
+
+  /** 댓글번호 */
+  private Integer cmntSn;
+
 }

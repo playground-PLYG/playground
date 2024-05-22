@@ -1,4 +1,4 @@
-package com.playground.api.notice.entity;
+package com.playground.api.board.entity;
 
 import java.util.ArrayList;
 import java.util.List;

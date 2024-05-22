@@ -15,6 +15,7 @@ import com.playground.api.restaurant.model.RstrntMenuListRequest;
 import com.playground.api.restaurant.model.RstrntMenuModifyRequest;
 import com.playground.api.restaurant.model.RstrntMenuRemoveRequest;
 import com.playground.api.restaurant.model.RstrntMenuResponse;
+import com.playground.api.restaurant.repository.RstrntMenuHashtagMapngRepository;
 import com.playground.api.restaurant.repository.RstrntMenuRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RstrntMenuService {
   private final RstrntMenuRepository rstrntMenuRepository;
+  private final RstrntMenuHashtagMapngRepository rstrntMenuHashtagMapngRepository;
 
   @Transactional(readOnly = true)
   public List<RstrntMenuResponse> getRstrntMenuList(RstrntMenuListRequest reqData) {
@@ -37,13 +39,10 @@ public class RstrntMenuService {
       rstrntMenuEntityBuilder.rstrntMenuPc(reqData.getMenuPrice());
     }
 
-    List<RstrntMenuEntity> rstrntMenuEntityList = rstrntMenuRepository.findAll(rstrntMenuEntityBuilder.build());
+    List<RstrntMenuResponse> rstrntMenuResponseList = rstrntMenuRepository.findAll(rstrntMenuEntityBuilder.build());
 
-    if (CollectionUtils.isNotEmpty(rstrntMenuEntityList)) {
-      return rstrntMenuEntityList
-          .stream().map(entity -> RstrntMenuResponse.builder().restaurantSerialNo(entity.getRstrntSn())
-              .restaurantMenuSerialNo(entity.getRstrntMenuSn()).menuName(entity.getRstrntMenuNm()).menuPrice(entity.getRstrntMenuPc()).build())
-          .toList();
+    if (CollectionUtils.isNotEmpty(rstrntMenuResponseList)) {
+      return rstrntMenuResponseList;
     } else {
       return new ArrayList<>();
     }
@@ -86,6 +85,8 @@ public class RstrntMenuService {
   public void removeRstrntMenu(RstrntMenuRemoveRequest reqData) {
     rstrntMenuRepository
         .deleteById(RstrntMenuPK.builder().rstrntSn(reqData.getRestaurantSerialNo()).rstrntMenuSn(reqData.getRestaurantMenuSerialNo()).build());
+
+    rstrntMenuHashtagMapngRepository.deleteByRstrntSnAndRstrntMenuSn(reqData.getRestaurantSerialNo(), reqData.getRestaurantMenuSerialNo());
   }
 
 }

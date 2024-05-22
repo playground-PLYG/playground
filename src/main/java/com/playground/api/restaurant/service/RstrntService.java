@@ -5,8 +5,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.restaurant.entity.RstrntEntity;
-import com.playground.api.restaurant.entity.RstrntMenuEntity;
-import com.playground.api.restaurant.entity.RstrntMenuPK;
 import com.playground.api.restaurant.entity.specification.RstrntSpecification;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
@@ -51,17 +49,11 @@ public class RstrntService {
   @Transactional
   public void removeRstrnt(List<RstrntSrchRequest> req) {
 
+    // TODO loop가 아닌 한방 쿼리로 변경 필요
     req.forEach(rstrnt -> {
       rstrntRepository.delete(RstrntEntity.builder().rstrntSn(rstrnt.getRstrntSn()).build());
 
-      // 식당이 삭제 되었으니 해당 식당 메뉴를 삭제한다 !
-      List<RstrntMenuEntity> rstrntMenuEntityList = rstrntMenuRepository.findAll(RstrntMenuEntity.builder().rstrntSn(rstrnt.getRstrntSn()).build());
-
-      log.debug(" 삭 제 메 뉴  :::: {}", rstrntMenuEntityList);
-
-      rstrntMenuEntityList.forEach(
-          menu -> rstrntMenuRepository.deleteById(RstrntMenuPK.builder().rstrntSn(menu.getRstrntSn()).rstrntMenuSn(menu.getRstrntMenuSn()).build()));
-
+      rstrntMenuRepository.deleteByRstrntSn(rstrnt.getRstrntSn());
     });
 
   }

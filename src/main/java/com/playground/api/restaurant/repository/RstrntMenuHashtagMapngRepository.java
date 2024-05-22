@@ -7,4 +7,5 @@ import com.playground.api.restaurant.entity.RstrntMenuHashtagMapngPK;
 
 @Repository
 public interface RstrntMenuHashtagMapngRepository extends JpaRepository<RstrntMenuHashtagMapngEntity, RstrntMenuHashtagMapngPK> {
+  void deleteByRstrntSnAndRstrntMenuSn(Integer rstrntSn, Integer rstrntMenuSn);
 }

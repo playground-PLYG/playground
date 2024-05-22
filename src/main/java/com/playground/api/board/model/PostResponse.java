@@ -1,4 +1,4 @@
-package com.playground.api.notice.model;
+package com.playground.api.board.model;
 
 import com.playground.model.BaseDto;
 
@@ -24,16 +24,16 @@ public class PostResponse extends BaseDto {
 	private static final long serialVersionUID = 1L;
 
 	@Schema(description = "게시물번호")
-	private Integer nttSn;
+	private int noticeNo;
 
 	@Schema(description = "게시판ID")
-	private String bbsId;
+	private String boardId;
 
 	@Schema(description = "게시물제목")
-	private String nttSj;
-
+	private String noticeSj;
+	
 	@Schema(description = "게시물내용")
-	private String nttCn;
+	private String noticeCn;
 
 	@Schema(description = "등록사용자ID")
 	private String registUsrId;

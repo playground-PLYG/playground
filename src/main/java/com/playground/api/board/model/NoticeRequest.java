@@ -1,4 +1,4 @@
-package com.playground.api.notice.model;
+package com.playground.api.board.model;
 
 import com.playground.model.BaseDto;
 

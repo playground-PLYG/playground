@@ -1,10 +1,5 @@
-package com.playground.api.notice.model;
+package com.playground.api.board.model;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import com.playground.api.sample.model.SmpleDetailResponse;
-import com.playground.api.sample.model.SmpleResponse;
 import com.playground.model.BaseDto;
 
 import io.swagger.v3.oas.annotations.media.Schema;

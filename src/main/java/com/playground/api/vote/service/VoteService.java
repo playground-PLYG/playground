@@ -3,7 +3,10 @@ package com.playground.api.vote.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -47,6 +50,10 @@ public class VoteService {
             .voteBeginDate(entity.getVoteBeginDt())
             .voteEndDate(entity.getVoteEndDt())
             .voteDeleteAlternative(entity.getVoteDeleteAt())
+            .registUsrId(entity.getRegistUsrId())
+            .registDt(entity.getRegistDt())
+            .updtUsrId(entity.getUpdtUsrId())
+            .updtDt(entity.getUpdtDt())
             .build())
         .toList();
     return new PageImpl<>(voteList, votePageList.getPageable(), votePageList.getTotalElements());
@@ -70,11 +77,9 @@ public class VoteService {
 
       VoteResponse voteResponse = modelMapper.map(voteEntity, VoteResponse.class);
 
-      if (!ObjectUtils.isEmpty(reqData.getQuestionSsno())) {
-        List<QestnResponse> qestnResponseList = voteRepository.getQestnDetail(reqData.getVoteSsno(), reqData.getQuestionSsno());
-        if (qestnResponseList.size() != 0) {
-          voteResponse.setQestnResponseList(qestnResponseList);
-        }
+      List<QestnResponse> qestnResponseList = voteRepository.getQestnDetail(reqData.getVoteSsno(), reqData.getQuestionSsno());
+      if (qestnResponseList.size() != 0) {
+        voteResponse.setQestnResponseList(qestnResponseList);
       }
 
       log.debug("VoteService.getVoteDetail ::::: voteResponse ::::: {}", voteResponse);
@@ -180,9 +185,46 @@ public class VoteService {
        .voteEndDate(voteEntity.getVoteEndDt())
        .voteDeleteAlternative(voteEntity.getVoteDeleteAt())
        .build();
+     
+   // voteEntity 에서 기존에 있었던 questionSsno 랑 reqData 로 들어온 queestionSsno랑 비교해서
+   List<QestnEntity> prevQestnList = voteRepository.getQestnList(reqData.getVoteSsno());
+   List<Integer> prevQestnSnList = new ArrayList<>();
+   List<Integer> afterQestnSnList = new ArrayList<>();
+   List<Integer> removeQestnSnList = new ArrayList<>();
+   if (!ObjectUtils.isEmpty(prevQestnList)) {
+     for(QestnEntity prev : prevQestnList) {
+       prevQestnSnList.add(prev.getQestnSn());
+     }
+     
+     if (!ObjectUtils.isEmpty(reqData.getQestnRequestList())) {
+       for(QestnRequest after : reqData.getQestnRequestList()) {
+         afterQestnSnList.add(after.getQuestionSsno());
+       }
+     }
+   }
+   // voteEntity 에만 존재하는 questionSsno 는 DB에서 지워주고  + voteIem 도 지워 주고
+   if(!ObjectUtils.isEmpty(prevQestnSnList) && !ObjectUtils.isEmpty(afterQestnSnList)) {
+     Collections.sort(prevQestnSnList);
+     Collections.sort(afterQestnSnList);
+     
+     removeQestnSnList = prevQestnSnList.stream().filter(prev -> afterQestnSnList.stream()
+         .noneMatch(Predicate.isEqual(prev))).collect(Collectors.toList());
+   }
+   
+   if(!ObjectUtils.isEmpty(removeQestnSnList)) {
+     Integer reqVoteSsno = reqData.getVoteSsno();
+     // voteIem 지우기
+     removeQestnSnList.forEach(removeQesSsno -> {
+       voteRepository.deleteBySsnoForVoteIem(reqVoteSsno, removeQesSsno);
+     });
+     
+     // qestn 지우기 
+     removeQestnSnList.forEach(removeQesSsno -> {
+       voteRepository.deleteBySsnoForQestn(reqVoteSsno, removeQesSsno);
+     });
+   }
    
    List<QestnResponse> setQestnList = new ArrayList<>();
-
    if (!ObjectUtils.isEmpty(reqData.getQestnRequestList())) {
      List<QestnRequest> qestnReList = reqData.getQestnRequestList();
      qestnReList.forEach(qestn -> {
@@ -210,7 +252,11 @@ public class VoteService {
                .iemNm(voteIem.getItemName())
                .build());
          });
-
+         
+         // 기존에 있었던 투표항목 제거 후 등록
+         voteRepository.deleteBySsnoForVoteIem(qestnRes.getVoteSn(), qestnRes.getQestnSn());
+         
+         // 등록
          List<VoteIemEntity> saveAllIemEntities = voteIemRepository.saveAll(iemEntities);
          setQestn.setVoteIemResponseList(saveAllIemEntities.stream()
              .map(entity -> VoteIemResponse.builder()
@@ -256,8 +302,8 @@ public class VoteService {
   }
 
   private LocalDateTime stringToLocalDateTime(String strDate) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-    LocalDateTime dateTime = LocalDateTime.parse(strDate, formatter);
-    return dateTime;
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+      LocalDateTime dateTime = LocalDateTime.parse(strDate, formatter);
+      return dateTime;
   }
 }

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
+import com.playground.api.vote.entity.QestnEntity;
 import com.playground.api.vote.entity.VoteEntity;
 import com.playground.api.vote.model.QestnResponse;
 import com.playground.api.vote.model.VoteIemResponse;
@@ -64,7 +65,8 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
     return queryFactory.select(qestnEntity)
                 .from(qestnEntity)
                 .leftJoin(voteIemEntity).on(qestnEntity.voteSn.eq(voteIemEntity.voteSn).and(qestnEntity.qestnSn.eq(voteIemEntity.qestnSn)))
-                .where(qestnEntity.qestnSn.eq(questionSsno).and(qestnEntity.voteSn.eq(voteSsno)))
+                .where(qestnEntity.voteSn.eq(voteSsno))
+                //.where(qestnEntity.qestnSn.eq(questionSsno).and(qestnEntity.voteSn.eq(voteSsno)))
                 .orderBy(qestnEntity.voteSn.asc(), qestnEntity.qestnSn.asc())
                 .transform(groupBy(qestnEntity.voteSn, qestnEntity.qestnSn).list(
                     Projections.fields(QestnResponse.class, 
@@ -156,6 +158,21 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   @Override
   public Long deleteByVoteSnForVoteIem(Integer voteSsno) {
     return queryFactory.delete(voteIemEntity).where(voteIemEntity.voteSn.eq(voteSsno)).execute();
+  }
+
+  @Override
+  public Long deleteBySsnoForVoteIem(Integer voteSsno, Integer questionSsno) {
+    return queryFactory.delete(voteIemEntity).where(voteIemEntity.voteSn.eq(voteSsno).and(voteIemEntity.qestnSn.eq(questionSsno))).execute();
+  }
+
+  @Override
+  public List<QestnEntity> getQestnList(Integer voteSsno) {
+    return queryFactory.selectFrom(qestnEntity).where(qestnEntity.voteSn.eq(voteSsno)).fetch();
+  }
+
+  @Override
+  public Long deleteBySsnoForQestn(Integer voteSsno, Integer questionSsno) {
+    return queryFactory.delete(qestnEntity).where(qestnEntity.voteSn.eq(voteSsno).and(qestnEntity.qestnSn.eq(questionSsno))).execute();
   }
 
 

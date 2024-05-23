@@ -31,7 +31,6 @@ public class VoteController {
   @Operation(summary = "투표목록 조회", description = "투표목록을 검색조건에 의해서 검색하고, 페이징처리를 하여 화면에 노출")
   @PostMapping("/api/vote/getVotePageList")
   public Page<VoteResponse> getVotePageList(@RequestBody @Valid VoteRequest reqData, Pageable pageable) {
-    log.debug("asdf reqData : {}", reqData);
     return voteService.getVotePageList(reqData, pageable);
   }
 
@@ -59,6 +58,7 @@ public class VoteController {
   @Operation(summary = "투표수정", description = "관리자가 투표를 수정")
   @PutMapping("/api/vote/modifyVote")
   public VoteResponse modifyVote(@RequestBody @Valid VoteRequest reqData) {
+    log.debug("##### ##### ##### modifyVote reqData : {}", reqData);
     return voteService.modifyVote(reqData);
   }
 

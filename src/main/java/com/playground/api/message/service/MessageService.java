@@ -1,32 +1,34 @@
 package com.playground.api.message.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClient;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.playground.api.message.component.DiscordComponent;
 import com.playground.api.message.model.DiscordRequest;
 import com.playground.exception.BizException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class MessageService {
 
   @Value("${discord.webhookURL}")
   private String url;
+  
+  private final DiscordComponent discordComponent;
 
   public void sendDiscordWebhook(DiscordRequest req) {
 
     try {
-      // 받은 dto json 형식으로 변환
+      discordComponent.sendDiscord(url, req);
+      // RestClient 세팅 1차 버전
+      /*
+      받은 dto json 형식으로 변환
       ObjectMapper mapper = new ObjectMapper();
       String jsonString = mapper.writeValueAsString(req);
-
-      // RestClient 세팅
+        
       RestClient restClient = RestClient.create();
 
       ResponseEntity<Void> response =
@@ -39,9 +41,8 @@ public class MessageService {
           .toBodilessEntity(); // 응답을 본문이 없는 엔터티로 반환
 
       log.debug("response :: {}", response);
+      */
       
-    } catch (JsonProcessingException e) {
-        throw new BizException("sendDiscordWebhook JsonProcessingException");
     } catch (HttpClientErrorException e) {
         throw new BizException("sendDiscordWebhook HttpClientErrorException : " + e.getStatusCode() + " :: " + e.getStatusText() );
     }

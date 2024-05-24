@@ -47,3 +47,8 @@ spring:
   config:
     activate:
       on-profile: dev
+      
+      
+---
+discord:
+  webhookURL: "https://discord.com/api/webhooks/1242719730939203594/FWOPpExAa2gvO5ZHroGrXKvEYbVPyo_riCZHS8Va_VkgnHyR4WvFfPyStW1H85W80yeW"

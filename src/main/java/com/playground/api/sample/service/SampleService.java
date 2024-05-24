@@ -56,16 +56,20 @@ public class SampleService {
    *
    * @return List<SmpleResponse> - 조회한 샘플 목록
    */
-  public List<SmpleResponse> getSmpleList() {
-    List<SmpleEntity> smpleEntityList = smpleRepository.findAll();
+  public Page<SmpleResponse> getSmpleList(Pageable pageable) {
+    Page<SmpleEntity> smpleEntityList = smpleRepository.findAllByOrderBySmpleSn(pageable);
+    
+    List<SmpleResponse> smpleResponse =
+        smpleEntityList.getContent().stream().map(entity -> SmpleResponse.builder()
+            .sampleSsno(entity.getSmpleSn())
+            .sampleContent1(entity.getSmpleFirstCn())
+            .sampleContent2(entity.getSmpleSeconCn())
+            .sampleContent3(entity.getSmpleThrdCn())
+            .build()
+            ).toList();
 
-    return smpleEntityList.stream().map(entity -> SmpleResponse.builder()
-        .sampleSsno(entity.getSmpleSn())
-        .sampleContent1(entity.getSmpleFirstCn())
-        .sampleContent2(entity.getSmpleSeconCn())
-        .sampleContent3(entity.getSmpleThrdCn())
-        .build())
-        .toList();
+    return new PageImpl<>(smpleResponse, smpleEntityList.getPageable(), smpleEntityList.getTotalElements());
+    
   }
 
   /**
@@ -92,12 +96,23 @@ public class SampleService {
    * @return List<SmpleDetailResponse> - 조회한 샘플 상세 목록
    */
   public List<SmpleDetailResponse> getSmpleDetailList(SmpleDetailRequest reqData) {
-    return Collections.emptyList();
     /*
-     * TODO QueryDSL 작업 후 반영 예정 List<SmpleDetailEntity> smpleDetailEntityList = smpleDetailRepository .findAllById(SmpleDetailPK.builder().smpleSn(reqData.getSampleSsno()).smpleDetailSn(reqData.getSampleDetailSsno()).build());
-     *
-     * return smpleDetailEntityList.stream() .map(entity -> SmpleDetailResponse.builder().sampleSsno(entity.getSmpleSn()).sampleDetailSsno(entity.getSmpleDetailSn()) .sampleDetailContent1(entity.getSmpleDetailFirstCn()).sampleDetailContent2(entity.getSmpleDetailSeconCn()) .sampleDetailContent3(entity.getSmpleDetailThrdCn()).build()) .toList();
+     * TODO QueryDSL 작업 후 반영 예정 
      */
+     List<SmpleDetailEntity> smpleDetailEntityList = smpleDetailRepository.findBySmpleEntity(
+         SmpleEntity.builder()
+         .smpleSn(reqData.getSampleSsno())
+         .build());
+     
+     return smpleDetailEntityList.stream().map(entity -> SmpleDetailResponse.builder()
+         .sampleSsno(entity.getSmpleEntity().getSmpleSn())
+         .sampleDetailSsno(entity.getSmpleDetailSn())
+         .sampleDetailContent1(entity.getSmpleDetailFirstCn())
+         .sampleDetailContent2(entity.getSmpleDetailSeconCn())
+         .sampleDetailContent3(entity.getSmpleDetailThrdCn())
+         .build())
+         .toList();
+     
   }
 
   /**

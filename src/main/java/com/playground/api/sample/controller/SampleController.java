@@ -47,8 +47,8 @@ public class SampleController {
    */
   @Operation(summary = "샘플 목록 조회", description = "샘플 테이블 정보 전체 조회")
   @GetMapping("/public/sample/getSmpleList")
-  public List<SmpleResponse> getSmpleList() {
-    return sampleService.getSmpleList();
+  public Page<SmpleResponse> getSmpleList(Pageable pageable) {
+    return sampleService.getSmpleList(pageable);
   }
 
   /**

@@ -64,7 +64,7 @@ public class MberService {
         .build();
   }
 
-  @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#p0", unless = "#result == null")
+  @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#token", unless = "#result == null")
   @Transactional(readOnly = true)
   public MberInfoResponse getMyInfo(String token) {
     if (!ObjectUtils.isEmpty(token)) {
@@ -74,7 +74,8 @@ public class MberService {
 
       MberEntity memberEntity = mberRepository.findById(member.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
 
-      return MberInfoResponse.builder().mberId(memberEntity.getMberId()).mberNm(memberEntity.getMberNm()).mberEmailAdres(memberEntity.getMberEmailAdres()).build();
+      return MberInfoResponse.builder().mberId(memberEntity.getMberId()).mberNm(memberEntity.getMberNm())
+          .mberEmailAdres(memberEntity.getMberEmailAdres()).build();
     } else {
       throw new BizException(MessageCode.INVALID_TOKEN);
     }

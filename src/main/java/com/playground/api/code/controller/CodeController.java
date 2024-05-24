@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.code.model.CodeGroupSrchRequest;
+import com.playground.api.code.model.CodeSrchRequest;
 import com.playground.api.code.model.CodeResponse;
 import com.playground.api.code.model.CodeSearchRequest;
+import com.playground.api.code.model.CodeSrchResponse;
 import com.playground.api.code.service.CodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,8 +73,23 @@ public class CodeController {
     return codeService.saveCodeList(req);
   }
 
+  /**
+   * 코드 조회
+   */
+  @Operation(summary = "코드 조회", description = "코드 조회")
+  @PostMapping("/public/code/getCode")
+  public CodeSrchResponse getCode(@RequestBody @Valid CodeSrchRequest reqData) {
+    return codeService.getCode(reqData);
+  }
 
-
+  /**
+   * 코드 그룹 조회
+   */
+  @Operation(summary = "코드 그룹 조회", description = "상위 코드 기준 코드 목록 조회")
+  @PostMapping("/public/code/getCodeGroupList")
+  public List<CodeSrchResponse> getCodeGroupList(@RequestBody @Valid CodeGroupSrchRequest reqData) {
+    return codeService.getCodeGroupList(reqData);
+  }
 }
 
 

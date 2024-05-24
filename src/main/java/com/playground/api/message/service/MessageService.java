@@ -1,8 +1,10 @@
 package com.playground.api.message.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import com.playground.api.code.model.CodeSrchRequest;
+import com.playground.api.code.model.CodeSrchResponse;
+import com.playground.api.code.service.CodeService;
 import com.playground.api.message.component.DiscordComponent;
 import com.playground.api.message.model.DiscordRequest;
 import com.playground.exception.BizException;
@@ -14,14 +16,25 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MessageService {
 
-  @Value("${discord.webhookURL}")
-  private String url;
+  //@Value("${discord.webhookURL}")
+  //private String url;
   
   private final DiscordComponent discordComponent;
+  
+  private final CodeService codeService;
 
   public void sendDiscordWebhook(DiscordRequest req) {
 
     try {
+      
+      CodeSrchResponse code = codeService.getCode(
+          CodeSrchRequest.builder()
+          .code("webhook_test")
+          .upperCode("API_KEY")
+          .build());
+      
+      String url = code.getCodeName();
+      
       discordComponent.sendDiscord(url, req);
       // RestClient 세팅 1차 버전
       /*

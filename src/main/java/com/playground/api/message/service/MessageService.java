@@ -1,7 +1,11 @@
 package com.playground.api.message.service;
 
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.playground.api.code.model.CodeSrchRequest;
 import com.playground.api.code.model.CodeSrchResponse;
 import com.playground.api.code.service.CodeService;
@@ -22,14 +26,16 @@ public class MessageService {
   private final DiscordComponent discordComponent;
   
   private final CodeService codeService;
-
+  
+  private final ObjectMapper objectMapper;
+  
   public void sendDiscordWebhook(DiscordRequest req) {
 
     try {
       
       CodeSrchResponse code = codeService.getCode(
           CodeSrchRequest.builder()
-          .code("webhook_test")
+          .code(req.getApiNm())
           .upperCode("API_KEY")
           .build());
       
@@ -57,7 +63,20 @@ public class MessageService {
       */
       
     } catch (HttpClientErrorException e) {
-        throw new BizException("sendDiscordWebhook HttpClientErrorException : " + e.getStatusCode() + " :: " + e.getStatusText() );
+      log.debug("asdf : {}", e.getResponseBodyAsString());
+      
+      String errorText = e.getResponseBodyAsString();
+      
+      // message 있을 경우 code, message 넣어주고 없으면 하드코딩
+      if (errorText.contains("message")) {
+        try {
+          Map<String, Object> map = objectMapper.readValue(errorText, Map.class);
+          throw new BizException(map.get("message").toString());
+        } catch (JsonProcessingException e1) {
+          throw new BizException("Discord 메시지 전송 중 실패하였습니다.");
+        }
+      }
+      throw new BizException("Discord 메시지 전송 중 실패하였습니다.");
     }
 
   }

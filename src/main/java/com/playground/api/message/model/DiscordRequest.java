@@ -26,6 +26,8 @@ public class DiscordRequest implements Serializable {
   
   @Serial
   private static final long serialVersionUID = 1L;
+  
+  private String apiNm;
 
   private String content;
   
@@ -36,102 +38,10 @@ public class DiscordRequest implements Serializable {
   
   private boolean tts;
   
-  public List<Embed> embeds = new ArrayList<>();
+  public List<DiscordEmbedRequest> embeds = new ArrayList<>();
 
-  public void addEmbed(Embed embed) {
+  public void addEmbed(DiscordEmbedRequest embed) {
     this.embeds.add(embed);
   }
 
-  @Getter
-  @Setter
-  public static class Embed {
-    private String title;
-
-    private String description;
-
-    private String url;
-
-    private Footer footer;
-
-    private Thumbnail thumbnail;
-
-    private Image image;
-
-    private Author author;
-
-    private List<Field> fields = new ArrayList<>();
-
-    public Embed setFooter(String text, String icon) {
-      this.footer = new Footer(text, icon);
-      return this;
-    }
-
-    public Embed setThumbnail(String url) {
-      this.thumbnail = new Thumbnail(url);
-      return this;
-    }
-
-    public Embed setImage(String url) {
-      this.image = new Image(url);
-      return this;
-    }
-
-    public Embed setAuthor(String name, String url, String icon) {
-      this.author = new Author(name, url, icon);
-      return this;
-    }
-
-    public Embed addField(String name, String value, boolean inline) {
-      this.fields.add(new Field(name, value, inline));
-      return this;
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class Footer {
-      private String text;
-      
-      @JsonProperty("icon_url")
-      private String iconUrl;
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class Thumbnail {
-      private String url;
-
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class Image {
-      private String url;
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class Author {
-      private String name;
-      
-      private String url; // http(s)로 시작하는 경로 필수
-      
-      @JsonProperty("icon_url")
-      private String iconUrl; // http(s)로 시작하는 경로 필수
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class Field {
-      private String name;
-      
-      private String value;
-      
-      private boolean inline;
-    }
-  }
 }

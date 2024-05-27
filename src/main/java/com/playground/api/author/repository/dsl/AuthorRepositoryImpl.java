@@ -3,6 +3,7 @@ package com.playground.api.author.repository.dsl;
 import static com.playground.api.author.entity.QAuthorEntity.authorEntity;
 import java.util.List;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 import com.playground.api.author.model.AuthorResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -42,11 +43,11 @@ public class AuthorRepositoryImpl implements AuthorRepositoryCustom {
   }
 
   private BooleanExpression deleteAtEq(String deleteAt) {
-    if (deleteAt == null) {
+    if (ObjectUtils.isEmpty(deleteAt)) {
       return null;
+    } else {
+      return authorEntity.deleteAt.eq(deleteAt);
     }
-
-    return authorEntity.deleteAt.eq(deleteAt);
   }
 
 }

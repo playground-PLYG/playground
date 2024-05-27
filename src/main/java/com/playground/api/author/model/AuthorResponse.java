@@ -1,6 +1,7 @@
 package com.playground.api.author.model;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -35,12 +36,12 @@ public class AuthorResponse extends BaseDto {
   private String registUsrId;
 
   @Schema(description = "등록일시")
-  private String registDt;
+  private LocalDateTime registDt;
 
   @Schema(description = "수정사용자ID")
   private String updtUsrId;
 
   @Schema(description = "수정일시")
-  private String updtDt;
+  private LocalDateTime updtDt;
 
 }

@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.author.entity.AuthorEntity;
 import com.playground.api.author.entity.AuthorMenuEntity;
 import com.playground.api.author.entity.MberAuthorEntity;
-import com.playground.api.author.entity.specification.AuthorSpecification;
 import com.playground.api.author.model.AuthorMenuRequest;
 import com.playground.api.author.model.AuthorMenuResponse;
 import com.playground.api.author.model.AuthorRequest;
@@ -24,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class AuthorService {
-  private final AuthorSpecification authorSpecification;
   private final AuthorRepository authorRepository;
   private final MberAuthorRepository mberAuthorRepository;
   private final AuthorMenuRepository authorMenuRepository;
@@ -32,11 +30,7 @@ public class AuthorService {
 
   @Transactional(readOnly = true)
   public List<AuthorResponse> getAuthorList(AuthorRequest req) {
-    AuthorEntity getAuthor = AuthorEntity.builder().authorId(req.getAuthorId()).authorNm(req.getAuthorNm()).deleteAt(req.getDeleteAt()).build();
-
-    List<AuthorEntity> resList = authorRepository.findAll(authorSpecification.searchCondition(getAuthor));
-
-    return resList.stream().map(item -> modelMapper.map(item, AuthorResponse.class)).toList();
+    return authorRepository.getAuthorList(req.getAuthorId(), req.getAuthorNm(), req.getDeleteAt());
   }
 
   @Transactional

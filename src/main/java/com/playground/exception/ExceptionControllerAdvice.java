@@ -4,9 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import com.playground.model.BaseResponse;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -58,6 +60,27 @@ public class ExceptionControllerAdvice {
     ObjectError objectError = e.getBindingResult().getAllErrors().stream().findFirst().orElse(new ObjectError("", "파라메터가 올바르지 않습니다."));
 
     return new BaseResponse<>(objectError.getDefaultMessage());
+  }
+
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public BaseResponse<Void> missingServletRequestParameterException(MissingServletRequestParameterException e) {
+    String parameterName = e.getParameterName();
+    String message = String.format("'%s'은(는) 필수 값 입니다.", parameterName);
+    ObjectError objectError = new ObjectError(parameterName, message);
+
+    return new BaseResponse<>(objectError.getDefaultMessage());
+  }
+
+  @ExceptionHandler(MaxUploadSizeExceededException.class)
+  @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+  public BaseResponse<Void> maxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+    /*
+     * TODO maxUploadSize 조회 안되고 -1로 나오는 현상 파악 long maxUploadSize = e.getMaxUploadSize(); String message = String.format("파일 업로드 용량을 초과했습니다. %s", maxUploadSize); ObjectError objectError = new ObjectError("maxUploadSize", message);
+     * 
+     * return new BaseResponse<>(objectError.getDefaultMessage());
+     */
+    return new BaseResponse<>("파일 업로드 용량을 초과했습니다. %s");
   }
 
   @ExceptionHandler(Exception.class)

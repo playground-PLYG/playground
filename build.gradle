@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.5.0'
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.8.0'
     }
 }
 
@@ -105,6 +105,7 @@ appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         projectId 'august-cascade-385602' // gcloud config set project
         version '1'   // gcloud to generate a version
+        bucket 'playground-plyg-appengine'
     }
 }
 

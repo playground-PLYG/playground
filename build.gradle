@@ -104,8 +104,9 @@ apply plugin: 'com.google.cloud.tools.appengine'
 appengine {  // App Engine tasks configuration
     deploy {   // deploy configuration
         projectId 'august-cascade-385602' // gcloud config set project
-        version '1'   // gcloud to generate a version
         bucket 'playground-plyg-appengine'
+        stopPreviousVersion true
+        promote true
     }
 }
 

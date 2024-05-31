@@ -3,6 +3,7 @@ package com.playground.api.file.service;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.collections4.CollectionUtils;
@@ -111,6 +112,52 @@ public class FileService {
     } catch (IOException e) {
       throw new BizException("파일 다운로드에 실패했습니다.");
     }
+  }
+
+  public FileResponse saveImage(FileSaveRequest reqData) {
+    if (reqData == null || reqData.getFile() == null) {
+      throw new BizException("업로드할 이미지 파일이 없습니다.");
+    }
+
+    String uuid = UUID.randomUUID().toString().replace("-", "");
+    String contentType = reqData.getFile().getContentType();
+    String originalFilename = reqData.getFile().getOriginalFilename();
+    Long fileSize = reqData.getFile().getSize();
+    String fileName = FilenameUtils.getBaseName(originalFilename);
+    String fileExt = FilenameUtils.getExtension(originalFilename);
+
+    if (StringUtils.isBlank(fileName)) {
+      throw new BizException("파일명이 없는 이미지 파일은 업로드 할 수 없습니다.");
+    }
+
+    if (StringUtils.isBlank(fileExt)) {
+      throw new BizException("파일확장자가 없는 이미지 파일은 업로드 할 수 없습니다.");
+    }
+
+    if (fileSize == 0) {
+      throw new BizException("파일 사이즈가 0인 이미지 파일은 업로드 할 수 없습니다.");
+    }
+
+    // TODO apache tika활용해서 확장자 위변조 체크
+    List<String> allowedMimeTypes = Arrays.asList("image/jpeg", "image/png", "image/gif", "image/svg+xml");
+    List<String> allowedExts = Arrays.asList("jpeg", "png", "gif", "svg");
+
+    if (!allowedMimeTypes.contains(contentType) || !allowedExts.contains(fileExt)) {
+      throw new BizException("이미지 파일만 업로드 할 수 있습니다.");
+    }
+
+    BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, uuid).setContentType(contentType).build();
+
+    try {
+      storage.create(blobInfo, reqData.getFile().getBytes());
+    } catch (IOException e) {
+      throw new BizException("파일 업로드에 실패했습니다.");
+    }
+
+    FileEntity fileEntity = fileRepository.save(
+        FileEntity.builder().orginlFileNm(fileName).orginlFileExtsnNm(fileExt).streFileNm(uuid).cntntsTyCn(contentType).fileCpcty(fileSize).build());
+
+    return FileResponse.builder().fileId(fileEntity.getFileSn()).fileName(originalFilename).fileSize(fileSize).build();
   }
 
   public ResponseEntity<byte[]> getImage(Integer fileId) {

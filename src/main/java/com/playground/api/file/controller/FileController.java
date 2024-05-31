@@ -1,7 +1,6 @@
 package com.playground.api.file.controller;
 
 
-import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,10 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.playground.api.file.model.FileListSrchRequest;
 import com.playground.api.file.model.FileRemoveRequest;
-import com.playground.api.file.model.FileResponse;
 import com.playground.api.file.model.FileSaveRequest;
+import com.playground.api.file.model.FileSaveResponse;
 import com.playground.api.file.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +30,7 @@ public class FileController {
    */
   @Operation(summary = "파일 업로드", description = "파일 업로드")
   @PostMapping("/public/file/saveFile")
-  public FileResponse saveFile(FileSaveRequest reqData) {
+  public FileSaveResponse saveFile(FileSaveRequest reqData) {
     return fileService.saveFile(reqData);
   }
 
@@ -61,15 +59,6 @@ public class FileController {
   @PostMapping("/public/file/removeFile")
   public void removeFile(@RequestBody @Valid FileRemoveRequest reqData) {
     fileService.removeFile(reqData);
-  }
-
-  /**
-   * 파일 정보 목록 조회
-   */
-  @Operation(summary = "파일 정보 목록 조회", description = "파일 정보 목록 조회")
-  @PostMapping("/public/file/getFileList")
-  public List<FileResponse> getFileList(@RequestBody @Valid FileListSrchRequest reqData) {
-    return fileService.getFileList(reqData);
   }
 }
 

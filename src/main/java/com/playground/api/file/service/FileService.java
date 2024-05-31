@@ -5,9 +5,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
@@ -17,10 +15,9 @@ import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.playground.api.file.entity.FileEntity;
-import com.playground.api.file.model.FileListSrchRequest;
 import com.playground.api.file.model.FileRemoveRequest;
-import com.playground.api.file.model.FileResponse;
 import com.playground.api.file.model.FileSaveRequest;
+import com.playground.api.file.model.FileSaveResponse;
 import com.playground.api.file.repository.FileRepository;
 import com.playground.exception.BizException;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +32,7 @@ public class FileService {
   @Value("${spring.cloud.gcp.storage.bucket}")
   private String bucketName;
 
-  public FileResponse saveFile(FileSaveRequest reqData) {
+  public FileSaveResponse saveFile(FileSaveRequest reqData) {
     if (reqData == null || reqData.getFile() == null) {
       throw new BizException("업로드할 파일이 없습니다.");
     }
@@ -46,20 +43,6 @@ public class FileService {
     Long fileSize = reqData.getFile().getSize();
     String fileName = FilenameUtils.getBaseName(originalFilename);
     String fileExt = FilenameUtils.getExtension(originalFilename);
-
-    if (StringUtils.isBlank(fileName)) {
-      throw new BizException("파일명이 없는 파일은 업로드 할 수 없습니다.");
-    }
-
-    if (StringUtils.isBlank(fileExt)) {
-      throw new BizException("파일확장자가 없는 파일은 업로드 할 수 없습니다.");
-    }
-
-    if (fileSize == 0) {
-      throw new BizException("파일 사이즈가 0인 파일은 업로드 할 수 없습니다.");
-    }
-
-    // TODO apache tika활용해서 확장자 위변조 체크
 
     BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, uuid).setContentType(contentType).build();
 
@@ -72,14 +55,14 @@ public class FileService {
     FileEntity fileEntity = fileRepository.save(
         FileEntity.builder().orginlFileNm(fileName).orginlFileExtsnNm(fileExt).streFileNm(uuid).cntntsTyCn(contentType).fileCpcty(fileSize).build());
 
-    return FileResponse.builder().fileId(fileEntity.getFileSn()).fileName(originalFilename).fileSize(fileSize).build();
+    return FileSaveResponse.builder().fileId(fileEntity.getFileSn()).fileName(originalFilename).fileSize(fileSize).build();
   }
 
   public ResponseEntity<byte[]> getFile(Integer fileId) {
     FileEntity fileEntity = fileRepository.findById(fileId).orElse(null);
 
     if (fileEntity == null) {
-      throw new BizException("다운로드할 파일이 없습니다.");
+      throw new BizException("파일이 없습니다.");
     }
 
     String fileName = fileEntity.getOrginlFileNm() + "." + fileEntity.getOrginlFileExtsnNm();
@@ -117,7 +100,7 @@ public class FileService {
     FileEntity fileEntity = fileRepository.findById(fileId).orElse(null);
 
     if (fileEntity == null) {
-      throw new BizException("이미지가 없습니다.");
+      throw new BizException("파일이 없습니다.");
     }
 
     MediaType mediaType;
@@ -160,26 +143,11 @@ public class FileService {
     FileEntity fileEntity = fileRepository.findById(reqData.getFileId()).orElse(null);
 
     if (fileEntity == null) {
-      throw new BizException("삭제할 파일이 없습니다.");
+      throw new BizException("파일이 없습니다.");
     }
 
     storage.delete(bucketName, fileEntity.getStreFileNm());
 
     fileRepository.delete(fileEntity);
-  }
-
-  public List<FileResponse> getFileList(FileListSrchRequest reqData) {
-    if (CollectionUtils.isEmpty(reqData.getFileIds())) {
-      throw new BizException("파일ID는 필수 값 입니다.");
-    }
-
-    List<FileEntity> fileEntityList = fileRepository.findAllById(reqData.getFileIds());
-
-    if (CollectionUtils.isEmpty(fileEntityList)) {
-      throw new BizException("파일이 없습니다.");
-    }
-
-    return fileEntityList.stream().map(fileEntity -> FileResponse.builder().fileId(fileEntity.getFileSn())
-        .fileName(fileEntity.getOrginlFileNm() + "." + fileEntity.getOrginlFileExtsnNm()).fileSize(fileEntity.getFileCpcty()).build()).toList();
   }
 }

@@ -1,7 +1,7 @@
 package com.playground.api.file.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import com.playground.api.file.entity.FileEntity;
 
-public interface FileRepository extends JpaRepository<FileEntity, Integer> {
+public interface FileRepository extends CrudRepository<FileEntity, Integer> {
 }

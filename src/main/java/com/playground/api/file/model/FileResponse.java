@@ -10,14 +10,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Schema(name = "FileSaveResponse", description = "파일 저장 응답 데이터")
+@Schema(name = "FileResponse", description = "파일 응답 데이터")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class FileSaveResponse extends BaseDto {
+public class FileResponse extends BaseDto {
   @Serial
   private static final long serialVersionUID = 1L;
 

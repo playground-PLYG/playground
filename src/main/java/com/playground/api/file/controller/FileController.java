@@ -46,6 +46,16 @@ public class FileController {
   }
 
   /**
+   * 이미지 파일 업로드
+   */
+  @Operation(summary = "이미지 파일 업로드", description = "이미지 파일 업로드")
+  @PostMapping("/public/file/saveImage")
+  public FileResponse saveImage(FileSaveRequest reqData) {
+    return fileService.saveImage(reqData);
+  }
+
+
+  /**
    * 이미지 조회
    */
   @Operation(summary = "이미지 조회", description = "이미지 조회")

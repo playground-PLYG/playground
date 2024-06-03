@@ -140,7 +140,7 @@ public class FileService {
 
     // TODO apache tika활용해서 확장자 위변조 체크
     List<String> allowedMimeTypes = Arrays.asList("image/jpeg", "image/png", "image/gif", "image/svg+xml");
-    List<String> allowedExts = Arrays.asList("jpeg", "png", "gif", "svg");
+    List<String> allowedExts = Arrays.asList("jpeg", "jpg", "png", "gif", "svg");
 
     if (!allowedMimeTypes.contains(contentType) || !allowedExts.contains(fileExt)) {
       throw new BizException("이미지 파일만 업로드 할 수 있습니다.");

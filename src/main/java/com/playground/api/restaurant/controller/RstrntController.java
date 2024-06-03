@@ -30,9 +30,6 @@ public class RstrntController {
   @Operation(summary = "식당리스트 조회", description = "식당리스트 조회")
   @PostMapping("public/restaurant/getRstrntList")
   public List<RstrntSrchResponse> getRstrntList(@RequestBody @Valid RstrntSrchRequest req) {
-
-    log.debug(" 식당리스트 조회 :::: {}", req);
-
     return rstrntService.getRstrntList(req);
   }
 

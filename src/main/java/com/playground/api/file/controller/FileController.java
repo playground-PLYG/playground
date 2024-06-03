@@ -2,8 +2,11 @@ package com.playground.api.file.controller;
 
 
 import java.util.List;
+import org.springframework.http.InvalidMediaTypeException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,7 @@ import com.playground.api.file.model.FileListSrchRequest;
 import com.playground.api.file.model.FileRemoveRequest;
 import com.playground.api.file.model.FileResponse;
 import com.playground.api.file.model.FileSaveRequest;
+import com.playground.api.file.model.ImageResponse;
 import com.playground.api.file.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,14 +58,23 @@ public class FileController {
     return fileService.saveImage(reqData);
   }
 
-
   /**
    * 이미지 조회
    */
   @Operation(summary = "이미지 조회", description = "이미지 조회")
-  @GetMapping("/public/file/getImage")
-  public ResponseEntity<byte[]> getImage(@RequestParam(required = true) Integer fileId) {
-    return fileService.getImage(fileId);
+  @GetMapping("/public/file/getImage/{fileId}")
+  public ResponseEntity<byte[]> getImage(@PathVariable(required = true) Integer fileId) {
+    ImageResponse imageResponse = fileService.getImage(fileId);
+
+    MediaType mediaType;
+
+    try {
+      mediaType = MediaType.parseMediaType(imageResponse.getMediaType());
+    } catch (InvalidMediaTypeException e) {
+      mediaType = MediaType.APPLICATION_OCTET_STREAM;
+    }
+
+    return ResponseEntity.ok().contentType(mediaType).body(imageResponse.getImg());
   }
 
   /**

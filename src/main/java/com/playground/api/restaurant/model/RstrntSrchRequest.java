@@ -31,6 +31,14 @@ public class RstrntSrchRequest extends BaseDto {
   @Schema(description = "식당거리")
   private BigDecimal rstrntDstnc;
 
+  @Schema(description = "위도위치")
+  private String laLc;
+
+  @Schema(description = "경도위치")
+  private String loLc;
+
+  @Schema(description = "카카오지도ID")
+  private String kakaoMapId;
 
 
 }

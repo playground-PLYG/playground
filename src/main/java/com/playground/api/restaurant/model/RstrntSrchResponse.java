@@ -38,4 +38,12 @@ public class RstrntSrchResponse extends BaseDto {
   @Schema(description = "누적선택수")
   private Long accmltChoiseCo;
 
+  @Schema(description = "위도위치")
+  private String laLc;
+
+  @Schema(description = "경도위치")
+  private String loLc;
+
+  @Schema(description = "카카오지도ID")
+  private String kakaoMapId;
 }

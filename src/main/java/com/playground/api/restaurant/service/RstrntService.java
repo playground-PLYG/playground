@@ -40,7 +40,7 @@ public class RstrntService {
   @Transactional
   public RstrntSrchResponse addRstrnt(RstrntSrchRequest req) {
     RstrntEntity entity = RstrntEntity.builder().rstrntNm(req.getRstrntNm()).rstrntSn(req.getRstrntSn()).rstrntKndCode(req.getRstrntKndCode())
-        .rstrntDstnc(req.getRstrntDstnc()).build();
+        .rstrntDstnc(req.getRstrntDstnc()).kakaoMapId(req.getKakaoMapId()).laLc(req.getLaLc()).loLc(req.getLoLc()).build();
     rstrntRepository.save(entity);
     return modelMapper.map(entity, RstrntSrchResponse.class);
   }

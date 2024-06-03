@@ -40,6 +40,24 @@ public class RstrntEntity extends BaseEntity {
   private String rstrntNm;
 
   /**
+   * 위도위치
+   */
+  @Column(name = "la_lc")
+  private String laLc;
+
+  /**
+   * 경도위치
+   */
+  @Column(name = "lo_lc")
+  private String loLc;
+
+  /**
+   * 카카오지도ID
+   */
+  @Column(name = "kakao_map_id")
+  private String kakaoMapId;
+
+  /**
    * 식당종류코드
    */
   @Column(name = "rstrnt_knd_code")

@@ -5,7 +5,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.restaurant.entity.RstrntEntity;
-import com.playground.api.restaurant.entity.specification.RstrntSpecification;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
 import com.playground.api.restaurant.repository.RstrntMenuRepository;
@@ -17,19 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class RstrntService {
-  private final RstrntSpecification rstrntSpecification;
   private final RstrntRepository rstrntRepository;
   private final ModelMapper modelMapper;
   private final RstrntMenuRepository rstrntMenuRepository;
 
   @Transactional(readOnly = true)
   public List<RstrntSrchResponse> getRstrntList(RstrntSrchRequest req) {
-
     RstrntEntity getRstrnt = RstrntEntity.builder().rstrntKndCode(req.getRstrntKndCode()).rstrntNm(req.getRstrntNm()).build();
 
-    log.debug(" 식당리스트 조회 :::: {}", getRstrnt);
-
-    List<RstrntEntity> getRstrntList = rstrntRepository.findAll(rstrntSpecification.searchCondition(getRstrnt));
+    List<RstrntSrchResponse> getRstrntList = rstrntRepository.findAll(getRstrnt);
 
     log.debug(" 식당리스트  :::: {}", getRstrntList);
 

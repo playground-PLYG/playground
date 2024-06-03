@@ -2,10 +2,8 @@ package com.playground.api.restaurant.model;
 
 import java.io.Serial;
 import java.math.BigDecimal;
-
-import com.google.appengine.repackaged.com.google.type.Date;
+import java.time.LocalDateTime;
 import com.playground.model.BaseDto;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,7 +31,7 @@ public class RstrntSrchResponse extends BaseDto {
   private BigDecimal rstrntDstnc;
 
   @Schema(description = "최근선택일시")
-  private Date recentChoiseDt;
+  private LocalDateTime recentChoiseDt;
 
   @Schema(description = "누적선택수")
   private Long accmltChoiseCo;
@@ -46,4 +44,9 @@ public class RstrntSrchResponse extends BaseDto {
 
   @Schema(description = "카카오지도ID")
   private String kakaoMapId;
+
+  @Schema(description = "이미지파일ID")
+  private Integer imageFileId;
+
+
 }

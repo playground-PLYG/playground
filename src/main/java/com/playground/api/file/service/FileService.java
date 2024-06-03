@@ -10,7 +10,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.InvalidMediaTypeException;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,19 @@ import com.playground.api.file.model.FileListSrchRequest;
 import com.playground.api.file.model.FileRemoveRequest;
 import com.playground.api.file.model.FileResponse;
 import com.playground.api.file.model.FileSaveRequest;
+import com.playground.api.file.model.ImageResponse;
 import com.playground.api.file.repository.FileRepository;
 import com.playground.exception.BizException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FileService {
   private final FileRepository fileRepository;
+
+  private final FileCacheService fileCacheService;
 
   private final Storage storage;
 
@@ -140,7 +145,7 @@ public class FileService {
 
     // TODO apache tika활용해서 확장자 위변조 체크
     List<String> allowedMimeTypes = Arrays.asList("image/jpeg", "image/png", "image/gif", "image/svg+xml");
-    List<String> allowedExts = Arrays.asList("jpeg", "png", "gif", "svg");
+    List<String> allowedExts = Arrays.asList("jpeg", "jpg", "png", "gif", "svg");
 
     if (!allowedMimeTypes.contains(contentType) || !allowedExts.contains(fileExt)) {
       throw new BizException("이미지 파일만 업로드 할 수 있습니다.");
@@ -160,49 +165,17 @@ public class FileService {
     return FileResponse.builder().fileId(fileEntity.getFileSn()).fileName(originalFilename).fileSize(fileSize).build();
   }
 
-  public ResponseEntity<byte[]> getImage(Integer fileId) {
+  public ImageResponse getImage(Integer fileId) {
     FileEntity fileEntity = fileRepository.findById(fileId).orElse(null);
 
     if (fileEntity == null) {
       throw new BizException("이미지가 없습니다.");
     }
 
-    MediaType mediaType;
-
-    try {
-      mediaType = MediaType.parseMediaType(fileEntity.getCntntsTyCn());
-    } catch (InvalidMediaTypeException e) {
-      mediaType = MediaType.APPLICATION_OCTET_STREAM;
-    }
-
-    try (ReadChannel reader = storage.reader(bucketName, fileEntity.getStreFileNm())) {
-      ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
-
-      List<Byte> byteList = new ArrayList<>();
-
-      while (reader.read(bytes) > 0) {
-        bytes.flip();
-
-        for (int i = 0; i < bytes.limit(); i++) {
-          byteList.add(bytes.get(i));
-        }
-
-        bytes.clear();
-      }
-
-      byte[] fileContent = new byte[byteList.size()];
-      int i = 0;
-
-      for (Byte b : byteList) {
-        fileContent[i++] = b;
-      }
-
-      return ResponseEntity.ok().contentType(mediaType).body(fileContent);
-    } catch (IOException e) {
-      throw new BizException("파일 다운로드에 실패했습니다.");
-    }
+    return fileCacheService.getImageCache(fileEntity);
   }
 
+  @CacheEvict(cacheNames = "images")
   public void removeFile(FileRemoveRequest reqData) {
     FileEntity fileEntity = fileRepository.findById(reqData.getFileId()).orElse(null);
 

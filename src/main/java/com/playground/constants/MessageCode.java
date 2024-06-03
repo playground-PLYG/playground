@@ -25,6 +25,11 @@ public enum MessageCode {
   ,INVALID_NAME("EM0005", "이름을 확인해주세요.")
   ,INVALID_PASSWD("EM0006", "비밀번호를 확인해주세요.")
   ,INVALID_EMAIL("EM0007", "이메일을 확인해주세요.")
+
+  // File Error
+  ,NOT_EXIST_FILE("EF0001", "파일이 없습니다.")
+  ,NOT_EXIST_FILE_EXT("EF0002", "%s 파일이 없습니다.")
+  ,NOT_UPLOAD("EF0003", "%s 업로드 할 수 없습니다.")
   ;
 
   private final String code;

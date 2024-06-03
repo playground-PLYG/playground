@@ -24,11 +24,10 @@ import com.playground.api.file.model.FileResponse;
 import com.playground.api.file.model.FileSaveRequest;
 import com.playground.api.file.model.ImageResponse;
 import com.playground.api.file.repository.FileRepository;
+import com.playground.constants.MessageCode;
 import com.playground.exception.BizException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FileService {
@@ -43,7 +42,7 @@ public class FileService {
 
   public FileResponse saveFile(FileSaveRequest reqData) {
     if (reqData == null || reqData.getFile() == null) {
-      throw new BizException("업로드할 파일이 없습니다.");
+      throw new BizException(MessageCode.NOT_EXIST_FILE);
     }
 
     String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -54,15 +53,15 @@ public class FileService {
     String fileExt = FilenameUtils.getExtension(originalFilename);
 
     if (StringUtils.isBlank(fileName)) {
-      throw new BizException("파일명이 없는 파일은 업로드 할 수 없습니다.");
+      throw new BizException(MessageCode.NOT_UPLOAD, "파일명이 없는 파일은");
     }
 
     if (StringUtils.isBlank(fileExt)) {
-      throw new BizException("파일확장자가 없는 파일은 업로드 할 수 없습니다.");
+      throw new BizException(MessageCode.NOT_UPLOAD, "파일확장자가 없는 파일은");
     }
 
     if (fileSize == 0) {
-      throw new BizException("파일 사이즈가 0인 파일은 업로드 할 수 없습니다.");
+      throw new BizException(MessageCode.NOT_UPLOAD, "파일 사이즈가 0인 파일은");
     }
 
     // TODO apache tika활용해서 확장자 위변조 체크
@@ -72,7 +71,7 @@ public class FileService {
     try {
       storage.create(blobInfo, reqData.getFile().getBytes());
     } catch (IOException e) {
-      throw new BizException("파일 업로드에 실패했습니다.");
+      throw new BizException(MessageCode.FAIL_UPLOAD);
     }
 
     FileEntity fileEntity = fileRepository.save(
@@ -85,7 +84,7 @@ public class FileService {
     FileEntity fileEntity = fileRepository.findById(fileId).orElse(null);
 
     if (fileEntity == null) {
-      throw new BizException("다운로드할 파일이 없습니다.");
+      throw new BizException(MessageCode.NOT_EXIST_FILE);
     }
 
     String fileName = fileEntity.getOrginlFileNm() + "." + fileEntity.getOrginlFileExtsnNm();
@@ -121,7 +120,7 @@ public class FileService {
 
   public FileResponse saveImage(FileSaveRequest reqData) {
     if (reqData == null || reqData.getFile() == null) {
-      throw new BizException("업로드할 이미지 파일이 없습니다.");
+      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, "업로드할 이미지");
     }
 
     String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -132,15 +131,15 @@ public class FileService {
     String fileExt = FilenameUtils.getExtension(originalFilename);
 
     if (StringUtils.isBlank(fileName)) {
-      throw new BizException("파일명이 없는 이미지 파일은 업로드 할 수 없습니다.");
+      throw new BizException(MessageCode.NOT_UPLOAD, "파일명이 없는 이미지 파일은");
     }
 
     if (StringUtils.isBlank(fileExt)) {
-      throw new BizException("파일확장자가 없는 이미지 파일은 업로드 할 수 없습니다.");
+      throw new BizException(MessageCode.NOT_UPLOAD, "파일 확장자가 없는 이미지 파일은");
     }
 
     if (fileSize == 0) {
-      throw new BizException("파일 사이즈가 0인 이미지 파일은 업로드 할 수 없습니다.");
+      throw new BizException(MessageCode.NOT_UPLOAD, "파일 사이즈가 0인 이미지 파일은");
     }
 
     // TODO apache tika활용해서 확장자 위변조 체크
@@ -148,7 +147,7 @@ public class FileService {
     List<String> allowedExts = Arrays.asList("jpeg", "jpg", "png", "gif", "svg");
 
     if (!allowedMimeTypes.contains(contentType) || !allowedExts.contains(fileExt)) {
-      throw new BizException("이미지 파일만 업로드 할 수 있습니다.");
+      throw new BizException(MessageCode.ONLY_IMG);
     }
 
     BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, uuid).setContentType(contentType).build();
@@ -156,7 +155,7 @@ public class FileService {
     try {
       storage.create(blobInfo, reqData.getFile().getBytes());
     } catch (IOException e) {
-      throw new BizException("파일 업로드에 실패했습니다.");
+      throw new BizException(MessageCode.FAIL_UPLOAD);
     }
 
     FileEntity fileEntity = fileRepository.save(
@@ -169,7 +168,7 @@ public class FileService {
     FileEntity fileEntity = fileRepository.findById(fileId).orElse(null);
 
     if (fileEntity == null) {
-      throw new BizException("이미지가 없습니다.");
+      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, "이미지");
     }
 
     return fileCacheService.getImageCache(fileEntity);
@@ -180,7 +179,7 @@ public class FileService {
     FileEntity fileEntity = fileRepository.findById(reqData.getFileId()).orElse(null);
 
     if (fileEntity == null) {
-      throw new BizException("삭제할 파일이 없습니다.");
+      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, "삭제할");
     }
 
     storage.delete(bucketName, fileEntity.getStreFileNm());
@@ -190,13 +189,13 @@ public class FileService {
 
   public List<FileResponse> getFileList(FileListSrchRequest reqData) {
     if (CollectionUtils.isEmpty(reqData.getFileIds())) {
-      throw new BizException("파일ID는 필수 값 입니다.");
+      throw new BizException(MessageCode.REQUIRED_FILE_ID);
     }
 
     List<FileEntity> fileEntityList = fileRepository.findAllById(reqData.getFileIds());
 
     if (CollectionUtils.isEmpty(fileEntityList)) {
-      throw new BizException("파일이 없습니다.");
+      throw new BizException(MessageCode.NOT_EXIST_FILE);
     }
 
     return fileEntityList.stream().map(fileEntity -> FileResponse.builder().fileId(fileEntity.getFileSn())

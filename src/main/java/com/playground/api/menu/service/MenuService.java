@@ -4,15 +4,15 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.playground.api.member.model.MberSrchRequest;
 import com.playground.api.menu.entity.MenuEntity;
-import com.playground.api.menu.entity.specification.MenuSpecification;
 import com.playground.api.menu.model.MenuResponse;
 import com.playground.api.menu.model.SaveMenuRequest;
 import com.playground.api.menu.model.SearchMenuRequest;
 import com.playground.api.menu.repository.MenuRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,14 +20,12 @@ import lombok.RequiredArgsConstructor;
 public class MenuService {
 
   private final MenuRepository menuRepository;
-  private final MenuSpecification menuSpecification;
   private final ModelMapper modelMapper;
 
   /** 메뉴 조회 */
   @Transactional(readOnly = true)
-  public List<MenuResponse> selectMenu() {
-    List<MenuEntity> entityList = menuRepository.findByUseAtOrderByMenuSn("Y");
-    return entityList.stream().map(item -> modelMapper.map(item, MenuResponse.class)).toList();
+  public List<MenuResponse> selectMenu(@Valid MberSrchRequest req) {
+    return menuRepository.getMenuList(req.getMberId());
   }
 
   /** 전체 메뉴 목록 조회 */
@@ -49,8 +47,6 @@ public class MenuService {
   /** 조건별 메뉴 조회 */
   @Transactional(readOnly = true)
   public List<MenuResponse> selectByCondition(SearchMenuRequest request) {
-    MenuEntity entity = MenuEntity.builder().menuNm(request.getMenuNm()).menuUrl(request.getMenuUrl()).useAt(request.getUseAt()).build();
-    List<MenuEntity> entityList = menuRepository.findAll(menuSpecification.searchCondition(entity), Sort.by("menuId"));
-    return entityList.stream().map(item -> modelMapper.map(item, MenuResponse.class)).toList();
+    return menuRepository.getSelectByCondition(request.getMenuNm(), request.getMenuUrl(), request.getUseAt());
   }
 }

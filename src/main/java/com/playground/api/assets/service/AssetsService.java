@@ -10,7 +10,6 @@ import com.playground.api.assets.entity.AssetsEntity;
 import com.playground.api.assets.model.AssetsRequest;
 import com.playground.api.assets.model.AssetsResponse;
 import com.playground.api.assets.repository.AssetsRepository;
-import com.playground.utils.FormatUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service

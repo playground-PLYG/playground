@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.code.entity.CodeEntity;
 import com.playground.api.code.entity.CodeEntity.CodeEntityBuilder;
-import com.playground.api.code.entity.specification.CodeSpecification;
 import com.playground.api.code.model.CodeGroupSrchRequest;
 import com.playground.api.code.model.CodeResponse;
 import com.playground.api.code.model.CodeSearchRequest;
@@ -25,18 +24,19 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class CodeService {
-  private final CodeSpecification codeSpecification;
   private final CodeRepository codeRepository;
   private final ModelMapper modelMapper;
 
   /*
    * 코드조회
    */
-  @Cacheable(cacheManager = CacheType.ONE_HOUR, cacheNames = "codes", key = "#reqData.codeSn + '_' + #reqData.codeId", unless = "#result == null")
+  @Cacheable(cacheManager = CacheType.ONE_HOUR, cacheNames = "codes",
+      key = "#reqData.codeSn + '_' + #reqData.codeId + '_' + #reqData.codeNm + '_' + #reqData.upperCodeId + '_' + #reqData.groupCodeAt",
+      unless = "#result == null")
   @Transactional(readOnly = true)
   public List<CodeResponse> getCodePageList(CodeSearchRequest reqData) {
-    CodeEntity codeEntity = modelMapper.map(reqData, CodeEntity.class);
-    List<CodeEntity> codeRepositoryPage = codeRepository.findAll(codeSpecification.searchCondition(codeEntity));
+    List<CodeEntity> codeRepositoryPage = codeRepository.findAll(CodeEntity.builder().codeId(reqData.getCodeId()).codeNm(reqData.getCodeNm())
+        .upperCodeId(reqData.getUpperCodeId()).groupCodeAt(reqData.getGroupCodeAt()).build());
 
     return new ArrayList<>(codeRepositoryPage.stream().map(item -> modelMapper.map(item, CodeResponse.class)).toList());
   }

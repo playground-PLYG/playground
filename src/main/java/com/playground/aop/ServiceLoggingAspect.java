@@ -117,7 +117,7 @@ public class ServiceLoggingAspect {
     watch.start();
     Object result = joinPoint.proceed();
     watch.stop();
-    log.debug("===================== Service - End =====================");
+    log.debug("====================== Service - End =======================");
     log.debug("  Eexecution Time : {} ms", watch.getTotalTimeMillis());
     log.debug(END_CHAR);
     return result;

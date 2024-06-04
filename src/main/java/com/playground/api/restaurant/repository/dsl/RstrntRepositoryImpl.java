@@ -20,8 +20,8 @@ public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
   @Override
   public List<RstrntSrchResponse> findAll(RstrntEntity entity) {
     return queryFactory
-        .select(Projections.fields(RstrntSrchResponse.class, tbRstrnt.rstrntSn, tbRstrnt.rstrntNm, tbRstrnt.rstrntKndCode, tbRstrnt.rstrntDstnc,
-            tbRstrnt.recentChoiseDt, tbRstrnt.rstrntImageFileSn.as("imageFileId")))
+        .select(Projections.fields(RstrntSrchResponse.class, tbRstrnt.rstrntSn, tbRstrnt.rstrntNm, tbRstrnt.kakaoMapId, tbRstrnt.laLc, tbRstrnt.loLc,
+            tbRstrnt.rstrntKndCode, tbRstrnt.rstrntDstnc, tbRstrnt.recentChoiseDt, tbRstrnt.rstrntImageFileSn.as("imageFileId")))
         .where(rstrntNmLike(entity.getRstrntNm()), rstrntKndCodeEq(entity.getRstrntKndCode())).from(tbRstrnt).leftJoin(tbFile)
         .on(tbRstrnt.rstrntImageFileSn.eq(tbFile.fileSn)).fetch();
   }

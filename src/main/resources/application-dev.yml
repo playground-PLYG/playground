@@ -6,6 +6,7 @@ server:
 #   key-store-password: ${sm://db-pwd}
    
 springdoc:
+  default-consumes-media-type: application/json
   default-produces-media-type: application/json
   api-docs:
     groups:

@@ -38,6 +38,10 @@ public enum MessageCode {
   private final String code;
   private final String msg;
 
+  public String getCode() {
+    return this.code;
+  }
+
   public String getMessage() {
     return this.msg;
   }

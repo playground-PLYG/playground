@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
+import com.playground.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 
 @Aspect
@@ -102,7 +103,12 @@ public class ServiceLoggingAspect {
    */
   @AfterThrowing(pointcut = "cut()", throwing = "e")
   public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-    log.debug(">>> AfterThrowing: {} exception: {}", joinPoint.getSignature().getName(), e.getMessage());
+    if (e instanceof BizException bizException) {
+      log.debug(">>> AfterThrowing: {} exception: [{} : {}] - {}", joinPoint.getSignature().getName(), bizException.getErrCode(),
+          bizException.getErrCode().getCode(), e.getMessage());
+    } else {
+      log.debug(">>> AfterThrowing: {} exception: {}", joinPoint.getSignature().getName(), e.getMessage());
+    }
   }
 
   @Around("cut()")

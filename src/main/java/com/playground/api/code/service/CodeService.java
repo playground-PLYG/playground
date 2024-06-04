@@ -12,9 +12,9 @@ import com.playground.api.code.entity.CodeEntity;
 import com.playground.api.code.entity.CodeEntity.CodeEntityBuilder;
 import com.playground.api.code.entity.specification.CodeSpecification;
 import com.playground.api.code.model.CodeGroupSrchRequest;
-import com.playground.api.code.model.CodeSrchRequest;
 import com.playground.api.code.model.CodeResponse;
 import com.playground.api.code.model.CodeSearchRequest;
+import com.playground.api.code.model.CodeSrchRequest;
 import com.playground.api.code.model.CodeSrchResponse;
 import com.playground.api.code.repository.CodeRepository;
 import com.playground.constants.CacheType;
@@ -38,7 +38,7 @@ public class CodeService {
     CodeEntity codeEntity = modelMapper.map(reqData, CodeEntity.class);
     List<CodeEntity> codeRepositoryPage = codeRepository.findAll(codeSpecification.searchCondition(codeEntity));
 
-    return codeRepositoryPage.stream().map(item -> modelMapper.map(item, CodeResponse.class)).toList();
+    return new ArrayList<>(codeRepositoryPage.stream().map(item -> modelMapper.map(item, CodeResponse.class)).toList());
   }
 
 

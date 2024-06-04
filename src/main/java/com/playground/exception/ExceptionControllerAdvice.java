@@ -1,7 +1,6 @@
 package com.playground.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -85,8 +84,9 @@ public class ExceptionControllerAdvice {
   }
 
   @ExceptionHandler(BizException.class)
-  protected ResponseEntity<BaseResponse<Void>> customException(BizException e) {
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BaseResponse<>(e));
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  protected BaseResponse<Void> bizException(BizException e) {
+    return new BaseResponse<>(e);
   }
 
   @ExceptionHandler(Exception.class)

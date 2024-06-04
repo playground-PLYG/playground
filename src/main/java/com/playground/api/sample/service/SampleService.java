@@ -65,6 +65,9 @@ public class SampleService {
             .sampleContent1(entity.getSmpleFirstCn())
             .sampleContent2(entity.getSmpleSeconCn())
             .sampleContent3(entity.getSmpleThrdCn())
+            .useDate(entity.getUseDt())
+            .beginDate(entity.getBeginDt())
+            .endDate(entity.getEndDt())
             .build()
             ).toList();
 
@@ -82,11 +85,75 @@ public class SampleService {
     if (reqData != null) {
       SmpleEntity smpleEntity = smpleRepository.findById(reqData.getSampleSsno()).orElse(SmpleEntity.builder().build());
 
-      return SmpleResponse.builder().sampleSsno(smpleEntity.getSmpleSn()).sampleContent1(smpleEntity.getSmpleFirstCn())
-          .sampleContent2(smpleEntity.getSmpleSeconCn()).sampleContent3(smpleEntity.getSmpleThrdCn()).build();
+      return SmpleResponse.builder()
+          .sampleSsno(smpleEntity.getSmpleSn())
+          .sampleContent1(smpleEntity.getSmpleFirstCn())
+          .sampleContent2(smpleEntity.getSmpleSeconCn())
+          .sampleContent3(smpleEntity.getSmpleThrdCn())
+          .useDate(smpleEntity.getUseDt())
+          .beginDate(smpleEntity.getBeginDt())
+          .endDate(smpleEntity.getEndDt())
+          .build();
     } else {
       return new SmpleResponse();
     }
+  }
+  
+  /**
+   * 샘플 insert 
+   *
+   * @return SmpleResponse
+   */
+  public SmpleResponse addSmple(SmpleRequest req) {
+    
+    SmpleEntity res = smpleRepository.save(SmpleEntity.builder()
+        .smpleFirstCn(req.getSampleContent1())
+        .smpleSeconCn(req.getSampleContent2())
+        .smpleThrdCn(req.getSampleContent3())
+        .useDt(req.getUseDate())
+        .beginDt(req.getBeginDate())
+        .endDt(req.getEndDate())
+        .build()); 
+    
+    return SmpleResponse.builder()
+        .sampleSsno(res.getSmpleSn())
+        .sampleSsno(res.getSmpleSn())
+        .sampleContent1(res.getSmpleFirstCn())
+        .sampleContent2(res.getSmpleSeconCn())
+        .sampleContent3(res.getSmpleThrdCn())
+        .useDate(res.getUseDt())
+        .beginDate(res.getBeginDt())
+        .endDate(res.getEndDt())
+        .build();
+  }
+  
+  /**
+   * 샘플 update 
+   *
+   * @return SmpleResponse
+   */
+  public SmpleResponse modifySmple(SmpleRequest req) {
+    
+    SmpleEntity res = smpleRepository.save(SmpleEntity.builder()
+        .smpleSn(req.getSampleSsno())
+        .smpleFirstCn(req.getSampleContent1())
+        .smpleSeconCn(req.getSampleContent2())
+        .smpleThrdCn(req.getSampleContent3())
+        .useDt(req.getUseDate())
+        .beginDt(req.getBeginDate())
+        .endDt(req.getEndDate())
+        .build()); 
+    
+    return SmpleResponse.builder()
+        .sampleSsno(res.getSmpleSn())
+        .sampleSsno(res.getSmpleSn())
+        .sampleContent1(res.getSmpleFirstCn())
+        .sampleContent2(res.getSmpleSeconCn())
+        .sampleContent3(res.getSmpleThrdCn())
+        .useDate(res.getUseDt())
+        .beginDate(res.getBeginDt())
+        .endDate(res.getEndDt())
+        .build();
   }
 
   /**

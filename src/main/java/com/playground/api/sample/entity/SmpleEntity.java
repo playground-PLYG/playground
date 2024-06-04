@@ -1,5 +1,6 @@
 package com.playground.api.sample.entity;
 
+import java.time.LocalDateTime;
 import com.playground.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,5 +47,23 @@ public class SmpleEntity extends BaseEntity {
    */
   @Column(name = "smple_thrd_cn")
   private String smpleThrdCn;
+  
+  /**
+   * 시간
+   */
+  @Column(name = "use_dt")
+  private LocalDateTime useDt;
+  
+  /**
+   * 시작시간
+   */
+  @Column(name = "begin_dt")
+  private LocalDateTime beginDt;
+  
+  /**
+   * 종료시간
+   */
+  @Column(name = "end_dt")
+  private LocalDateTime endDt;
   
 }

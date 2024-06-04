@@ -1,6 +1,7 @@
 package com.playground.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -77,10 +78,15 @@ public class ExceptionControllerAdvice {
   public BaseResponse<Void> maxUploadSizeExceededException(MaxUploadSizeExceededException e) {
     /*
      * TODO maxUploadSize 조회 안되고 -1로 나오는 현상 파악 long maxUploadSize = e.getMaxUploadSize(); String message = String.format("파일 업로드 용량을 초과했습니다. %s", maxUploadSize); ObjectError objectError = new ObjectError("maxUploadSize", message);
-     * 
+     *
      * return new BaseResponse<>(objectError.getDefaultMessage());
      */
     return new BaseResponse<>("파일 업로드 용량을 초과했습니다. %s");
+  }
+
+  @ExceptionHandler(BizException.class)
+  protected ResponseEntity<BaseResponse<Void>> customException(BizException e) {
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BaseResponse<>(e));
   }
 
   @ExceptionHandler(Exception.class)

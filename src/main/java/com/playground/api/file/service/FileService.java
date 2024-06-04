@@ -53,15 +53,15 @@ public class FileService {
     String fileExt = FilenameUtils.getExtension(originalFilename);
 
     if (StringUtils.isBlank(fileName)) {
-      throw new BizException(MessageCode.NOT_UPLOAD, "파일명이 없는 파일은");
+      throw new BizException(MessageCode.NOT_UPLOAD, new String[] {"파일명이 없는 파일은"});
     }
 
     if (StringUtils.isBlank(fileExt)) {
-      throw new BizException(MessageCode.NOT_UPLOAD, "파일확장자가 없는 파일은");
+      throw new BizException(MessageCode.NOT_UPLOAD, new String[] {"파일확장자가 없는 파일은"});
     }
 
     if (fileSize == 0) {
-      throw new BizException(MessageCode.NOT_UPLOAD, "파일 사이즈가 0인 파일은");
+      throw new BizException(MessageCode.NOT_UPLOAD, new String[] {"파일 사이즈가 0인 파일은"});
     }
 
     // TODO apache tika활용해서 확장자 위변조 체크
@@ -120,7 +120,7 @@ public class FileService {
 
   public FileResponse saveImage(FileSaveRequest reqData) {
     if (reqData == null || reqData.getFile() == null) {
-      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, "업로드할 이미지");
+      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, new String[] {"업로드할 이미지"});
     }
 
     String uuid = UUID.randomUUID().toString().replace("-", "");
@@ -131,15 +131,15 @@ public class FileService {
     String fileExt = FilenameUtils.getExtension(originalFilename);
 
     if (StringUtils.isBlank(fileName)) {
-      throw new BizException(MessageCode.NOT_UPLOAD, "파일명이 없는 이미지 파일은");
+      throw new BizException(MessageCode.NOT_UPLOAD, new String[] {"파일명이 없는 이미지 파일은"});
     }
 
     if (StringUtils.isBlank(fileExt)) {
-      throw new BizException(MessageCode.NOT_UPLOAD, "파일 확장자가 없는 이미지 파일은");
+      throw new BizException(MessageCode.NOT_UPLOAD, new String[] {"파일 확장자가 없는 이미지 파일은"});
     }
 
     if (fileSize == 0) {
-      throw new BizException(MessageCode.NOT_UPLOAD, "파일 사이즈가 0인 이미지 파일은");
+      throw new BizException(MessageCode.NOT_UPLOAD, new String[] {"파일 사이즈가 0인 이미지 파일은"});
     }
 
     // TODO apache tika활용해서 확장자 위변조 체크
@@ -168,7 +168,7 @@ public class FileService {
     FileEntity fileEntity = fileRepository.findById(fileId).orElse(null);
 
     if (fileEntity == null) {
-      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, "이미지");
+      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, new String[] {"이미지"});
     }
 
     return fileCacheService.getImageCache(fileEntity);
@@ -179,7 +179,7 @@ public class FileService {
     FileEntity fileEntity = fileRepository.findById(reqData.getFileId()).orElse(null);
 
     if (fileEntity == null) {
-      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, "삭제할");
+      throw new BizException(MessageCode.NOT_EXIST_FILE_EXT, new String[] {"삭제할"});
     }
 
     storage.delete(bucketName, fileEntity.getStreFileNm());

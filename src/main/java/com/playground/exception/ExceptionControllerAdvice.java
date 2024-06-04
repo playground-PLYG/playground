@@ -85,7 +85,7 @@ public class ExceptionControllerAdvice {
 
   @ExceptionHandler(BizException.class)
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  protected BaseResponse<Void> bizException(BizException e) {
+  public BaseResponse<Void> bizException(BizException e) {
     return new BaseResponse<>(e);
   }
 

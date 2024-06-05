@@ -1,6 +1,7 @@
 package com.playground.api.sample.model;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
@@ -36,4 +37,22 @@ public class SmpleRequest extends BaseDto {
    */
   @Schema(description = "샘플 세번째 내용", example = "test3")
   private String sampleContent3;
+  
+  /**
+   * 시간
+   */
+  @Schema(description = "시간", example = "yyyy-mm-dd hh:mi:ss.SSS")
+  private LocalDateTime useDate;
+  
+  /**
+   * 샘플 세번째 내용
+   */
+  @Schema(description = "시작시간", example = "yyyy-mm-dd hh:mi:ss.SSS")
+  private LocalDateTime beginDate;
+  
+  /**
+   * 샘플 세번째 내용
+   */
+  @Schema(description = "종료시간", example = "yyyy-mm-dd hh:mi:ss.SSS")
+  private LocalDateTime endDate;
 }

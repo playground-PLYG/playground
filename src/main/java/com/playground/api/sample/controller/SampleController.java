@@ -67,6 +67,28 @@ public class SampleController {
   public SmpleResponse getSmpleDetail(@RequestBody @Valid SmpleRequest reqData) {
     return sampleService.getSmpleDetail(reqData);
   }
+  
+  /**
+   * 샘플 테이블 저장
+   *
+   * @return SmpleResponse - 샘플
+   */
+  @Operation(summary = "샘플 Smple Add", description = "샘플 테이블 저장")
+  @PostMapping("/public/sample/addSmple")
+  public SmpleResponse addSmple(@RequestBody SmpleRequest req) {
+    return sampleService.addSmple(req);
+  }
+  
+  /**
+   * 샘플 테이블 수정
+   *
+   * @return SmpleResponse - 샘플
+   */
+  @Operation(summary = "샘플 Smple modify", description = "샘플 테이블 수정")
+  @PostMapping("/public/sample/modifySmple")
+  public SmpleResponse modifySmple(@RequestBody SmpleRequest req) {
+    return sampleService.modifySmple(req);
+  }
 
   /**
    * 샘플 상세 목록 조회

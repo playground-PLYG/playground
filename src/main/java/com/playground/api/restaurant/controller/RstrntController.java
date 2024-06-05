@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.restaurant.model.RstrntDetailSrchRequest;
+import com.playground.api.restaurant.model.RstrntDetailSrchResponse;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
 import com.playground.api.restaurant.service.RstrntService;
@@ -33,6 +35,15 @@ public class RstrntController {
     return rstrntService.getRstrntList(req);
   }
 
+  /**
+   * 식당 상세 조회
+   */
+
+  @Operation(summary = "식당 상세 조회", description = "식당 상세 조회")
+  @PostMapping("public/restaurant/getRstrntDetail")
+  public RstrntDetailSrchResponse getRstrntDetail(@RequestBody @Valid RstrntDetailSrchRequest req) {
+    return rstrntService.getRstrntDetail(req);
+  }
 
   /**
    * 식당 등록

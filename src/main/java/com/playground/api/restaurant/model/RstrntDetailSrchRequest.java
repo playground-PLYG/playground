@@ -1,21 +1,20 @@
 package com.playground.api.restaurant.model;
 
 import java.io.Serial;
+import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
-@Schema(name = "RstrntMenuListRequest", description = "식당 메뉴 목록 조회 요청 데이터")
-@Builder
-@AllArgsConstructor
+@Schema(name = "RstrntDetailSrchRequest", description = "식당 상세 조회 요청 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public class RstrntMenuListRequest extends RstrntMenuRequest {
+@Setter
+public class RstrntDetailSrchRequest extends BaseDto {
+
   @Serial
   private static final long serialVersionUID = 1L;
 
@@ -23,7 +22,4 @@ public class RstrntMenuListRequest extends RstrntMenuRequest {
   @Schema(description = "식당일련번호", requiredMode = RequiredMode.REQUIRED)
   private Integer restaurantSerialNo;
 
-  @Null
-  @Schema(description = "식당메뉴일련번호", hidden = true)
-  private Integer restaurantMenuSerialNo;
 }

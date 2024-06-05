@@ -26,7 +26,7 @@ public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
             tbRstrnt.rstrntDstnc.as("restaurantDistance"), tbRstrnt.recentChoiseDt.as("recentChoiseDate"),
             tbRstrnt.rstrntImageFileSn.as("imageFileId")))
         .where(rstrntNmLike(entity.getRstrntNm()), rstrntKndCodeEq(entity.getRstrntKndCode())).from(tbRstrnt).leftJoin(tbFile)
-        .on(tbRstrnt.rstrntImageFileSn.eq(tbFile.fileSn)).fetch();
+        .on(tbRstrnt.rstrntImageFileSn.eq(tbFile.fileSn)).orderBy(tbRstrnt.rstrntSn.desc()).fetch();
   }
 
   private BooleanExpression rstrntNmLike(String rstrntNm) {

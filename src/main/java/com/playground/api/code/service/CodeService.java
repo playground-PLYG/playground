@@ -57,7 +57,7 @@ public class CodeService {
   /*
    * 코드삭제
    */
-  @CacheEvict(cacheNames = {"code", "codes", "code_group"})
+  @CacheEvict(cacheNames = {"code", "codes", "code_group"}, allEntries = true)
   public void deleteCode(CodeSearchRequest req) {
     Integer codeSn = req.getCodeSn();
 
@@ -67,7 +67,7 @@ public class CodeService {
   /*
    * 코드등록/수정
    */
-  @CacheEvict(cacheNames = {"code", "codes", "code_group"})
+  @CacheEvict(cacheNames = {"code", "codes", "code_group"}, allEntries = true)
   public CodeResponse saveCodeList(CodeSearchRequest req) {
     String groupCdYn = req.getGroupCodeAt();
 

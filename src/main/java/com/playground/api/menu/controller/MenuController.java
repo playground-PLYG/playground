@@ -3,11 +3,11 @@ package com.playground.api.menu.controller;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.member.model.MberSrchRequest;
 import com.playground.api.menu.entity.MenuEntity;
 import com.playground.api.menu.model.MenuResponse;
 import com.playground.api.menu.model.SaveMenuRequest;
@@ -32,9 +32,9 @@ public class MenuController {
    * @return List<MenuResponse> 메뉴 리스트
    */
   @Operation(summary = "메뉴 조회", description = "메뉴 조회")
-  @GetMapping("/public/menu/select")
-  public List<MenuResponse> selectMenu() {
-    return menuService.selectMenu();
+  @PostMapping("/public/menu/select")
+  public List<MenuResponse> selectMenu(@RequestBody @Valid MberSrchRequest req) {
+    return menuService.selectMenu(req);
   }
 
   /**

@@ -75,7 +75,7 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
                         ,qestnEntity.qestnCn.as("questionContents")
                         ,qestnEntity.compnoChoiseAt.as("compoundNumberChoiceAlternative")
                         ,list(Projections.fields(VoteIemResponse.class, 
-                                voteIemEntity.iemId.as("itemId")
+                                voteIemEntity.iemSn.as("itemSsno")
                                 ,voteIemEntity.iemNm.as("itemName")
                                 )).as("voteIemResponseList")
                         )));

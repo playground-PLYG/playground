@@ -38,5 +38,5 @@ public class QestnAnswerPK implements Serializable {
 	/**
 	 * 항목ID
 	 */
-	private String iemId;
+	private Integer iemSn;
 }

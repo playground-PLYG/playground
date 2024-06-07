@@ -31,7 +31,7 @@ public class AnswerService {
     return qestnAnswerEntities.stream()
         .map(entity -> QestnAnswerResponse.builder()
             .answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn())
-            .questionSsno(entity.getQestnSn()).itemId(entity.getIemId())
+            .questionSsno(entity.getQestnSn()).itemSsno(entity.getIemSn())
             .answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn())
             .build())
         .toList();
@@ -44,7 +44,7 @@ public class AnswerService {
     reqDataList.forEach(req -> {
       resEntityList.add(QestnAnswerEntity.builder()
           .voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno())
-          .iemId(req.getItemId()).answerUserId(StringUtils.defaultString(req.getAnswerUserId()))
+          .iemSn(req.getItemSsno()).answerUserId(StringUtils.defaultString(req.getAnswerUserId()))
           .answerCn(StringUtils.defaultString(req.getAnswerContents()))
           .build());
     });
@@ -53,7 +53,7 @@ public class AnswerService {
     return saveAllEntities.stream()
         .map(entity -> QestnAnswerResponse.builder()
             .answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn())
-            .questionSsno(entity.getQestnSn()).itemId(entity.getIemId())
+            .questionSsno(entity.getQestnSn()).itemSsno(entity.getIemSn())
             .answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn())
             .build())
         .toList();
@@ -66,7 +66,7 @@ public class AnswerService {
       QestnAnswerEntity reqAnswer = QestnAnswerEntity.builder()
           .answerSn(req.getAnswerSsno()).voteSn(req.getVoteSsno())
           .qestnSn(req.getQuestionSsno()).answerUserId(StringUtils.defaultString(req.getAnswerUserId()))
-          .iemId(req.getItemId()).answerCn(StringUtils.defaultString(req.getAnswerContents()))
+          .iemSn(req.getItemSsno()).answerCn(StringUtils.defaultString(req.getAnswerContents()))
           .build();
       
        QestnAnswerEntity resAnswer = qestnAnswerRepository.selectByEntity(reqAnswer);
@@ -74,7 +74,7 @@ public class AnswerService {
       if (!ObjectUtils.isEmpty(resAnswer)) {
         qestnAnswerRepository.deleteById(QestnAnswerPK.builder()
             .answerSn(resAnswer.getAnswerSn()).voteSn(resAnswer.getVoteSn())
-            .qestnSn(resAnswer.getQestnSn()).iemId(resAnswer.getIemId())
+            .qestnSn(resAnswer.getQestnSn()).iemSn(resAnswer.getIemSn())
             .build());
       }
       QestnAnswerEntity saveAnswer = qestnAnswerRepository.save(reqAnswer);
@@ -83,7 +83,7 @@ public class AnswerService {
 
     return resEntityList.stream().map(entity -> QestnAnswerResponse.builder()
             .answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn())
-            .questionSsno(entity.getQestnSn()).itemId(entity.getIemId())
+            .questionSsno(entity.getQestnSn()).itemSsno(entity.getIemSn())
             .answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn())
             .build())
         .toList();

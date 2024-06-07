@@ -140,7 +140,7 @@ public class VoteService {
             iemEntities.add(VoteIemEntity.builder()
                 .voteSn(qestnRes.getVoteSn())
                 .qestnSn(qestnRes.getQestnSn())
-                .iemId(voteIem.getItemId())
+                .iemSn(voteIem.getItemSsno())
                 .iemNm(voteIem.getItemName())
                 .build());
           });
@@ -148,7 +148,7 @@ public class VoteService {
           List<VoteIemEntity> saveAllIemEntities = voteIemRepository.saveAll(iemEntities);
           setQestn.setVoteIemResponseList(saveAllIemEntities.stream()
               .map(entity -> VoteIemResponse.builder()
-                  .itemId(entity.getIemId())
+                  .itemSsno(entity.getIemSn())
                   .itemName(entity.getIemNm())
                   .build())
               .toList());
@@ -248,7 +248,7 @@ public class VoteService {
            iemEntities.add(VoteIemEntity.builder()
                .voteSn(qestnRes.getVoteSn())
                .qestnSn(qestnRes.getQestnSn())
-               .iemId(voteIem.getItemId())
+               .iemSn(voteIem.getItemSsno())
                .iemNm(voteIem.getItemName())
                .build());
          });
@@ -260,7 +260,7 @@ public class VoteService {
          List<VoteIemEntity> saveAllIemEntities = voteIemRepository.saveAll(iemEntities);
          setQestn.setVoteIemResponseList(saveAllIemEntities.stream()
              .map(entity -> VoteIemResponse.builder()
-                 .itemId(entity.getIemId())
+                 .itemSsno(entity.getIemSn())
                  .itemName(entity.getIemNm())
                  .build())
              .toList());

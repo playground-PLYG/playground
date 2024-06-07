@@ -38,7 +38,7 @@ public class QestnAnswerRequest extends BaseDto {
 	 * 항목ID
 	 */
 	@Schema(description = "항목ID", example = "0000123456")
-	private String itemId;
+	private Integer itemSsno;
 
 	/**
 	 * 답변사용자ID

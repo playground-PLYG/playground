@@ -23,7 +23,7 @@ public class VoteIemPK implements Serializable {
 	/**
 	 * 항목ID
 	 */
-	private String iemId;
+	private Integer iemSn;
 
 	/**
 	 * 질문일련번호

@@ -28,8 +28,8 @@ public class VoteIemEntity extends BaseEntity {
    * 항목ID
    */
   @Id
-  @Column(name = "iem_id")
-  private String iemId;
+  @Column(name = "iem_sn")
+  private Integer iemSn;
 
   /**
    * 투표일련번호

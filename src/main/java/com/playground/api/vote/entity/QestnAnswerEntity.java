@@ -60,8 +60,8 @@ public class QestnAnswerEntity extends BaseEntity {
 	 * 항목ID
 	 */
 	@Id
-	@Column(name = "iem_id")
-	private String iemId;
+	@Column(name = "iem_sn")
+	private Integer iemSn;
 
 	/**
 	 * 답변사용자ID

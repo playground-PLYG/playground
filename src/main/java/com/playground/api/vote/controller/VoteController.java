@@ -70,5 +70,14 @@ public class VoteController {
   public VoteResponse removeVote(@RequestBody @Valid VoteRequest reqData) {
     return voteService.removeVote(reqData);
   }
+  
+  /**
+   * 당일 점심투표 등록
+   */
+  @Operation(summary = "당일 점심투표 등록", description = "하루한번 자동으로 점심투표를 생성할 API")
+  @PostMapping("/api/vote/addTodayLunchVote")
+  public void addTodayLunchVote() {
+    voteService.addTodayLunchVote();
+  }
 
 }

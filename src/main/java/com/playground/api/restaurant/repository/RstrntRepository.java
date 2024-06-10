@@ -11,5 +11,5 @@ import com.playground.api.restaurant.repository.dsl.RstrntRepositoryCustom;
 public interface RstrntRepository extends JpaRepository<RstrntEntity, Integer>, RstrntRepositoryCustom {
   void deleteAllByRstrntSnIn(List<Integer> rstrntSns);
 
-  Optional<RstrntEntity> findFirstByRstrntNmAndKakaoMapId(String rstrntNm, String kakaoMapId);
+  Optional<RstrntEntity> findFirstByRstrntNmOrKakaoMapId(String rstrntNm, String kakaoMapId);
 }

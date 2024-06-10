@@ -68,7 +68,7 @@ public class RstrntService {
 
   @Transactional(readOnly = true)
   public RstrntSrchResponse getIsExist(RstrntExistCheckRequest req) {
-    RstrntEntity rstrntEntity = rstrntRepository.findFirstByRstrntNmAndKakaoMapId(req.getRestaurantName(), req.getKakaoMapId()).orElse(null);
+    RstrntEntity rstrntEntity = rstrntRepository.findFirstByRstrntNmOrKakaoMapId(req.getRestaurantName(), req.getKakaoMapId()).orElse(null);
 
     if (rstrntEntity == null) {
       return null;

@@ -67,7 +67,7 @@ public class CodeService {
   /*
    * 코드등록/수정
    */
-  @CacheEvict(cacheManager = CacheType.ONE_HOUR, cacheNames = {"code", "codes", "code_group"})
+  @CacheEvict(cacheNames = {"code", "codes", "code_group"}, allEntries = true)
   public CodeResponse saveCodeList(CodeSearchRequest req) {
     String groupCdYn = req.getGroupCodeAt();
 

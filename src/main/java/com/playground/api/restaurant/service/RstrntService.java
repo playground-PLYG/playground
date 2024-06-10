@@ -6,10 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.restaurant.entity.RstrntEntity;
 import com.playground.api.restaurant.model.RstrntDetailSrchRequest;
 import com.playground.api.restaurant.model.RstrntDetailSrchResponse;
+import com.playground.api.restaurant.model.RstrntExistCheckRequest;
 import com.playground.api.restaurant.model.RstrntMenuListRequest;
 import com.playground.api.restaurant.model.RstrntMenuResponse;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
+import com.playground.api.restaurant.repository.RstrntMenuHashtagMapngRepository;
 import com.playground.api.restaurant.repository.RstrntMenuRepository;
 import com.playground.api.restaurant.repository.RstrntRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ public class RstrntService {
   private final RstrntRepository rstrntRepository;
 
   private final RstrntMenuRepository rstrntMenuRepository;
+
+  private final RstrntMenuHashtagMapngRepository rstrntMenuHashtagMapngRepository;
 
   @Transactional(readOnly = true)
   public List<RstrntSrchResponse> getRstrntList(RstrntSrchRequest req) {
@@ -41,7 +45,6 @@ public class RstrntService {
     return rstrntDetailSrchResponse;
   }
 
-
   @Transactional
   public RstrntSrchResponse addRstrnt(RstrntSrchRequest req) {
     RstrntEntity entity =
@@ -54,17 +57,23 @@ public class RstrntService {
         .imageFileId(entity.getRstrntImageFileSn()).build();
   }
 
-
   @Transactional
   public void removeRstrnt(List<RstrntSrchRequest> req) {
+    List<Integer> rstrntSnList = req.stream().mapToInt(RstrntSrchRequest::getRestaurantSerialNo).boxed().toList();
 
-    // TODO loop가 아닌 한방 쿼리로 변경 필요
-    req.forEach(rstrnt -> {
-      rstrntRepository.delete(RstrntEntity.builder().rstrntSn(rstrnt.getRestaurantSerialNo()).build());
-
-      rstrntMenuRepository.deleteByRstrntSn(rstrnt.getRestaurantSerialNo());
-    });
-
+    rstrntRepository.deleteAllByRstrntSnIn(rstrntSnList);
+    rstrntMenuRepository.deleteAllByRstrntSnIn(rstrntSnList);
+    rstrntMenuHashtagMapngRepository.deleteAllByRstrntSnIn(rstrntSnList);
   }
 
+  @Transactional(readOnly = true)
+  public RstrntSrchResponse getIsExist(RstrntExistCheckRequest req) {
+    RstrntEntity rstrntEntity = rstrntRepository.findFirstByRstrntNmAndKakaoMapId(req.getRestaurantName(), req.getKakaoMapId()).orElse(null);
+
+    if (rstrntEntity == null) {
+      return null;
+    } else {
+      return RstrntSrchResponse.builder().restaurantName(rstrntEntity.getRstrntNm()).kakaoMapId(rstrntEntity.getKakaoMapId()).build();
+    }
+  }
 }

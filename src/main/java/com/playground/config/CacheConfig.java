@@ -21,6 +21,15 @@ import com.playground.constants.CacheType;
 @EnableCaching
 @Configuration
 public class CacheConfig {
+  @Bean(CacheType.ZERO)
+  public RedisCacheManager zeroCacheManager(RedisConnectionFactory redisConnectionFactory) {
+    RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofSeconds(-1))
+        .disableCachingNullValues().serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer(objectMapper())));
+
+    return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory).cacheDefaults(redisCacheConfiguration).build();
+  }
+
   @Primary
   @Bean(CacheType.ONE_MINUTES)
   public RedisCacheManager oneMinutesCacheManager(RedisConnectionFactory redisConnectionFactory) {

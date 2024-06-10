@@ -1,5 +1,6 @@
 package com.playground.api.restaurant.repository;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,4 +13,6 @@ public interface RstrntMenuRepository extends JpaRepository<RstrntMenuEntity, Rs
   Optional<RstrntMenuEntity> findById(RstrntMenuPK id);
 
   void deleteByRstrntSn(Integer rstrntSn);
+
+  void deleteAllByRstrntSnIn(List<Integer> rstrntSns);
 }

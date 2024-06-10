@@ -8,9 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import com.playground.api.vote.entity.QestnAnswerEntity;
 import com.playground.api.vote.entity.QestnAnswerPK;
+import com.playground.api.vote.entity.VoteEntity;
 import com.playground.api.vote.model.QestnAnswerRequest;
 import com.playground.api.vote.model.QestnAnswerResponse;
+import com.playground.api.vote.model.QestnResponse;
+import com.playground.api.vote.model.VoteRequest;
+import com.playground.api.vote.model.VoteResponse;
 import com.playground.api.vote.repository.QestnAnswerRepository;
+import com.playground.api.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +24,46 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AnswerService {
   private final QestnAnswerRepository qestnAnswerRepository;
+  private final VoteRepository voteRepository;
+  
+  @Transactional(readOnly = true)
+  public Boolean isDuplicateVote(QestnAnswerRequest reqData) {
+    Boolean isDuplicate = true; //true = 중복투표, false = 처음투표 
+    if(!ObjectUtils.isEmpty(reqData.getVoteSsno()) && !StringUtils.isEmpty(reqData.getAnswerUserId())) {
+      Long resultCount = qestnAnswerRepository.selectByAnswerUserId(reqData.getVoteSsno(), reqData.getAnswerUserId());
+      if(resultCount.intValue()>0) {
+        isDuplicate = true; //중복
+      }else {
+        isDuplicate = false; //처음
+      }
+    }
+    return isDuplicate;
+  }
+  
+  @Transactional(readOnly = true)
+  public VoteResponse getVoteDetail(VoteRequest reqData) {
+    if (!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
+      VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
+      VoteResponse voteResponse = VoteResponse.builder()
+          .voteSsno(voteEntity.getVoteSn())
+          .voteKindCode(voteEntity.getVoteKndCode())
+          .voteSubject(voteEntity.getVoteSj())
+          .anonymityVoteAlternative(voteEntity.getAnnymtyVoteAt())
+          .voteBeginDate(voteEntity.getVoteBeginDt())
+          .voteEndDate(voteEntity.getVoteEndDt())
+          .voteDeleteAlternative(voteEntity.getVoteDeleteAt())
+          .build();
+
+      List<QestnResponse> qestnResponseList = voteRepository.getQestnDetail(reqData.getVoteSsno(), reqData.getQuestionSsno());
+      if (qestnResponseList.size() != 0) {
+        voteResponse.setQestnResponseList(qestnResponseList);
+      }
+      return voteResponse;
+    } else {
+      return new VoteResponse();
+    }
+
+  }
 
   @Transactional(readOnly = true)
   public List<QestnAnswerResponse> getAnswer(QestnAnswerRequest reqData) {

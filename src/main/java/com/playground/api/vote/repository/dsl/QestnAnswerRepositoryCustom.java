@@ -9,4 +9,6 @@ public interface QestnAnswerRepositoryCustom {
   Long deleteBySsno(Integer answerSsno);
   
   QestnAnswerEntity selectByEntity(QestnAnswerEntity qestnAnswerEntity);
+  
+  Long selectByAnswerUserId(Integer voteSsno, String answerUserId);
 }

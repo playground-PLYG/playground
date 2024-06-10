@@ -2,6 +2,7 @@ package com.playground.api.board.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.DynamicInsert;
 import com.playground.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +30,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Entity
+@DynamicInsert
 @Table(name = "tb_comment")
 @IdClass(CommentEntityPK.class)
 @SequenceGenerator(name = "tb_comment_cmnt_no_seq", sequenceName = "tb_comment_cmnt_no_seq", initialValue = 1, allocationSize = 1)
@@ -50,6 +52,9 @@ public class CommentEntity extends BaseEntity {
 
   @Column(name = "upper_cmnt_sn")
   private Integer upperCmntSn;
+
+  @Column(name = "delete_at")
+  private String deleteAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumns({@JoinColumn(name = "bbs_id", referencedColumnName = "bbs_id", insertable = false, updatable = false),

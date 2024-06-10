@@ -40,6 +40,9 @@ public class CommentResponse extends BaseDto {
   @Schema(description = "상위댓글번호")
   private Integer upperCommentNo;
 
+  @Schema(description = "삭제여부")
+  private String deleteChk;
+
   @Schema(description = "등록사용자ID")
   private String registUsrId;
 

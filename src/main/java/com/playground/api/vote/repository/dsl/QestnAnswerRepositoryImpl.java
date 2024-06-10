@@ -6,6 +6,7 @@ import org.springframework.util.ObjectUtils;
 import com.playground.api.vote.entity.QQestnAnswerEntity;
 import com.playground.api.vote.entity.QestnAnswerEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,5 +72,15 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
     }else {
       return tbQestnAnswer.answerUserId.eq(reqAnswerUserId);
     }
+  }
+
+  @Override
+  public Long selectByAnswerUserId(Integer voteSsno, String answerUserId) {
+    return queryFactory
+        .select(Wildcard.count)
+        .from(tbQestnAnswer)
+        .where(tbQestnAnswer.voteSn.eq(voteSsno)
+            .and(tbQestnAnswer.answerUserId.eq(answerUserId)))
+        .fetchOne();
   }
 }

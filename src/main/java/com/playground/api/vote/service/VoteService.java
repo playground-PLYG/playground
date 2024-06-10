@@ -347,7 +347,7 @@ public class VoteService {
       VoteIemEntity.builder()
       .voteSn(resVote.getVoteSn())
       .qestnSn(resQestn.getQestnSn())
-      .iemId(String.valueOf(res.getRestaurantSerialNo())) // 이거 DB 변경해야할듯
+      .iemSn(res.getRestaurantSerialNo()) // 이거 DB 변경해야할듯
       .iemNm(res.getRestaurantName())
       .build());
     }

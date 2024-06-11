@@ -1,0 +1,28 @@
+package com.playground.api.restaurant.model;
+
+import java.io.Serial;
+import com.playground.model.BaseDto;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@Schema(name = "RstrntExistCheckRequest", description = "식당 중복 확인 요청 데이터")
+@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
+public class RstrntExistCheckRequest extends BaseDto {
+
+  @Serial
+  private static final long serialVersionUID = 1L;
+
+  @NotNull(message = "식당명은 필수 값 입니다.")
+  @Schema(description = "식당명", requiredMode = RequiredMode.REQUIRED)
+  private String restaurantName;
+
+  @NotNull(message = "카카오지도는 필수 값 입니다.")
+  @Schema(description = "카카오지도ID", requiredMode = RequiredMode.REQUIRED)
+  private String kakaoMapId;
+}

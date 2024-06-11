@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.restaurant.model.RstrntDetailSrchRequest;
 import com.playground.api.restaurant.model.RstrntDetailSrchResponse;
+import com.playground.api.restaurant.model.RstrntExistCheckRequest;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
 import com.playground.api.restaurant.service.RstrntService;
@@ -28,7 +29,6 @@ public class RstrntController {
   /**
    * 식당리스트 조회
    */
-
   @Operation(summary = "식당리스트 조회", description = "식당리스트 조회")
   @PostMapping("public/restaurant/getRstrntList")
   public List<RstrntSrchResponse> getRstrntList(@RequestBody @Valid RstrntSrchRequest req) {
@@ -38,7 +38,6 @@ public class RstrntController {
   /**
    * 식당 상세 조회
    */
-
   @Operation(summary = "식당 상세 조회", description = "식당 상세 조회")
   @PostMapping("public/restaurant/getRstrntDetail")
   public RstrntDetailSrchResponse getRstrntDetail(@RequestBody @Valid RstrntDetailSrchRequest req) {
@@ -51,13 +50,8 @@ public class RstrntController {
   @Operation(summary = "식당 등록", description = "식당 등록")
   @PostMapping("/public/restaurant/addRstrnt")
   public RstrntSrchResponse addRstrnt(@RequestBody @Valid RstrntSrchRequest req) {
-
-    log.debug(" 식당 등록 :::: {}", req);
-
     return rstrntService.addRstrnt(req);
   }
-
-
 
   /**
    * 식당 삭제
@@ -65,9 +59,16 @@ public class RstrntController {
   @Operation(summary = "식당 삭제", description = "식당 삭제")
   @PostMapping("/public/restaurant/removeRstrnt")
   public void removeRstrnt(@RequestBody @Valid List<RstrntSrchRequest> req) {
-
-    log.debug(" 식당 삭제 :::: {}", req);
-
     rstrntService.removeRstrnt(req);
+  }
+
+
+  /**
+   * 식당 상세 조회
+   */
+  @Operation(summary = "식당 중복 여부 조회", description = "식당 중복 여부 조회")
+  @PostMapping("public/restaurant/getIsExist")
+  public RstrntSrchResponse getIsExist(@RequestBody @Valid RstrntExistCheckRequest req) {
+    return rstrntService.getIsExist(req);
   }
 }

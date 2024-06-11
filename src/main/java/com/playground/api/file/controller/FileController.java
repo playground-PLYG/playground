@@ -1,7 +1,9 @@
 package com.playground.api.file.controller;
 
 
+import java.time.Duration;
 import java.util.List;
+import org.springframework.http.CacheControl;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +76,7 @@ public class FileController {
       mediaType = MediaType.APPLICATION_OCTET_STREAM;
     }
 
-    return ResponseEntity.ok().contentType(mediaType).body(imageResponse.getImg());
+    return ResponseEntity.ok().contentType(mediaType).cacheControl(CacheControl.maxAge(Duration.ofHours(1))).body(imageResponse.getImg());
   }
 
   /**

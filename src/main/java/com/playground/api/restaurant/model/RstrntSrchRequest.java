@@ -38,5 +38,6 @@ public class RstrntSrchRequest extends BaseDto {
   @Schema(description = "카카오지도ID")
   private String kakaoMapId;
 
-
+  @Schema(description = "이미지파일ID")
+  private Integer imageFileId;
 }

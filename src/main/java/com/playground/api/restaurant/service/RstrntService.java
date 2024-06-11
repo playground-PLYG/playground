@@ -47,10 +47,12 @@ public class RstrntService {
 
   @Transactional
   public RstrntSrchResponse addRstrnt(RstrntSrchRequest req) {
-    RstrntEntity entity =
-        RstrntEntity.builder().rstrntNm(req.getRestaurantName()).rstrntSn(req.getRestaurantSerialNo()).rstrntKndCode(req.getRestaurantKindCode())
-            .rstrntDstnc(req.getRestaurantDistance()).kakaoMapId(req.getKakaoMapId()).laLc(req.getLa()).loLc(req.getLo()).build();
+    RstrntEntity entity = RstrntEntity.builder().rstrntNm(req.getRestaurantName()).rstrntSn(req.getRestaurantSerialNo())
+        .rstrntKndCode(req.getRestaurantKindCode()).rstrntDstnc(req.getRestaurantDistance()).kakaoMapId(req.getKakaoMapId()).laLc(req.getLa())
+        .loLc(req.getLo()).rstrntImageFileSn(req.getImageFileId()).build();
+
     rstrntRepository.save(entity);
+
     return RstrntSrchResponse.builder().restaurantSerialNo(entity.getRstrntSn()).restaurantName(entity.getRstrntNm())
         .restaurantKindCode(entity.getRstrntKndCode()).restaurantDistance(entity.getRstrntDstnc()).recentChoiseDate(entity.getRecentChoiseDt())
         .accumulationChoiseCount(entity.getAccmltChoiseCo()).la(entity.getLaLc()).lo(entity.getLoLc()).kakaoMapId(entity.getKakaoMapId())

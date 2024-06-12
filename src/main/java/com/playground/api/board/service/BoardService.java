@@ -149,33 +149,23 @@ public class BoardService {
   /** 댓글 수정 */
   @Transactional
   public void modifyComment(CommentRequest commentRequest) {
-    CommentEntity.CommentEntityBuilder commentEntityBuilder = CommentEntity.builder()
-        .postEntity(PostEntity.builder().noticeEntity(NoticeEntity.builder().bbsId(commentRequest.getBoardId()).build())
-            .nttSn(commentRequest.getNoticeNo()).build())
-        .cmntSn(commentRequest.getCommentNo()).deleteAt(commentRequest.getDeleteChk()).cmntCn(commentRequest.getCommentCn());
+    CommentEntity commentEntity = commentRepository.findByCmntSn(commentRequest.getCommentNo());
 
-    if (commentRequest.getUpperCommentNo() > 0) {
-      commentEntityBuilder.upperCmntSn(commentRequest.getUpperCommentNo());
-    }
-    CommentEntity commentEntity = commentEntityBuilder.build();
-    commentRepository.save(commentEntity);
+    CommentEntity updateCommentEntity = CommentEntity.builder().cmntSn(commentEntity.getCmntSn()).postEntity(commentEntity.getPostEntity())
+        .cmntCn(commentRequest.getCommentCn()).upperCmntSn(commentEntity.getUpperCmntSn()).deleteAt(commentEntity.getDeleteAt()).build();
+
+    commentRepository.save(updateCommentEntity);
   }
 
   /** 임시 댓글 삭제 */
   @Transactional
   public void removeComment(CommentRequest commentRequest) {
-    CommentEntity.CommentEntityBuilder commentEntityBuilder = CommentEntity.builder()
-        .postEntity(PostEntity.builder().noticeEntity(NoticeEntity.builder().bbsId(commentRequest.getBoardId()).build())
-            .nttSn(commentRequest.getNoticeNo()).build())
-        .cmntSn(commentRequest.getCommentNo()).deleteAt(commentRequest.getDeleteChk()).cmntCn(commentRequest.getCommentCn());
+    CommentEntity commentEntity = commentRepository.findByCmntSn(commentRequest.getCommentNo());
 
-    if (commentRequest.getUpperCommentNo() > 0) {
-      commentEntityBuilder.upperCmntSn(commentRequest.getUpperCommentNo());
-    }
+    CommentEntity deleteCommentEntity = CommentEntity.builder().cmntSn(commentEntity.getCmntSn()).postEntity(commentEntity.getPostEntity())
+        .cmntCn(commentEntity.getCmntCn()).upperCmntSn(commentEntity.getUpperCmntSn()).deleteAt("Y").build();
 
-    CommentEntity commentEntity = commentEntityBuilder.build();
-
-    commentRepository.save(commentEntity);
+    commentRepository.save(deleteCommentEntity);
   }
 
 }

@@ -10,4 +10,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, CommentE
   List<CommentEntity> deleteByCmntSn(Integer cmntNo);
 
   List<CommentEntity> deleteByUpperCmntSn(Integer upperCmntNo);
+
+  CommentEntity findByCmntSn(Integer cmntSn);
 }

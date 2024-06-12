@@ -27,7 +27,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
             menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt))
         .distinct().from(mberEntity).rightJoin(mberAuthorEntity).on(mberEntity.mberId.eq(mberAuthorEntity.mberId)).rightJoin(authorMenuEntity)
         .on(mberAuthorEntity.authorId.eq(authorMenuEntity.authorId)).rightJoin(menuEntity).on(authorMenuEntity.menuSn.eq(menuEntity.menuSn))
-        .where(mberIdEq(mberId), menuEntity.useAt.eq("Y")).fetch();
+        .where(mberIdEq(mberId).or(authorMenuEntity.authorId.eq("ROLE_DEFAULT")), menuEntity.useAt.eq("Y")).fetch();
   }
 
   public List<MenuResponse> getSelectByCondition(String menuNm, String menuUrl, String useAt) {
@@ -38,11 +38,11 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 
   /* 동적쿼리를 위한 함수 */
   private BooleanExpression mberIdEq(String mberId) {
-    if (ObjectUtils.isEmpty(mberId)) {
+    if (mberId == null) {
       return null;
-    } else {
-      return mberEntity.mberId.eq(mberId);
     }
+
+    return mberEntity.mberId.eq(mberId);
   }
 
   private BooleanExpression menuNmLike(String menuNm) {

@@ -5,11 +5,16 @@ import static com.playground.api.author.entity.QMberAuthorEntity.mberAuthorEntit
 import static com.playground.api.member.entity.QMberEntity.mberEntity;
 import static com.playground.api.menu.entity.QMenuEntity.menuEntity;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
+import com.playground.api.menu.entity.MenuEntity;
 import com.playground.api.menu.model.MenuResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class MenuRepositoryImpl implements MenuRepositoryCustom {
+
   private final JPAQueryFactory queryFactory;
+
 
   @Override
   public List<MenuResponse> getMenuList(String mberId) {
@@ -30,11 +37,19 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         .where(mberIdEq(mberId).or(authorMenuEntity.authorId.eq("ROLE_DEFAULT")), menuEntity.useAt.eq("Y")).fetch();
   }
 
-  public List<MenuResponse> getSelectByCondition(String menuNm, String menuUrl, String useAt) {
-    return queryFactory.select(Projections.fields(MenuResponse.class, menuEntity.menuSn, menuEntity.menuNm, menuEntity.menuUrl, menuEntity.menuDepth,
-        menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt, menuEntity.registUsrId, menuEntity.registDt, menuEntity.updtUsrId,
-        menuEntity.updtDt)).from(menuEntity).where(menuNmLike(menuNm)).fetch();
+
+  @Override
+  public Page<MenuEntity> getMenuPageList(String menuNm, String menuUrl, String useAt, Pageable pageable) {
+
+    List<MenuEntity> content = queryFactory.selectFrom(menuEntity).where(menuNmLike(menuNm), menuUrlLike(menuUrl), useAtEq(useAt))
+        .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+
+    JPAQuery<Long> countQuery =
+        queryFactory.select(menuEntity.count()).from(menuEntity).where(menuNmLike(menuNm), menuUrlLike(menuUrl), useAtEq(useAt));
+
+    return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
   }
+
 
   /* 동적쿼리를 위한 함수 */
   private BooleanExpression mberIdEq(String mberId) {
@@ -44,6 +59,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 
     return mberEntity.mberId.eq(mberId);
   }
+
 
   private BooleanExpression menuNmLike(String menuNm) {
     if (menuNm == null) {
@@ -60,6 +76,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 
     return menuEntity.menuUrl.like("%" + menuUrl + "%");
   }
+
 
   private BooleanExpression useAtEq(String useAt) {
     if (ObjectUtils.isEmpty(useAt)) {

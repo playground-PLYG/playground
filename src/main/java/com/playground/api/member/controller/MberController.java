@@ -50,6 +50,15 @@ public class MberController {
 	public SignInResponse signIn(@RequestBody @Valid SignInRequest req) {
 		return mberService.signIn(req);
 	}
+	
+	/**
+   * 로그아웃
+   */
+  @Operation(summary = "로그아웃", description = "로그아웃 처리")
+  @PostMapping("/public/member/signOut")
+  public void signOut(@RequestHeader(value = "Authorization") String token) {
+    mberService.signOut(token);
+  }
 
 	/**
 	 * 내 정보 조회

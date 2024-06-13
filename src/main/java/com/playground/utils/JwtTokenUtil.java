@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.crypto.SecretKey;
 import org.springframework.util.StringUtils;
+import com.google.common.net.HttpHeaders;
 import com.playground.api.member.model.MberInfoResponse;
 import com.playground.api.member.model.MberInfoResponse.MberInfoResponseBuilder;
 import com.playground.constants.MessageCode;
@@ -14,6 +15,7 @@ import com.playground.exception.BizException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -99,6 +101,14 @@ public class JwtTokenUtil {
    */
   private static boolean isTokenExpired(String token) {
     return getExpirationDate(token).before(new Date());
+  }
+  
+  //Request의 Header에서 token 값을 가져옵니다. "authorization" : "token'
+  public String resolveToken(HttpServletRequest request) {
+      if(request.getHeader(HttpHeaders.AUTHORIZATION) != null ) {
+        return request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
+      }
+      return null;
   }
 
   public static MberInfoResponse autholriztionCheckUser(String token) {

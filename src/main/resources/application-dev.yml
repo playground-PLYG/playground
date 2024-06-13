@@ -72,3 +72,5 @@ decorator:
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}
+
+CLIENT_URL: https://playground-nuxt.vercel.app

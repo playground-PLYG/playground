@@ -27,7 +27,25 @@ import lombok.extern.slf4j.Slf4j;
 public class VoteRstrntRepositoryImpl implements VoteRstrntRepositoryCustom {
   private final JPAQueryFactory queryFactory;
 
-
+  @Override
+  public Integer getVoteRstrntCount() {
+    StringTemplate voteRegist = Expressions.stringTemplate("TO_CHAR({0}, '{1s}')", voteEntity.registDt,"YYYYMMDD");
+    
+    LocalDate date = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    String today = date.format(formatter);
+    
+    return Math.toIntExact(queryFactory
+        .select(voteEntity.count())
+        .from(voteEntity)
+        .where(voteEntity.voteKndCode.eq("LUN")
+            .and(voteEntity.voteDeleteAt.eq("N"))
+            .and(voteRegist.eq(today))
+            .and(voteEntity.voteBeginDt.loe(LocalDateTime.now()))
+         ).fetchFirst());
+  }
+  
+  
   @Override
   public List<VoteRstrntResponse> getVoteRstrntList() {
     

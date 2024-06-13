@@ -73,3 +73,5 @@ decorator:
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}
+
+CLIENT_URL: http://localhost:3000

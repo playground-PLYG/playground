@@ -4,21 +4,13 @@ import java.io.Serial;
 import java.time.LocalDateTime;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
-@Schema(name = "MenuResponse", description = "메뉴 조회 응답 데이터")
-@Builder
-@AllArgsConstructor
-@RequiredArgsConstructor
+@Schema(name = "MenuRequest", description = "메뉴 관리")
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
-public class MenuResponse extends BaseDto {
+public class MenuRequest extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;

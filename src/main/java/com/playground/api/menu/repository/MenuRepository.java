@@ -1,16 +1,28 @@
 package com.playground.api.menu.repository;
 
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import com.playground.api.menu.entity.MenuEntity;
 import com.playground.api.menu.repository.dsl.MenuRepositoryCustom;
 
 @Repository
-public interface MenuRepository extends JpaRepository<MenuEntity, Integer>, MenuRepositoryCustom {
-  /** 메뉴 조회 */
-  List<MenuEntity> findByUseAtOrderByMenuSn(String useAt);
+public interface MenuRepository extends CrudRepository<MenuEntity, Integer>, MenuRepositoryCustom {
 
-  /** 전체 메뉴 목록 조회 */
-  List<MenuEntity> findAllByOrderByMenuSn();
+  /**
+   * 메뉴 단건 조회
+   * 
+   * @param menuSn
+   * @return
+   */
+  Optional<MenuEntity> findByMenuSn(Integer menuSn);
+
+
+  /**
+   * 메뉴 삭제
+   * 
+   * @param menuSn
+   * @return
+   */
+  Optional<MenuEntity> deleteByMenuSn(Integer menuSn);
 }

@@ -27,6 +27,9 @@ public class CommentRequest extends BaseDto {
   @Schema(description = "상위댓글번호")
   private int upperCommentNo;
 
+  @Schema(description = "삭제여부")
+  private String deleteChk;
+
   @Schema(description = "등록사용자ID")
   private String registUsrId;
 

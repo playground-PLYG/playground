@@ -109,7 +109,8 @@ public class BoardService {
     commentEntityList.stream().forEach(commentEntity -> {
       CommentResponse commentResponse = CommentResponse.builder().commentNo(commentEntity.getCmntSn())
           .noticeNo(commentEntity.getPostEntity().getNttSn()).boardId(commentEntity.getPostEntity().getNoticeEntity().getBbsId())
-          .commentCn(commentEntity.getCmntCn()).upperCommentNo(commentEntity.getUpperCmntSn()).build();
+          .commentCn(commentEntity.getCmntCn()).upperCommentNo(commentEntity.getUpperCmntSn()).deleteChk(commentEntity.getDeleteAt())
+          .registUsrId(commentEntity.getRegistUsrId()).build();
 
       String currentId = String.format("%s_%s_%s", commentResponse.getBoardId(), commentResponse.getNoticeNo(), commentResponse.getCommentNo());
 
@@ -130,10 +131,16 @@ public class BoardService {
   /** 댓글 생성 */
   @Transactional
   public List<CommentResponse> addComment(CommentRequest commentRequest) {
-    CommentEntity commentEntity = CommentEntity.builder()
-        .postEntity(PostEntity.builder().noticeEntity(NoticeEntity.builder().bbsId(commentRequest.getBoardId()).build())
-            .nttSn(commentRequest.getNoticeNo()).build())
-        .cmntCn(commentRequest.getCommentCn()).upperCmntSn(commentRequest.getUpperCommentNo()).build();
+    CommentEntity.CommentEntityBuilder commentEntityBuilder =
+        CommentEntity.builder().postEntity(PostEntity.builder().noticeEntity(NoticeEntity.builder().bbsId(commentRequest.getBoardId()).build())
+            .nttSn(commentRequest.getNoticeNo()).build()).cmntCn(commentRequest.getCommentCn());
+
+    if (commentRequest.getUpperCommentNo() > 0) {
+      commentEntityBuilder.upperCmntSn(commentRequest.getUpperCommentNo());
+    }
+
+    CommentEntity commentEntity = commentEntityBuilder.build();
+
     commentRepository.save(commentEntity);
 
     return null;
@@ -142,18 +149,23 @@ public class BoardService {
   /** 댓글 수정 */
   @Transactional
   public void modifyComment(CommentRequest commentRequest) {
-    CommentEntity commentEntity = CommentEntity.builder()
-        .postEntity(PostEntity.builder().noticeEntity(NoticeEntity.builder().bbsId(commentRequest.getBoardId()).build())
-            .nttSn(commentRequest.getNoticeNo()).build())
-        .cmntSn(commentRequest.getCommentNo()).cmntCn(commentRequest.getCommentCn()).upperCmntSn(commentRequest.getUpperCommentNo()).build();
-    commentRepository.save(commentEntity);
+    CommentEntity commentEntity = commentRepository.findByCmntSn(commentRequest.getCommentNo());
+
+    CommentEntity updateCommentEntity = CommentEntity.builder().cmntSn(commentEntity.getCmntSn()).postEntity(commentEntity.getPostEntity())
+        .cmntCn(commentRequest.getCommentCn()).upperCmntSn(commentEntity.getUpperCmntSn()).deleteAt(commentEntity.getDeleteAt()).build();
+
+    commentRepository.save(updateCommentEntity);
   }
 
   /** 임시 댓글 삭제 */
   @Transactional
   public void removeComment(CommentRequest commentRequest) {
-    // commentRepository.deleteByCmntNo(commentRequest.getCommentNo());
-    // commentRepository.deleteByUpperCmntNo(commentRequest.getCommentNo());
+    CommentEntity commentEntity = commentRepository.findByCmntSn(commentRequest.getCommentNo());
+
+    CommentEntity deleteCommentEntity = CommentEntity.builder().cmntSn(commentEntity.getCmntSn()).postEntity(commentEntity.getPostEntity())
+        .cmntCn(commentEntity.getCmntCn()).upperCmntSn(commentEntity.getUpperCmntSn()).deleteAt("Y").build();
+
+    commentRepository.save(deleteCommentEntity);
   }
 
 }

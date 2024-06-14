@@ -72,7 +72,7 @@ public class MberService {
     log.debug(">>> rstMember : {}", rstMember);
     
     // 토큰 발급 및 로그인 처리
-    SignInResponse signRes = SignInResponse.builder().token(JwtTokenUtil.createAccessToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId())
+    SignInResponse signRes = SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId())
         .build();
     
     // 토큰 유효여부 확인 후 securityContext 등록

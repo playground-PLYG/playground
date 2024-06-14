@@ -10,6 +10,11 @@
     "description": "암호화 유틸 salt"
   },
   {
+    "name": "CLIENT_URL",
+    "type": "java.lang.String",
+    "description": "Front Server Url"
+  },
+  {
     "name": "spring.datasource.master.hikari.read-only",
     "type": "java.lang.String",
     "description": "Reflication 설정을 위한 master hikari.read-only'"

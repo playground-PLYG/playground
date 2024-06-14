@@ -72,7 +72,7 @@ public class MberService {
     log.debug(">>> rstMember : {}", rstMember);
     
     // 토큰 발급 및 로그인 처리
-    SignInResponse signRes = SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId())
+    SignInResponse signRes = SignInResponse.builder().token(JwtTokenUtil.createAccessToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId())
         .build();
     
     // 토큰 유효여부 확인 후 securityContext 등록
@@ -116,23 +116,14 @@ public class MberService {
     }
   }
   
+  @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#token", unless = "#result == null")
+  @Transactional(readOnly = true)
   public MberInfoResponse getMember() {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
     
-    if (!ObjectUtils.isEmpty(token)) {
-      MberInfoResponse member = JwtTokenUtil.autholriztionCheckUser(token); // 넘겨받은 토큰 값으로 토큰에 있는 값 꺼내기
-
-      log.debug("szs/me : {}", member);
-
-      MberEntity memberEntity = mberRepository.findById(member.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
-
-      return MberInfoResponse.builder().mberId(memberEntity.getMberId()).mberNm(memberEntity.getMberNm())
-          .mberEmailAdres(memberEntity.getMberEmailAdres()).build();
-    } else {
-      throw new BizException(MessageCode.INVALID_TOKEN);
-    }
+    return getMyInfo(token);
   }
 
   @Transactional(readOnly = true)

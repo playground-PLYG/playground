@@ -1,5 +1,7 @@
 server:
  port: 8080
+ main:
+   lazy-initialization: true
  memory:
    min: 128mb
    max: 320mb
@@ -59,9 +61,11 @@ logging:
   pattern:
     file: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} [${LOG_LEVEL_PATTERN:%5p}] [%10.10X{userId}] [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
   level:
-    root: info
+    root: warn
+    org:
+      springframework: warn
     com:
-     playground: debug
+     playground: warn
 
 decorator:
   datasource:

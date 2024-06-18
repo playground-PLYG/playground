@@ -12,3 +12,4 @@ automatic_scaling:
 
 env_variables:
  spring_profiles_active: "dev"
+ JAVA_OPS: "-Xms128m -Xmx256m -XX:MaxMetaspaceSize=64m -XX:MinMetaspaceFreeRatio=20 -XX:MaxMetaspaceFreeRatio=40"

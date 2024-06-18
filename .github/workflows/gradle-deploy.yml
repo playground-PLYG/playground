@@ -49,10 +49,10 @@ jobs:
     - name: Make service.json
       run: echo '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}' > /home/runner/work/playground/playground/service.json
       
-    #- name: Build with Gradle
-    #  run: ./gradlew test
-    #  env:
-    #    GOOGLE_APPLICATION_CREDENTIALS: '/home/runner/work/playground/playground/service.json'
+    - name: Build with Gradle
+      run: ./gradlew test
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: '/home/runner/work/playground/playground/service.json'
         
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2

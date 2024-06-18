@@ -1,6 +1,8 @@
 package com.playground.api.menu.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +31,10 @@ public class MenuService {
    */
   @Transactional(readOnly = true)
   public List<MenuResponse> getMenuList(@Valid MberSrchRequest req) {
-    return menuRepository.getMenuList(req.getMberId());
+    List<MenuResponse> upperList = menuRepository.getUpperMenuList(req.getMberId());
+    List<MenuResponse> lowerList = menuRepository.getLowerMenuList(req.getMberId());
+
+    return Stream.concat(upperList.stream(), lowerList.stream()).collect(Collectors.toList());
   }
 
 

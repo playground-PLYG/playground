@@ -3,8 +3,8 @@ server:
  main:
    lazy-initialization: true
  memory:
-   min: 64mb
-   max: 292mb
+   min: 32mb
+   max: 280mb
    
 springdoc:
   default-consumes-media-type: application/json
@@ -21,8 +21,8 @@ springdoc:
 
 spring:
  hikari:
-  minimum-idle: 5
-  maximum-pool-size: 7
+  minimum-idle: 4
+  maximum-pool-size: 6
  data:
    redis:
      port: ${sm://redis-port}

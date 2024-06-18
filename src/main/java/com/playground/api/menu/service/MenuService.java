@@ -134,4 +134,31 @@ public class MenuService {
     }
   }
 
+
+  /**
+   * 메뉴 사용여부 변경
+   * 
+   * @param menuSn
+   * @return
+   */
+  @Transactional
+  public void modifyUseAtMenu(List<MenuRequest> request) {
+
+    for (int i = 0; i < request.size(); i++) {
+
+      String useAt = request.get(i).getUseAt();
+
+      if ("N".equals(useAt)) {
+        useAt = "Y";
+        request.get(i).setUseAt("Y");
+      } else {
+        request.get(i).setUseAt("N");
+      }
+
+      menuRepository.save(MenuEntity.builder().menuSn(request.get(i).getMenuSn()).menuNm(request.get(i).getMenuNm())
+          .menuUrl(request.get(i).getMenuUrl()).menuDepth(request.get(i).getMenuDepth()).menuSortOrdr(request.get(i).getMenuSortOrdr())
+          .upperMenuSn(request.get(i).getUpperMenuSn()).useAt(request.get(i).getUseAt()).build());
+    }
+  }
+
 }

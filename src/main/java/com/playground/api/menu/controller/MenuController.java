@@ -108,4 +108,17 @@ public class MenuController {
     menuService.removeMenu(request);
   }
 
+
+  /**
+   * 메뉴 사용여부 변경
+   * 
+   * @param request
+   */
+  @Operation(summary = "메뉴 사용여부 변경", description = "메뉴 사용여부 변경")
+  @PostMapping("/public/menu/modifyUseAtMenu")
+  public void modifyUseAtMenu(@RequestBody @Valid List<MenuRequest> request) {
+
+    menuService.modifyUseAtMenu(request);
+  }
+
 }

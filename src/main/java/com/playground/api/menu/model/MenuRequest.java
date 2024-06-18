@@ -6,10 +6,12 @@ import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 @Schema(name = "MenuRequest", description = "메뉴 관리")
 @EqualsAndHashCode(callSuper = true)
 @Getter
+@Setter
 public class MenuRequest extends BaseDto {
 
   @Serial

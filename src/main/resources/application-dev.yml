@@ -3,8 +3,8 @@ server:
  main:
    lazy-initialization: true
  memory:
-   min: 128mb
-   max: 320mb
+   min: 64mb
+   max: 300mb
    
 springdoc:
   default-consumes-media-type: application/json

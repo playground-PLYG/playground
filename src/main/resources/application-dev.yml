@@ -17,9 +17,6 @@ springdoc:
     filter: true
 
 spring:
- hikari:
-  minimum-idle: 3
-  maximum-pool-size: 6
  data:
    redis:
      port: ${sm://redis-port}

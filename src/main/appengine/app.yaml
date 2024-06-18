@@ -1,6 +1,6 @@
 runtime: java17
 instance_class: F1
-entrypoint: 'java -jar -Xms32m -Xmx280m -XX:MaxMetaspaceSize=78m -XX:MinMetaspaceFreeRatio=5 -XX:MaxMetaspaceFreeRatio=30 -XX:+UseSerialGC ./build/libs/playground-0.0.1.jar'
+entrypoint: 'java -jar -Xms32m -Xmx272m -XX:MaxMetaspaceSize=80m -XX:MinMetaspaceFreeRatio=5 -XX:MaxMetaspaceFreeRatio=30 -XX:+UseSerialGC ./build/libs/playground-0.0.1.jar'
 
 automatic_scaling:
   min_instances: 1

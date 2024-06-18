@@ -1,9 +1,9 @@
 runtime: java17
 instance_class: F1
-entrypoint: 'java -jar -Xms128m -Xmx256m -XX:MaxMetaspaceSize=64m -XX:MinMetaspaceFreeRatio=20 -XX:MaxMetaspaceFreeRatio=80 ./build/libs/playground-0.0.1.jar'
+entrypoint: 'java -jar -Xms128m -Xmx256m -XX:MaxMetaspaceSize=96m -XX:MinMetaspaceFreeRatio=20 -XX:MaxMetaspaceFreeRatio=80 ./build/libs/playground-0.0.1.jar'
 
 automatic_scaling:
-  min_instances: 0
+  min_instances: 1
   max_instances: 1
   max_idle_instances: 1
   target_cpu_utilization: 0.95
@@ -12,4 +12,3 @@ automatic_scaling:
 
 env_variables:
  spring_profiles_active: "dev"
- JAVA_OPS: "-Xms128m -Xmx256m -XX:MaxMetaspaceSize=64m -XX:MinMetaspaceFreeRatio=20 -XX:MaxMetaspaceFreeRatio=40"

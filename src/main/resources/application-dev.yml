@@ -1,7 +1,5 @@
 server:
  port: 8080
- main:
-   lazy-initialization: true
    
 springdoc:
   default-consumes-media-type: application/json
@@ -45,14 +43,16 @@ spring:
   pathmatch:
    matching-strategy: ANT_PATH_MATCHER
  web:
-    resources:
-      add-mappings: false
+  resources:
+   add-mappings: false
  ai:
-    openai:
-      api-key: ${sm://openai-key}
-      embedding:
-        options:
-          model: text-embedding-3-small
+  openai:
+   api-key: ${sm://openai-key}
+   embedding:
+    options:
+     model: text-embedding-3-small
+ devtools:
+  add-properties: false
 
 logging:
   pattern:

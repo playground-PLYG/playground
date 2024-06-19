@@ -70,12 +70,14 @@ decorator:
     p6spy:
       enable-logging: false
       
-#management:
-#  endpoints:
-#    web:
-#      base-path: "/"
-#      path-mapping:
-#        health: "healthcheck"
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
+      show-components: never
+      show-details: never
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}

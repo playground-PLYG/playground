@@ -72,12 +72,17 @@ decorator:
       
 management:
   endpoints:
-    enabled-by-default: false
-  endpoint:
-    health:
-      enabled: true
-      show-components: never
-      show-details: never
+    web:
+      exposure:
+        include:
+        - health
+  health:
+    defaults:
+      enabled: false
+    diskspace:
+      enabled: false
+    db:
+      enabled: false
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}

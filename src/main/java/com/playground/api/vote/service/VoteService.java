@@ -8,14 +8,16 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import com.playground.api.restaurant.model.RstrntSrchRequest;
-import com.playground.api.restaurant.model.RstrntSrchResponse;
+import com.playground.api.message.model.DiscordEmbedRequest;
+import com.playground.api.message.model.DiscordRequest;
+import com.playground.api.message.service.MessageService;
 import com.playground.api.restaurant.service.RstrntService;
 import com.playground.api.vote.entity.QestnEntity;
 import com.playground.api.vote.entity.VoteEntity;
@@ -40,6 +42,10 @@ public class VoteService {
   private final VoteIemRepository voteIemRepository;
   private final ModelMapper modelMapper;
   private final RstrntService rstrntService;
+  private final MessageService messageService;
+  
+  @Value("${CLIENT_URL}")
+  private String clientUrl;
 
   @Transactional(readOnly = true)
   public Page<VoteResponse> getVotePageList(VoteRequest reqData, Pageable pageable) {
@@ -162,6 +168,20 @@ public class VoteService {
       });
       voteResponse.setQestnResponseList(setQestnList);
     }
+    
+    //discord 메시지 전송
+    DiscordRequest dto = new DiscordRequest();
+    dto.setApiNm("vote"); //vote 채널의 API_KEY 
+    dto.setUsername(voteEntity.getRegistUsrId());
+
+    DiscordEmbedRequest embed = new DiscordEmbedRequest();
+    embed.setTitle(reqData.getVoteSubject());
+    embed.setDescription("[투표하기]("+clientUrl+"/vote?ssno="+voteEntity.getVoteSn()+")");
+    embed.addField("익명투표여부", "N".equals(reqData.getAnonymityVoteAlternative()) ? "회원투표" : "익명투표", true);
+
+    dto.addEmbed(embed);
+
+    messageService.sendDiscordWebhook(dto);
 
     return voteResponse;
   }

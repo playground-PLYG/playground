@@ -1,7 +1,6 @@
 package com.playground.api.menu.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -34,7 +33,7 @@ public class MenuService {
     List<MenuResponse> upperList = menuRepository.getUpperMenuList(req.getMberId());
     List<MenuResponse> lowerList = menuRepository.getLowerMenuList(req.getMberId());
 
-    return Stream.concat(upperList.stream(), lowerList.stream()).collect(Collectors.toList());
+    return Stream.concat(upperList.stream(), lowerList.stream()).toList();
   }
 
 

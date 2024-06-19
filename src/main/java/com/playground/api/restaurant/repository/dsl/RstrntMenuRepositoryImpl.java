@@ -26,11 +26,10 @@ public class RstrntMenuRepositoryImpl implements RstrntMenuRepositoryCustom {
   public List<RstrntMenuResponse> findAll(RstrntMenuEntity entity) {
     List<RstrntMenuResponse> resultList = queryFactory.select(tbRstrntMenu).from(tbRstrntMenu).leftJoin(rstrntMenuHashtagMapngEntity)
         .on(tbRstrntMenu.rstrntSn.eq(rstrntMenuHashtagMapngEntity.rstrntSn), tbRstrntMenu.rstrntMenuSn.eq(rstrntMenuHashtagMapngEntity.rstrntMenuSn))
-        .leftJoin(hashtagEntity).on(
-            rstrntMenuHashtagMapngEntity.hashtagSn.eq(hashtagEntity.hashtagSn))
-        .where(tbRstrntMenu.rstrntSn.eq(entity.getRstrntSn()), rstrntMenuNmLike(entity
-            .getRstrntMenuNm()), rstrntMenuPcEq(
-                entity.getRstrntMenuPc()))
+        .leftJoin(hashtagEntity).on(rstrntMenuHashtagMapngEntity.hashtagSn.eq(hashtagEntity.hashtagSn))
+        .where(tbRstrntMenu.rstrntSn.eq(entity.getRstrntSn()), rstrntMenuNmLike(entity.getRstrntMenuNm()),
+            rstrntMenuPcEq(entity.getRstrntMenuPc()))
+        .orderBy(tbRstrntMenu.rstrntMenuNm.asc())
         .transform(GroupBy.groupBy(tbRstrntMenu.rstrntSn, tbRstrntMenu.rstrntMenuSn)
             .list(Projections.fields(RstrntMenuResponse.class, tbRstrntMenu.rstrntSn.as("restaurantSerialNo"),
                 tbRstrntMenu.rstrntMenuSn.as("restaurantMenuSerialNo"), tbRstrntMenu.rstrntMenuNm.as("menuName"),

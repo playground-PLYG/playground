@@ -6,14 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Schema(name = "CodeSrchRequest", description = "코드 조회 요청 데이터")
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@Builder
 public class CodeSrchRequest extends BaseDto {
   @Serial
   private static final long serialVersionUID = 1L;
@@ -25,5 +24,4 @@ public class CodeSrchRequest extends BaseDto {
   @NotNull(message = "상위코드는 필수 값 입니다.")
   @Schema(description = "상위코드", requiredMode = RequiredMode.REQUIRED)
   private String upperCode;
-
 }

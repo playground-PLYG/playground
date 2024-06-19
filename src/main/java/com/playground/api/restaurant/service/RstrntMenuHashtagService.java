@@ -3,6 +3,7 @@ package com.playground.api.restaurant.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.embedding.Embedding;
 import org.springframework.stereotype.Service;
@@ -112,8 +113,11 @@ public class RstrntMenuHashtagService {
       List<HashtagEntity> resList = hashtagRepository.findRstrntMenuHashtag(
           RstrntMenuEntity.builder().rstrntSn(reqData.getRestaurantSerialNo()).rstrntMenuSn(reqData.getRestaurantMenuSerialNo()).build());
       // 임베딩
-      String embeddingMessage =
-          rstrntMenuEntity.getRstrntMenuNm() + ", " + resList.stream().map(HashtagEntity::getHashtagNm).collect(Collectors.joining(", "));
+      String embeddingMessage = rstrntMenuEntity.getRstrntMenuNm();
+
+      if (CollectionUtils.isNotEmpty(resList)) {
+        embeddingMessage += ", " + resList.stream().map(HashtagEntity::getHashtagNm).collect(Collectors.joining(", "));
+      }
 
       Embedding embedding = embeddingService.getEmbedding(embeddingMessage);
 

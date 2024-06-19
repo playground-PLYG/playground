@@ -9,4 +9,6 @@ public interface RstrntRepositoryCustom {
   List<RstrntSrchResponse> findAll(RstrntEntity entity);
 
   RstrntDetailSrchResponse findByIdDetail(Integer rstrntSn);
+
+  long updateRstrntImageFileSnById(Integer rstrntSn, Integer rstrntImageFileSn);
 }

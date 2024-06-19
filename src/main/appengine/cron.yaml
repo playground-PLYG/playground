@@ -1,0 +1,5 @@
+cron:
+  - description: "Keep alive request"
+    url: /actuator/health
+    schedule: every 14 minutes from 08:45 to 19:00 Monday,Tuesday,Wednesday,Thursday,Friday
+    timezone: Asia/Seoul

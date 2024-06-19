@@ -56,4 +56,7 @@ public class MenuResponse extends BaseDto {
   @Schema(description = "수정일시")
   private LocalDateTime updtDt;
 
+  @Schema(description = "하위메뉴보유여부")
+  private String lwprtMenuHoldAt;
+
 }

@@ -9,12 +9,20 @@ import com.playground.api.menu.model.MenuResponse;
 public interface MenuRepositoryCustom {
 
   /**
-   * 사이드바 노출메뉴 조회
+   * 사이드바 상위메뉴 조회
    * 
    * @param mberId
    * @return
    */
-  List<MenuResponse> getMenuList(String mberId);
+  List<MenuResponse> getUpperMenuList(String mberId);
+
+  /**
+   * 사이드바 하위메뉴 조회
+   * 
+   * @param mberId
+   * @return
+   */
+  List<MenuResponse> getLowerMenuList(String mberId);
 
 
   /**

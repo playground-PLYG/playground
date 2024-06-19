@@ -9,6 +9,7 @@ import com.playground.api.restaurant.model.RstrntDetailSrchResponse;
 import com.playground.api.restaurant.model.RstrntExistCheckRequest;
 import com.playground.api.restaurant.model.RstrntMenuListRequest;
 import com.playground.api.restaurant.model.RstrntMenuResponse;
+import com.playground.api.restaurant.model.RstrntModifyImageRequest;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
 import com.playground.api.restaurant.repository.RstrntMenuHashtagMapngRepository;
@@ -77,5 +78,11 @@ public class RstrntService {
     } else {
       return RstrntSrchResponse.builder().restaurantName(rstrntEntity.getRstrntNm()).kakaoMapId(rstrntEntity.getKakaoMapId()).build();
     }
+  }
+
+
+  @Transactional
+  public void modifyRstrntImage(RstrntModifyImageRequest req) {
+    rstrntRepository.updateRstrntImageFileSnById(req.getRestaurantSerialNo(), req.getImageFileId());
   }
 }

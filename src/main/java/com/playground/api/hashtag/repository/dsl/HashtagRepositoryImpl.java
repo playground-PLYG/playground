@@ -29,7 +29,7 @@ public class HashtagRepositoryImpl implements HashtagRepositoryCustom {
     return queryFactory.selectFrom(tbHashtag).innerJoin(tbRstrntMenuHashtagMapng).on(tbHashtag.hashtagSn.eq(tbRstrntMenuHashtagMapng.hashtagSn))
         .where(tbHashtag.hashtagSn.notIn(JPAExpressions.select(tbRstrntMenuHashtagMapng.hashtagSn).from(tbRstrntMenuHashtagMapng)
             .where(tbRstrntMenuHashtagMapng.rstrntSn.eq(rstrntSn), tbRstrntMenuHashtagMapng.rstrntMenuSn.eq(rstrntMenuSn))))
-        .groupBy(tbHashtag.hashtagSn).orderBy(tbHashtag.count().desc(), tbHashtag.hashtagSn.desc()).limit(10).fetch();
+        .groupBy(tbHashtag.hashtagSn).orderBy(tbHashtag.count().desc(), tbHashtag.hashtagSn.desc()).limit(30).fetch();
   }
 
   @Override

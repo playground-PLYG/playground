@@ -46,4 +46,9 @@ public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
             tbRstrnt.rstrntImageFileSn.as("imageFileId")))
         .where(tbRstrnt.rstrntSn.eq(rstrntSn)).from(tbRstrnt).leftJoin(tbFile).on(tbRstrnt.rstrntImageFileSn.eq(tbFile.fileSn)).fetchOne();
   }
+
+  @Override
+  public long updateRstrntImageFileSnById(Integer rstrntSn, Integer rstrntImageFileSn) {
+    return queryFactory.update(tbRstrnt).set(tbRstrnt.rstrntImageFileSn, rstrntImageFileSn).where(tbRstrnt.rstrntSn.eq(rstrntSn)).execute();
+  }
 }

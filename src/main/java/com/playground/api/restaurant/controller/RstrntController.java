@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.restaurant.model.RstrntDetailSrchRequest;
 import com.playground.api.restaurant.model.RstrntDetailSrchResponse;
 import com.playground.api.restaurant.model.RstrntExistCheckRequest;
+import com.playground.api.restaurant.model.RstrntModifyImageRequest;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
 import com.playground.api.restaurant.service.RstrntService;
@@ -15,9 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Tag(name = "restaurant", description = "식당 API")
 @RestController
 @RequiredArgsConstructor
@@ -70,5 +69,15 @@ public class RstrntController {
   @PostMapping("public/restaurant/getIsExist")
   public RstrntSrchResponse getIsExist(@RequestBody @Valid RstrntExistCheckRequest req) {
     return rstrntService.getIsExist(req);
+  }
+
+
+  /**
+   * 식당 이미지 수정
+   */
+  @Operation(summary = "식당 이미지 수정", description = "식당 이미지 수정")
+  @PostMapping("/public/restaurant/modifyRstrntImage")
+  public void modifyRstrntImage(@RequestBody @Valid RstrntModifyImageRequest req) {
+    rstrntService.modifyRstrntImage(req);
   }
 }

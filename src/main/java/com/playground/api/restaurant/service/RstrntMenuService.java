@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.ai.embedding.Embedding;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.playground.api.ai.service.EmbeddingService;
 import com.playground.api.restaurant.entity.RstrntMenuEntity;
 import com.playground.api.restaurant.entity.RstrntMenuEntity.RstrntMenuEntityBuilder;
 import com.playground.api.restaurant.entity.RstrntMenuPK;
@@ -22,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RstrntMenuService {
+  private final EmbeddingService embeddingService;
+
   private final RstrntMenuRepository rstrntMenuRepository;
   private final RstrntMenuHashtagMapngRepository rstrntMenuHashtagMapngRepository;
 
@@ -65,8 +69,10 @@ public class RstrntMenuService {
 
   @Transactional
   public RstrntMenuResponse addRstrntMenu(RstrntMenuAddRequest reqData) {
+    Embedding embedding = embeddingService.getEmbedding(reqData.getMenuName());
+
     RstrntMenuEntity rstrntMenuEntity = rstrntMenuRepository.save(RstrntMenuEntity.builder().rstrntSn(reqData.getRestaurantSerialNo())
-        .rstrntMenuNm(reqData.getMenuName()).rstrntMenuPc(reqData.getMenuPrice()).build());
+        .rstrntMenuNm(reqData.getMenuName()).rstrntMenuPc(reqData.getMenuPrice()).embedding(embedding.getOutput()).build());
 
     return RstrntMenuResponse.builder().restaurantSerialNo(rstrntMenuEntity.getRstrntSn()).restaurantMenuSerialNo(rstrntMenuEntity.getRstrntMenuSn())
         .menuName(rstrntMenuEntity.getRstrntMenuNm()).menuPrice(rstrntMenuEntity.getRstrntMenuPc()).build();
@@ -74,8 +80,22 @@ public class RstrntMenuService {
 
   @Transactional
   public RstrntMenuResponse modifyRstrntMenu(RstrntMenuModifyRequest reqData) {
-    RstrntMenuEntity rstrntMenuEntity = rstrntMenuRepository.save(RstrntMenuEntity.builder().rstrntSn(reqData.getRestaurantSerialNo())
-        .rstrntMenuSn(reqData.getRestaurantMenuSerialNo()).rstrntMenuNm(reqData.getMenuName()).rstrntMenuPc(reqData.getMenuPrice()).build());
+    RstrntMenuEntity rstrntMenuEntityOld = rstrntMenuRepository
+        .findById(RstrntMenuPK.builder().rstrntSn(reqData.getRestaurantSerialNo()).rstrntMenuSn(reqData.getRestaurantMenuSerialNo()).build())
+        .orElseGet(RstrntMenuEntity::new);
+
+    RstrntMenuEntityBuilder rstrntMenuEntityBuilder =
+        RstrntMenuEntity.builder().rstrntSn(reqData.getRestaurantSerialNo()).rstrntMenuSn(reqData.getRestaurantMenuSerialNo())
+            .rstrntMenuNm(reqData.getMenuName()).rstrntMenuPc(reqData.getMenuPrice()).embedding(rstrntMenuEntityOld.getEmbedding());
+
+    if (!StringUtils.equals(rstrntMenuEntityOld.getRstrntMenuNm(), reqData.getMenuName())
+        || CollectionUtils.isEmpty(rstrntMenuEntityOld.getEmbedding())) {
+      Embedding embedding = embeddingService.getEmbedding(reqData.getMenuName());
+
+      rstrntMenuEntityBuilder.embedding(embedding.getOutput());
+    }
+
+    RstrntMenuEntity rstrntMenuEntity = rstrntMenuRepository.save(rstrntMenuEntityBuilder.build());
 
     return RstrntMenuResponse.builder().restaurantSerialNo(rstrntMenuEntity.getRstrntSn()).restaurantMenuSerialNo(rstrntMenuEntity.getRstrntMenuSn())
         .menuName(rstrntMenuEntity.getRstrntMenuNm()).menuPrice(rstrntMenuEntity.getRstrntMenuPc()).build();
@@ -88,5 +108,4 @@ public class RstrntMenuService {
 
     rstrntMenuHashtagMapngRepository.deleteByRstrntSnAndRstrntMenuSn(reqData.getRestaurantSerialNo(), reqData.getRestaurantMenuSerialNo());
   }
-
 }

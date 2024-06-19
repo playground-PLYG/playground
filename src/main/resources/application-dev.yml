@@ -69,6 +69,13 @@ decorator:
     exclude-beans: dataSource
     p6spy:
       enable-logging: false
+      
+management:
+  endpoints:
+    web:
+      base-path: "/"
+      path-mapping:
+        health: "healthcheck"
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}

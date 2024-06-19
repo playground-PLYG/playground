@@ -13,30 +13,17 @@ public class CodeSearchRequest extends BaseDto {
   @Serial
   private static final long serialVersionUID = 1L;
 
-  @Schema(description = "코드일련번호")
-  private Integer codeSn;
-
   @Schema(description = "코드ID")
-  private String codeId;
+  private String code;
 
   @Schema(description = "코드명")
-  private String codeNm;
+  private String codeName;
 
   @Schema(description = "상위코드ID")
-  private String upperCodeId;
+  private String upperCode;
 
   @Schema(description = "그룹코드여부")
-  private String groupCodeAt;
-
-  @Schema(description = "정렬순번")
-  private Integer sortOrdr;
-
-  @Schema(description = "등록사용자ID")
-  private String registUsrId;
-
-  @Schema(description = "수정사용자ID")
-  private String updtUsrId;
-
+  private String groupCode;
 
 
 }

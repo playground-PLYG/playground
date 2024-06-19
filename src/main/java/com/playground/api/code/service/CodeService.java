@@ -2,15 +2,19 @@ package com.playground.api.code.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.code.entity.CodeEntity;
-import com.playground.api.code.entity.CodeEntity.CodeEntityBuilder;
+import com.playground.api.code.model.CodeAddRequest;
 import com.playground.api.code.model.CodeGroupSrchRequest;
+import com.playground.api.code.model.CodeRemoveRequest;
 import com.playground.api.code.model.CodeResponse;
 import com.playground.api.code.model.CodeSearchRequest;
 import com.playground.api.code.model.CodeSrchRequest;
@@ -25,69 +29,91 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CodeService {
   private final CodeRepository codeRepository;
-  private final ModelMapper modelMapper;
 
-  /*
-   * 코드조회
+  /**
+   * 코드 리스트 조회
+   *
+   * @param reqData
+   * @return Page<CodeResponse>
    */
-  @Cacheable(cacheManager = CacheType.ONE_HOUR, cacheNames = "codes",
-      key = "#reqData.codeSn + '_' + #reqData.codeId + '_' + #reqData.codeNm + '_' + #reqData.upperCodeId + '_' + #reqData.groupCodeAt",
-      unless = "#result == null")
-  @Transactional(readOnly = true)
-  public List<CodeResponse> getCodePageList(CodeSearchRequest reqData) {
-    List<CodeEntity> codeRepositoryPage = codeRepository.findAll(CodeEntity.builder().codeId(reqData.getCodeId()).codeNm(reqData.getCodeNm())
-        .upperCodeId(reqData.getUpperCodeId()).groupCodeAt(reqData.getGroupCodeAt()).build());
-
-    return new ArrayList<>(codeRepositoryPage.stream().map(item -> modelMapper.map(item, CodeResponse.class)).toList());
-  }
-
-
   /*
-   * 상위코드조회
+   * @Cacheable(cacheManager = CacheType.ONE_HOUR, cacheNames = "codes", key = "#reqData.code + '_' + #reqData.codeName + '_' + #reqData.upperCode + '_' + #reqData.groupCode + '_' + #pageable.getPageSize() + '_' + #pageable.getPageNumber()", unless = "#result == null")
    */
   @Transactional(readOnly = true)
-  public List<CodeResponse> selectUpCodeid() {
-    List<CodeEntity> upCodeList = codeRepository.findAll();
+  public Page<CodeResponse> getCodePageList(Pageable pageable, CodeSearchRequest reqData) {
 
-    log.debug("upCodeList: {}", upCodeList);
+    CodeEntity entity = CodeEntity.builder().codeId(reqData.getCode()).codeNm(reqData.getCodeName()).upperCodeId(reqData.getUpperCode())
+        .groupCodeAt(reqData.getGroupCode()).build();
 
-    return upCodeList.stream().map(item -> modelMapper.map(item, CodeResponse.class)).toList();
+    Page<CodeEntity> codePageList = codeRepository.getCodePageList(entity, pageable);
+
+    List<CodeResponse> codeList = codePageList.getContent().stream()
+        .map(codeEntity -> CodeResponse.builder().codeSerialNo(codeEntity.getCodeSn()).code(codeEntity.getCodeId()).codeName(codeEntity.getCodeNm())
+            .upperCode(codeEntity.getUpperCodeId()).groupCode(codeEntity.getGroupCodeAt()).order(codeEntity.getSortOrdr())
+            .registUsrId(codeEntity.getRegistUsrId()).registDt(codeEntity.getRegistDt()).updtUsrId(codeEntity.getUpdtUsrId())
+            .updtDt(codeEntity.getUpdtDt()).build())
+        .toList();
+
+    return new PageImpl<>(codeList, codePageList.getPageable(), codePageList.getTotalElements());
   }
 
-  /*
-   * 코드삭제
+
+  /**
+   * 전체 코드 리스트 조회
+   *
+   * @return List<CodeResponse>
    */
-  @CacheEvict(cacheNames = {"code", "codes", "code_group"}, allEntries = true)
-  public void deleteCode(CodeSearchRequest req) {
-    Integer codeSn = req.getCodeSn();
+  @Transactional(readOnly = true)
+  public List<CodeResponse> getAllCodeList() {
+    List<CodeEntity> allCodeList = codeRepository.findAll();
 
-    codeRepository.delete(CodeEntity.builder().codeSn(codeSn).build());
-  }
+    log.debug("upCodeList: {}", allCodeList);
 
-  /*
-   * 코드등록/수정
-   */
-  @CacheEvict(cacheNames = {"code", "codes", "code_group"}, allEntries = true)
-  public CodeResponse saveCodeList(CodeSearchRequest req) {
-    String groupCdYn = req.getGroupCodeAt();
-
-    CodeEntityBuilder codeEntityBuilder = CodeEntity.builder().codeSn(req.getCodeSn()).codeId(req.getCodeId()).codeNm(req.getCodeNm())
-        .groupCodeAt(groupCdYn).sortOrdr(req.getSortOrdr());
-
-    if ("N".equals(groupCdYn)) {
-      String up = req.getUpperCodeId();
-      CodeEntity upCode = codeRepository.findByCodeNm(up);
-
-      codeEntityBuilder.upperCodeId(upCode.getCodeId());
+    if (CollectionUtils.isNotEmpty(allCodeList)) {
+      return new ArrayList<>(allCodeList.stream()
+          .map(codeEntity -> CodeResponse.builder().codeSerialNo(codeEntity.getCodeSn()).code(codeEntity.getCodeId()).codeName(codeEntity.getCodeNm())
+              .upperCode(codeEntity.getUpperCodeId()).groupCode(codeEntity.getGroupCodeAt()).order(codeEntity.getSortOrdr()).build())
+          .toList());
+    } else {
+      return new ArrayList<>();
     }
-
-    CodeEntity codeEntity = codeEntityBuilder.build();
-
-    CodeEntity saveCode = codeRepository.save(codeEntity);
-
-    return modelMapper.map(saveCode, CodeResponse.class);
   }
 
+  /**
+   * 코드 삭제
+   *
+   * @param reqData
+   */
+  @CacheEvict(cacheNames = {"code", "codes", "code_group"}, allEntries = true)
+  @Transactional
+  public void removeCode(List<CodeRemoveRequest> reqData) {
+    List<Integer> codeSns = reqData.stream().map(CodeRemoveRequest::getCodeSerialNo).collect(Collectors.toList());
+
+    log.debug("codeSns: {}", codeSns);
+
+    codeRepository.deleteByCodeSnIn(codeSns);
+  }
+
+  /**
+   * 코드 등록/수정
+   *
+   * @param reqData
+   * @return CodeResponse
+   */
+  @CacheEvict(cacheNames = {"code", "codes", "code_group"}, allEntries = true)
+  @Transactional
+  public CodeResponse addCode(CodeAddRequest reqData) {
+    CodeEntity entity = CodeEntity.builder().codeSn(reqData.getCodeSerialNo()).codeId(reqData.getCode()).codeNm(reqData.getCodeName())
+        .upperCodeId(reqData.getUpperCode()).groupCodeAt(reqData.getGroupCode()).sortOrdr(reqData.getOrder()).build();
+
+    log.debug("addCode entity: {}", entity);
+
+
+    codeRepository.save(entity);
+
+    return CodeResponse.builder().codeSerialNo(entity.getCodeSn()).code(entity.getCodeNm()).codeName(entity.getGroupCodeAt())
+        .upperCode(entity.getUpperCodeId()).groupCode(entity.getGroupCodeAt()).order(entity.getSortOrdr()).build();
+  }
 
   /**
    * 코드 조회

@@ -2,15 +2,19 @@ package com.playground.api.code.controller;
 
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.code.model.CodeAddRequest;
 import com.playground.api.code.model.CodeGroupSrchRequest;
-import com.playground.api.code.model.CodeSrchRequest;
+import com.playground.api.code.model.CodeRemoveRequest;
 import com.playground.api.code.model.CodeResponse;
 import com.playground.api.code.model.CodeSearchRequest;
+import com.playground.api.code.model.CodeSrchRequest;
 import com.playground.api.code.model.CodeSrchResponse;
 import com.playground.api.code.service.CodeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,45 +36,37 @@ public class CodeController {
    * 코드 조회
    */
   @Operation(summary = "코드 조회", description = "코드 조회")
-  @PostMapping("/public/code/codeSearch")
-  public List<CodeResponse> getCodeList(@RequestBody @Valid CodeSearchRequest req) {
+  @PostMapping("/public/code/getCodePageList")
+  public Page<CodeResponse> getCodePageList(Pageable pageable, @RequestBody @Valid CodeSearchRequest reqData) {
+    return codeService.getCodePageList(pageable, reqData);
 
-    log.debug("CodeSearchRequest::::::::::::::: {}", req);
-
-    return codeService.getCodePageList(req);
   }
 
   /**
-   * 상위 조회
+   * 전체 코드 조회
    */
-  @Operation(summary = "상위코드id조회", description = "상위코드id 조회")
-  @GetMapping("/public/code/selectUpCodeid")
-  public List<CodeResponse> selectUpCodeid() {
-    return codeService.selectUpCodeid();
+  @Operation(summary = "전체 코드 조회", description = "전체 코드 조회")
+  @GetMapping("/public/code/getAllCodeList")
+  public List<CodeResponse> getAllCodeList() {
+    return codeService.getAllCodeList();
   }
 
   /**
    * 코드 삭제
    */
   @Operation(summary = "코드 삭제", description = "코드 삭제")
-  @PostMapping("/public/code/codeDelete")
-  public void deleteCode(@RequestBody @Valid CodeSearchRequest req) {
-
-    log.debug("codeDelete::::::::::::::: {}", req);
-
-    codeService.deleteCode(req);
+  @PostMapping("/public/code/removeCode")
+  public void removeCode(@RequestBody @Valid List<CodeRemoveRequest> reqData) {
+    codeService.removeCode(reqData);
   }
 
   /**
    * 코드 등록/수정
    */
   @Operation(summary = "코드 등록", description = "코드 등록")
-  @PostMapping("/public/code/codeSave")
-  public CodeResponse saveCodeList(@RequestBody @Valid CodeSearchRequest req) {
-
-    log.debug("saveCodeList::::::::::::::: {}", req);
-
-    return codeService.saveCodeList(req);
+  @PostMapping("/public/code/addCode")
+  public CodeResponse addCode(@RequestBody @Valid CodeAddRequest reqData) {
+    return codeService.addCode(reqData);
   }
 
   /**

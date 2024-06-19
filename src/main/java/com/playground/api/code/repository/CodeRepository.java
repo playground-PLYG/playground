@@ -14,4 +14,7 @@ public interface CodeRepository extends CrudRepository<CodeEntity, Integer>, Cod
   Optional<CodeEntity> findFirstByCodeIdAndUpperCodeId(String codeId, String upperCodeId);
 
   List<CodeEntity> findByUpperCodeIdOrderBySortOrdr(String upperCodeId);
+
+  void deleteByCodeSnIn(List<Integer> codeSns);
+
 }

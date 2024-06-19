@@ -2,9 +2,13 @@ package com.playground.api.code.repository.dsl;
 
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import com.playground.api.code.entity.CodeEntity;
 import com.playground.api.code.entity.QCodeEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -34,4 +38,22 @@ public class CodeRepositoryImpl implements CodeRepositoryCustom {
   private BooleanExpression groupCodeAtEq(String groupCodeAt) {
     return StringUtils.isNotBlank(groupCodeAt) ? tbCode.groupCodeAt.eq(groupCodeAt) : null;
   }
+
+  @Override
+  public Page<CodeEntity> getCodePageList(CodeEntity entity, Pageable pageable) {
+
+    List<CodeEntity> content =
+        queryFactory.selectFrom(tbCode)
+            .where(codeIdLike(entity.getCodeId()), codeNmLike(entity.getCodeNm()), upperCodeIdLike(entity.getUpperCodeId()),
+                groupCodeAtEq(entity.getGroupCodeAt()))
+            .orderBy(tbCode.codeSn.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+
+    JPAQuery<Long> countQuery = queryFactory.select(tbCode.count()).from(tbCode).where(codeIdLike(entity.getCodeId()), codeNmLike(entity.getCodeNm()),
+        upperCodeIdLike(entity.getUpperCodeId()), groupCodeAtEq(entity.getGroupCodeAt()));
+
+    return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+  }
+
+
+
 }

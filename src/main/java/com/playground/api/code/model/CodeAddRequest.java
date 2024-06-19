@@ -1,24 +1,15 @@
 package com.playground.api.code.model;
 
 import java.io.Serial;
-import java.time.LocalDateTime;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
-@Schema(name = "CodeResponse", description = "응답 데이터")
-@Builder
-@AllArgsConstructor
-@RequiredArgsConstructor
+@Schema(name = "CodeAddRequest", description = "등록/수정 요청 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
-public class CodeResponse extends BaseDto {
+public class CodeAddRequest extends BaseDto {
   @Serial
   private static final long serialVersionUID = 1L;
 
@@ -40,16 +31,6 @@ public class CodeResponse extends BaseDto {
   @Schema(description = "정렬순번")
   private Integer order;
 
-  @Schema(description = "등록사용자ID")
-  private String registUsrId;
 
-  @Schema(description = "등록일시")
-  private LocalDateTime registDt;
-
-  @Schema(description = "수정사용자ID")
-  private String updtUsrId;
-
-  @Schema(description = "수정일시")
-  private LocalDateTime updtDt;
 
 }

@@ -58,7 +58,7 @@ public class VoteController {
   @Operation(summary = "투표수정", description = "관리자가 투표를 수정")
   @PutMapping("/api/vote/modifyVote")
   public VoteResponse modifyVote(@RequestBody @Valid VoteRequest reqData) {
-    log.debug("##### ##### ##### modifyVote reqData : {}", reqData);
+    log.debug("##### ##### modifyVote reqData : {}", reqData);
     return voteService.modifyVote(reqData);
   }
 

@@ -27,7 +27,7 @@ public class VoteRstrntResponse extends BaseDto {
   /**
    * 투표일련번호
    */
-  @Schema(description = "투표일련번호", example = "1234567890")
+  @Schema(description = "투표일련번호", example = "12367890")
   private Integer voteSsno;
 
   /**
@@ -65,25 +65,25 @@ public class VoteRstrntResponse extends BaseDto {
    */
   @Schema(description = "투표삭제여부", example = "N")
   private String voteDeleteYn;
-  
+
   /**
    * 질문일련번호
    */
   @Schema(description = "질문일련번호", example = "Y")
   private Integer qestnSsno;
-  
+
   /**
    * 질문일련번호
    */
   @Schema(description = "질문명", example = "Y")
   private String qestnName;
-  
+
   /**
    * 질문일련번호
    */
   @Schema(description = "복수선택여부", example = "Y")
   private String compnoChoiseYn;
-  
+
 
   @Schema(description = "식당메뉴투표리스트")
   private List<VoteRstrntIemResponse> voteRstrntIemList;

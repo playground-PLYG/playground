@@ -18,14 +18,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/playground")
 public class StatisticsController {
   private final StatisticsService statisticsService;
-  
+
   /**
    * 통계 조회
    */
   @Operation(summary = "통계 조회", description = "투표에 대한 통계")
   @PostMapping("/public/statistics/getVoteStatistics")
-  public StatisticsResponse getVoteStatistics(@RequestBody @Valid StatisticsRequest reqData){
+  public StatisticsResponse getVoteStatistics(@RequestBody @Valid StatisticsRequest reqData) {
     return statisticsService.getVoteStatistics(reqData);
   }
-
 }

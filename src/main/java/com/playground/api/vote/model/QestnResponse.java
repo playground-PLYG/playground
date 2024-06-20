@@ -43,7 +43,7 @@ public class QestnResponse extends BaseDto {
   private String questionContents;
 
   /**
-   * 복수선택여부
+   * 복수 선택여부
    */
   @Schema(description = "복수선택여부", example = "Y")
   private String compoundNumberChoiceAlternative;

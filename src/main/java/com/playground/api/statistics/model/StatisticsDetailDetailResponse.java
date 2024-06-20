@@ -25,7 +25,7 @@ public class StatisticsDetailDetailResponse extends BaseDto {
   /**
    * 항목ID
    */
-  @Schema(description = "항목ID", example = "0000123456")
+  @Schema(description = "항목ID", example = "00001456")
   private Integer itemSsno;
 
   /**

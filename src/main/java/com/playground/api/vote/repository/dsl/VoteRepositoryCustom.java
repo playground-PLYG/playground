@@ -12,17 +12,17 @@ public interface VoteRepositoryCustom {
   Page<VoteEntity> getVotePageList(VoteRequest reqData, Pageable pageable);
 
   List<QestnResponse> getQestnDetail(Integer voteSsno, Integer questionSsno);
-  
+
   List<QestnEntity> getQestnList(Integer voteSsno);
-  
+
   Long updateByIdForVote(VoteRequest reqData);
 
   Long deleteByVoteSnForQestn(Integer voteSsno);
-  
+
   Long deleteBySsnoForQestn(Integer voteSsno, Integer questionSsno);
-  
+
   Long deleteByVoteSnForVoteIem(Integer voteSsno);
-  
+
   Long deleteBySsnoForVoteIem(Integer voteSsno, Integer questionSsno);
 
 }

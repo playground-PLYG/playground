@@ -28,7 +28,7 @@ public class VoteEntity extends BaseEntity {
   /**
    * 투표일련번호
    */
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "vote_sn")
@@ -69,14 +69,14 @@ public class VoteEntity extends BaseEntity {
    */
   @Column(name = "vote_delete_at")
   private String voteDeleteAt;
-  
-  
-//  @OneToMany
-//  @JoinColumn(name = "qestn_sn")
-//  private List<QestnEntity> qestnList;
-  
-//  @OneToMany
-//  @JoinColumn(name="vote_sn")
-//  private List<VoteIemEntity> voteIemList;
+
+
+  // @OneToMany
+  // @JoinColumn(name = "qestn_sn")
+  // private List<QestnEntity> qestnList;
+
+  // @OneToMany
+  // @JoinColumn(name="vote_sn")
+  // private List<VoteIemEntity> voteIemList;
 
 }

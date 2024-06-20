@@ -32,7 +32,7 @@ public class VoteIemEntity extends BaseEntity {
   private Integer iemSn;
 
   /**
-   * 투표일련번호
+   * 투표 일련번호
    */
   @Id
   @Column(name = "vote_sn")

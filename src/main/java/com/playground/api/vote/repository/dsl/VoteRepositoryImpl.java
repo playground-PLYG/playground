@@ -1,6 +1,6 @@
 package com.playground.api.vote.repository.dsl;
 
-//해당 클래스에서 사용할 Q클래스 테이블 설정
+// 해당 클래스에서 사용할 Q클래스 테이블 설정
 import static com.playground.api.vote.entity.QQestnEntity.qestnEntity;
 import static com.playground.api.vote.entity.QVoteEntity.voteEntity;
 import static com.playground.api.vote.entity.QVoteIemEntity.voteIemEntity;
@@ -27,60 +27,42 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @RequiredArgsConstructor
-@Slf4j
+
 public class VoteRepositoryImpl implements VoteRepositoryCustom {
   private final JPAQueryFactory queryFactory;
-  //QVoteEntity tbVote = QVoteEntity.voteEntity;
-  //QQestnEntity tbQestn = QQestnEntity.qestnEntity;
+  // QVoteEntity tbVote = QVoteEntity.voteEntity;
+  // QQestnEntity tbQestn = QQestnEntity.qestnEntity;
 
   @Override
   public Page<VoteEntity> getVotePageList(VoteRequest reqData, Pageable pageable) {
     List<VoteEntity> content = queryFactory
-        .selectFrom(voteEntity)
-        .where(firstCnLike(reqData.getVoteKindCode()),
-               secondCnLike(reqData.getVoteSubject()),
-               thirdCnEq(reqData.getAnonymityVoteAlternative()),
-               fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate()))
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize())
-        .fetch();
-    
-    JPAQuery<Long> countQuery = queryFactory
-        .select(voteEntity.count())
-        .from(voteEntity)
-        .where(firstCnLike(reqData.getVoteKindCode()),
-               secondCnLike(reqData.getVoteSubject()),
-               thirdCnEq(reqData.getAnonymityVoteAlternative()),
-               fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate()));
-    
+        .selectFrom(voteEntity).where(firstCnLike(reqData.getVoteKindCode()), secondCnLike(reqData.getVoteSubject()),
+            thirdCnEq(reqData.getAnonymityVoteAlternative()), fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate()))
+        .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+
+    JPAQuery<Long> countQuery =
+        queryFactory.select(voteEntity.count()).from(voteEntity).where(firstCnLike(reqData.getVoteKindCode()), secondCnLike(reqData.getVoteSubject()),
+            thirdCnEq(reqData.getAnonymityVoteAlternative()), fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate()));
+
     return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
   }
 
   @Override
   public List<QestnResponse> getQestnDetail(Integer voteSsno, Integer questionSsno) {
-    return queryFactory.select(qestnEntity)
-                .from(qestnEntity)
-                .leftJoin(voteIemEntity).on(qestnEntity.voteSn.eq(voteIemEntity.voteSn).and(qestnEntity.qestnSn.eq(voteIemEntity.qestnSn)))
-                .where(qestnEntity.voteSn.eq(voteSsno))
-                //.where(qestnEntity.qestnSn.eq(questionSsno).and(qestnEntity.voteSn.eq(voteSsno)))
-                .orderBy(qestnEntity.voteSn.asc(), qestnEntity.qestnSn.asc())
-                .transform(groupBy(qestnEntity.voteSn, qestnEntity.qestnSn).list(
-                    Projections.fields(QestnResponse.class, 
-                        qestnEntity.voteSn.as("voteSsno")
-                        ,qestnEntity.qestnSn.as("questionSsno")
-                        ,qestnEntity.qestnCn.as("questionContents")
-                        ,qestnEntity.compnoChoiseAt.as("compoundNumberChoiceAlternative")
-                        ,list(Projections.fields(VoteIemResponse.class, 
-                                voteIemEntity.iemSn.as("itemSsno")
-                                ,voteIemEntity.iemNm.as("itemName")
-                                )).as("voteIemResponseList")
-                        )));
+    return queryFactory.select(qestnEntity).from(qestnEntity).leftJoin(voteIemEntity)
+        .on(qestnEntity.voteSn.eq(voteIemEntity.voteSn).and(qestnEntity.qestnSn.eq(voteIemEntity.qestnSn))).where(qestnEntity.voteSn.eq(voteSsno))
+        // .where(qestnEntity.qestnSn.eq(questionSsno).and(qestnEntity.voteSn.eq(voteSsno)))
+        .orderBy(qestnEntity.voteSn.asc(), qestnEntity.qestnSn.asc())
+        .transform(groupBy(qestnEntity.voteSn, qestnEntity.qestnSn)
+            .list(Projections.fields(QestnResponse.class, qestnEntity.voteSn.as("voteSsno"), qestnEntity.qestnSn.as("questionSsno"),
+                qestnEntity.qestnCn.as("questionContents"), qestnEntity.compnoChoiseAt.as("compoundNumberChoiceAlternative"),
+                list(Projections.fields(VoteIemResponse.class, voteIemEntity.iemSn.as("itemSsno"), voteIemEntity.iemNm.as("itemName")))
+                    .as("voteIemResponseList"))));
   }
-  
+
   /* 동적쿼리를 위한 함수 */
   private BooleanExpression firstCnLike(String firstCn) {
     if (ObjectUtils.isEmpty(firstCn)) {
@@ -142,19 +124,16 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
 
   @Override
   public Long updateByIdForVote(VoteRequest reqData) {
-    LocalDateTime nowDateTime =  LocalDateTime.now();
-    return queryFactory.update(voteEntity)
-        .set(voteEntity.voteDeleteAt, reqData.getVoteDeleteAlternative())
-        .set(voteEntity.updtDt, nowDateTime)
-        .where(voteEntity.voteSn.eq(reqData.getVoteSsno()))
-        .execute();
+    LocalDateTime nowDateTime = LocalDateTime.now();
+    return queryFactory.update(voteEntity).set(voteEntity.voteDeleteAt, reqData.getVoteDeleteAlternative()).set(voteEntity.updtDt, nowDateTime)
+        .where(voteEntity.voteSn.eq(reqData.getVoteSsno())).execute();
   }
 
   @Override
   public Long deleteByVoteSnForQestn(Integer voteSsno) {
     return queryFactory.delete(qestnEntity).where(qestnEntity.voteSn.eq(voteSsno)).execute();
   }
-  
+
   @Override
   public Long deleteByVoteSnForVoteIem(Integer voteSsno) {
     return queryFactory.delete(voteIemEntity).where(voteIemEntity.voteSn.eq(voteSsno)).execute();

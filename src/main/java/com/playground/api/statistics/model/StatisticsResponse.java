@@ -38,7 +38,7 @@ public class StatisticsResponse extends BaseDto {
   /**
    * 질문숫자
    */
-  @Schema(description = "질문 수", example = "2")
+  @Schema(description = "질문 갯수", example = "2")
   private Integer questionCount;
 
   /**

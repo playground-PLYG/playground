@@ -7,7 +7,6 @@ import com.playground.api.vote.entity.QestnAnswerPK;
 import com.playground.api.vote.repository.dsl.QestnAnswerRepositoryCustom;
 
 @Repository
-public interface QestnAnswerRepository extends JpaRepository<QestnAnswerEntity, QestnAnswerPK>, QestnAnswerRepositoryCustom{
-
+public interface QestnAnswerRepository extends JpaRepository<QestnAnswerEntity, QestnAnswerPK>, QestnAnswerRepositoryCustom {
 
 }

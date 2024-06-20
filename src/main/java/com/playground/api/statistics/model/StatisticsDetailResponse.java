@@ -38,7 +38,7 @@ public class StatisticsDetailResponse extends BaseDto {
   /**
    * detailDetail
    */
-  @Schema(description = "투표결과 항목별", example = "count, ssno, name")
+  @Schema(description = "투표결과 항목별", example = "count, ssno, name, etc...")
   private List<StatisticsDetailDetailResponse> staDetailDetailList;
 
 }

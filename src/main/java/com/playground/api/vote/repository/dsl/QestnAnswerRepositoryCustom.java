@@ -8,17 +8,17 @@ import com.playground.api.vote.entity.QestnAnswerEntity;
 
 public interface QestnAnswerRepositoryCustom {
   List<QestnAnswerEntity> findBySsno(QestnAnswerEntity qestnAnswerEntity);
-  
+
   Long deleteBySsno(Integer answerSsno);
-  
+
   QestnAnswerEntity selectByEntity(QestnAnswerEntity qestnAnswerEntity);
-  
+
   Long selectByAnswerUserId(Integer voteSsno, String answerUserId);
-  
+
   /**
    * 통계에 사용하는 method
-   * */
+   */
   StatisticsResponse selectVoteStatistics(StatisticsRequest reqData);
-  
+
   List<StatisticsDetailResponse> selectVoteDetailStatistics(StatisticsRequest reqData);
 }

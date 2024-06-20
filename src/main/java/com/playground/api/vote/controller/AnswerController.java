@@ -25,25 +25,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AnswerController {
   private final AnswerService answerService;
-  
+
   /**
-   * 중복투표 여부 조회 --> memberId로 조회
-   * */
+   * 중복투표 여부 조회 -> memberId로 조회
+   */
   @Operation(summary = "중복투표여부 조회", description = "회원아이디로 검색해서 투표가 중복인지 여부 조회")
   @PostMapping("/public/voteAnswer/isDuplicateVote")
   public Boolean isDuplicateVote(@RequestBody @Valid QestnAnswerRequest reqData) {
     return answerService.isDuplicateVote(reqData);
   }
-  
+
   /**
    * 투표 내용 조회하기
-   * */
+   */
   @Operation(summary = "투표조회", description = "투표내용을 조회")
   @PostMapping("/public/voteAnswer/getVoteDetail")
   public VoteResponse getVoteDetail(@RequestBody @Valid VoteRequest reqData) {
     return answerService.getVoteDetail(reqData);
   }
-  
+
   /**
    * 답변 조회 하기
    */
@@ -53,7 +53,7 @@ public class AnswerController {
     log.debug("############## request ::: {}", reqData);
     return answerService.getAnswer(reqData);
   }
-  
+
   /**
    * 답변 등록 하기
    */
@@ -62,7 +62,7 @@ public class AnswerController {
   public List<QestnAnswerResponse> addAnswer(@RequestBody @Valid List<QestnAnswerRequest> reqDataList) {
     return answerService.addAnswer(reqDataList);
   }
-  
+
   /**
    * 답변수정
    */
@@ -80,5 +80,5 @@ public class AnswerController {
   public Long removeAnswer(@RequestBody @Valid QestnAnswerRequest qestnAnswerRequest) {
     return answerService.removeAnswer(qestnAnswerRequest);
   }
-  
+
 }

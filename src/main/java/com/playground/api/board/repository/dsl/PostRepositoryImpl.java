@@ -28,7 +28,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
       return null;
     }
 
-    return postEntity.nttSj.like("%" + nttSj + "%");
+    return postEntity.nttSj.like(nttSj + "%");
   }
 
 }

@@ -57,12 +57,13 @@ public class BoardService {
   @Transactional(readOnly = true)
   public List<PostResponse> getPostList(PostRequest req) {
 
-    NoticeEntity pk = NoticeEntity.builder().bbsId(req.getBoardId()).build();
+    PostEntity schEntity = PostEntity.builder().noticeEntity(NoticeEntity.builder().bbsId(req.getBoardId()).build()).nttSj(req.getNoticeSj()).build();
 
-    List<PostEntity> postEntity = postRepository.findByNoticeEntity(pk);
-    return postEntity
-        .stream().map(entity -> PostResponse.builder().noticeNo(entity.getNttSn()).boardId(entity.getNoticeEntity().getBbsId())
-            .noticeSj(entity.getNttSj()).noticeCn(entity.getNttCn()).registUsrId(entity.getRegistUsrId()).updtUsrId(entity.getUpdtUsrId()).build())
+    List<PostEntity> postEntity = postRepository.getPostList(schEntity);
+    return postEntity.stream()
+        .map(entity -> PostResponse.builder().noticeNo(entity.getNttSn()).boardId(entity.getNoticeEntity().getBbsId()).noticeSj(entity.getNttSj())
+            .noticeCn(entity.getNttCn()).registUsrId(entity.getRegistUsrId()).registDt(entity.getRegistDt()).updtUsrId(entity.getUpdtUsrId())
+            .updtDt(entity.getUpdtDt()).build())
         .toList();
   }
 

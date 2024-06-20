@@ -1,8 +1,10 @@
 package com.playground.api.member.model;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +13,7 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
+@Builder
 public class MberSrchResponse extends BaseDto {
   @Serial
   private static final long serialVersionUID = 1L;
@@ -32,17 +35,17 @@ public class MberSrchResponse extends BaseDto {
 
   @Schema(description = "회원전화번호")
   private String mberTelno;
-  
+
   @Schema(description = "등록사용자ID")
   private String registUsrId;
 
   @Schema(description = "등록일시")
-  private String registDt;
+  private LocalDateTime registDt;
 
   @Schema(description = "수정사용자ID")
   private String updtUsrId;
 
   @Schema(description = "수정일시")
-  private String updtDt;
+  private LocalDateTime updtDt;
 
 }

@@ -3,8 +3,10 @@ package com.playground.api.member.service;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -70,16 +72,16 @@ public class MberService {
     }
 
     log.debug(">>> rstMember : {}", rstMember);
-    
+
     // 토큰 발급 및 로그인 처리
-    SignInResponse signRes = SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId())
-        .build();
-    
+    SignInResponse signRes =
+        SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId()).build();
+
     // 토큰 유효여부 확인 후 securityContext 등록
     String token = signRes.getToken();
-    
+
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-    
+
     if (Boolean.TRUE.equals(JwtTokenUtil.isValidToken(token))) {
       LoginMemberDto userDto = LoginMemberDto.builder().mberId(rstMember.getMberId()).mberNm(rstMember.getMberNm()).build();
 
@@ -90,13 +92,13 @@ public class MberService {
 
       SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
-    
+
     return signRes;
   }
-  
+
   @Transactional(readOnly = true)
   public void signOut(String token) {
-    //refresh Token expired 시간 1초로
+    // refresh Token expired 시간 1초로
   }
 
   @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#token", unless = "#result == null")
@@ -107,22 +109,20 @@ public class MberService {
 
       log.debug("szs/me : {}", member);
 
-      MberEntity memberEntity = mberRepository.findById(member.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER)); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
+      return mberRepository.findByIdDetail(member.getMberId()); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
 
-      return MberInfoResponse.builder().mberId(memberEntity.getMberId()).mberNm(memberEntity.getMberNm())
-          .mberEmailAdres(memberEntity.getMberEmailAdres()).build();
     } else {
       throw new BizException(MessageCode.INVALID_TOKEN);
     }
   }
-  
+
   @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#token", unless = "#result == null")
   @Transactional(readOnly = true)
   public MberInfoResponse getMember() {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-    
+
     String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-    
+
     return getMyInfo(token);
   }
 
@@ -130,13 +130,27 @@ public class MberService {
   public List<MberSrchResponse> getMberList(MberSrchRequest req) {
     MberEntity pgEntity = MberEntity.builder().mberId(req.getMberId()).mberNm(req.getMberNm()).build();
 
-    log.debug(">>> pgEntity : {}", pgEntity);
-
     List<MberEntity> member = mberRepository.findAll(memberSpecification.searchCondition(pgEntity));
 
-    log.debug(">>> member : {}", member);
+    return member.stream()
+        .map(entity -> MberSrchResponse.builder().mberId(entity.getMberId()).mberNm(entity.getMberNm()).mberBymd(entity.getMberBymd())
+            .mberEmailAdres(entity.getMberEmailAdres()).mberSexdstnCode(entity.getMberSexdstnCode()).mberTelno(entity.getMberTelno())
+            .registDt(entity.getRegistDt()).registUsrId(entity.getRegistUsrId()).updtUsrId(entity.getUpdtUsrId()).updtDt(entity.getUpdtDt()).build())
+        .toList();
+  }
 
-    return member.stream().map(item -> modelMapper.map(item, MberSrchResponse.class)).toList();
+  @Transactional(readOnly = true)
+  public Page<MberSrchResponse> getMberPageList(Pageable pageable, MberSrchRequest req) {
+
+    Page<MberEntity> memberPageList = mberRepository.getMberPageList(req.getMberId(), req.getMberNm(), pageable);
+
+    List<MberSrchResponse> mberList = memberPageList.getContent().stream()
+        .map(entity -> MberSrchResponse.builder().mberId(entity.getMberId()).mberNm(entity.getMberNm()).mberBymd(entity.getMberBymd())
+            .mberEmailAdres(entity.getMberEmailAdres()).mberSexdstnCode(entity.getMberSexdstnCode()).mberTelno(entity.getMberTelno())
+            .registDt(entity.getRegistDt()).registUsrId(entity.getRegistUsrId()).updtDt(entity.getUpdtDt()).updtUsrId(entity.getUpdtUsrId()).build())
+        .toList();
+    return new PageImpl<>(mberList, memberPageList.getPageable(), memberPageList.getTotalElements());
+
   }
 
   @Transactional(readOnly = true)

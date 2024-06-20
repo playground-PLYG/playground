@@ -5,11 +5,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
 import com.playground.api.member.entity.MberEntity;
+import com.playground.api.member.repository.dsl.MberRepositoryCustom;
 
 @Repository
-public interface MberRepository extends JpaRepository<MberEntity, String>, JpaSpecificationExecutor<MberEntity> {
+public interface MberRepository extends JpaRepository<MberEntity, String>, JpaSpecificationExecutor<MberEntity>, MberRepositoryCustom {
 
   MberEntity findByMberIdOrMberEmailAdres(String userId, String email);
 
@@ -18,5 +18,6 @@ public interface MberRepository extends JpaRepository<MberEntity, String>, JpaSp
   MberEntity findByMberEmailAdres(String email);
 
   List<MberEntity> findAll(Specification<MberEntity> searchCondition);
+  
 
 }

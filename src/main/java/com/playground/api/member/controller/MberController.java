@@ -1,7 +1,8 @@
 package com.playground.api.member.controller;
 
 import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,27 +32,27 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/playground")
 public class MberController {
 
-	private final MberService mberService;
+  private final MberService mberService;
 
-	/**
-	 * 회원가입
-	 */
-	@Operation(summary = "회원가입", description = "회원 가입하기")
-	@PostMapping("/public/member/addMber")
-	public SignUpResponse addMber(@RequestBody @Valid SignUpRequest req) {
-		return mberService.addMber(req);
-	}
+  /**
+   * 회원가입
+   */
+  @Operation(summary = "회원가입", description = "회원 가입하기")
+  @PostMapping("/public/member/addMber")
+  public SignUpResponse addMber(@RequestBody @Valid SignUpRequest req) {
+    return mberService.addMber(req);
+  }
 
-	/**
-	 * 로그인
-	 */
-	@Operation(summary = "인증", description = "인증 처리")
-	@PostMapping("/public/member/signIn")
-	public SignInResponse signIn(@RequestBody @Valid SignInRequest req) {
-		return mberService.signIn(req);
-	}
-	
-	/**
+  /**
+   * 로그인
+   */
+  @Operation(summary = "인증", description = "인증 처리")
+  @PostMapping("/public/member/signIn")
+  public SignInResponse signIn(@RequestBody @Valid SignInRequest req) {
+    return mberService.signIn(req);
+  }
+
+  /**
    * 로그아웃
    */
   @Operation(summary = "로그아웃", description = "로그아웃 처리")
@@ -60,37 +61,46 @@ public class MberController {
     mberService.signOut(token);
   }
 
-	/**
-	 * 내 정보 조회
-	 */
-	@Operation(summary = "내 정보 조회", description = "본인의 정보를 조회")
-	@GetMapping("/api/member/getMyInfo")
-	public MberInfoResponse getMyInfo(@RequestHeader(value = "Authorization") String token) {
-		return mberService.getMyInfo(token);
-	}
+  /**
+   * 내 정보 조회
+   */
+  @Operation(summary = "내 정보 조회", description = "본인의 정보를 조회")
+  @GetMapping("/api/member/getMyInfo")
+  public MberInfoResponse getMyInfo(@RequestHeader(value = "Authorization") String token) {
+    return mberService.getMyInfo(token);
+  }
 
-	/**
-	 * 회원 조회
-	 */
-	@Operation(summary = "회원 조회", description = "회원 조회")
-	@PostMapping("/public/member/getMberList")
-	public List<MberSrchResponse> getMberList(@RequestBody @Valid MberSrchRequest req) {
+  /**
+   * 회원 조회
+   */
+  @Operation(summary = "회원 조회", description = "회원 조회")
+  @PostMapping("/public/member/getMberPageList")
+  public Page<MberSrchResponse> getMberPageList(Pageable pageable, @RequestBody @Valid MberSrchRequest req) {
 
-		log.debug(">>> 회원조회 : {}", req);
+    log.debug(">>> 회원조회 : {}", req);
 
-		return mberService.getMberList(req);
-	}
+    return mberService.getMberPageList(pageable, req);
+  }
 
-	/**
-	 * 회원 중복 조회
-	 */
-	@Operation(summary = "회원 중복 조회", description = "회원 중복 조회")
-	@PostMapping("/public/member/getMberDupCeck")
-	public String getMberDupCeck(@RequestBody @Valid MberSrchRequest req) {
+  /**
+   * 페이징 포함 회원 조회
+   */
+  @Operation(summary = "회원 조회", description = "페이징 포함 회원 조회")
+  @PostMapping("/public/member/getMberList")
+  public List<MberSrchResponse> getMberList(@RequestBody @Valid MberSrchRequest req) {
+    return mberService.getMberList(req);
+  }
 
-		log.debug(">>> 회원조회 : {}", req);
+  /**
+   * 회원 중복 조회
+   */
+  @Operation(summary = "회원 중복 조회", description = "회원 중복 조회")
+  @PostMapping("/public/member/getMberDupCeck")
+  public String getMberDupCeck(@RequestBody @Valid MberSrchRequest req) {
 
-		return mberService.getMberDupCeck(req);
-	}
+    log.debug(">>> 회원조회 : {}", req);
+
+    return mberService.getMberDupCeck(req);
+  }
 
 }

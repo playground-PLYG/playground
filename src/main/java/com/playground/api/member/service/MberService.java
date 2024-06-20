@@ -109,9 +109,8 @@ public class MberService {
 
       log.debug("szs/me : {}", member);
 
-      MberInfoResponse mberInfoResponse = mberRepository.findByIdDetail(member.getMberId()); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
+      return mberRepository.findByIdDetail(member.getMberId()); // 토큰 claims에 담겨 있는 userId로 회원 정보 조회
 
-      return mberInfoResponse;
     } else {
       throw new BizException(MessageCode.INVALID_TOKEN);
     }

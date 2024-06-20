@@ -17,14 +17,13 @@ public class StatisticsService {
 
   @Transactional(readOnly = true)
   public StatisticsResponse getVoteStatistics(StatisticsRequest reqData) {
-    if(!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
-      StatisticsResponse statResponse =  qestnAnswerRepository.selectVoteStatistics(reqData);
+    if (!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
+      StatisticsResponse statResponse = qestnAnswerRepository.selectVoteStatistics(reqData);
       List<StatisticsDetailResponse> detailList = qestnAnswerRepository.selectVoteDetailStatistics(reqData);
       statResponse.setStaDetailList(detailList);
       return statResponse;
-    }else {
+    } else {
       return new StatisticsResponse();
     }
   }
-
 }

@@ -60,9 +60,9 @@ public class VoteRequest extends BaseDto {
   /**
    * 질문일련번호
    */
-  @Schema(description = "질문일련번호", example = "1234567890")
+  @Schema(description = "질문일련번호", example = "12347890")
   private Integer questionSsno;
-  
+
   @Schema(description = "질문객체", example = "qestnRequest")
   private List<QestnRequest> qestnRequestList;
 }

@@ -6,8 +6,7 @@ import com.playground.api.vote.entity.QestnEntity;
 import com.playground.api.vote.entity.QestnPK;
 
 @Repository
-public interface QestnRepository extends JpaRepository<QestnEntity, QestnPK>{
-  
-  
-  
+public interface QestnRepository extends JpaRepository<QestnEntity, QestnPK> {
+
+
 }

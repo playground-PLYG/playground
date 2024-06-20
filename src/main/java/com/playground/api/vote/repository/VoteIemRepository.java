@@ -6,6 +6,7 @@ import com.playground.api.vote.entity.VoteIemEntity;
 import com.playground.api.vote.entity.VoteIemPK;
 
 @Repository
-public interface VoteIemRepository extends JpaRepository<VoteIemEntity, VoteIemPK>{
+public interface VoteIemRepository extends JpaRepository<VoteIemEntity, VoteIemPK> {
+
 
 }

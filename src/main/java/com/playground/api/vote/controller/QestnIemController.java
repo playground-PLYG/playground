@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/playground")
 public class QestnIemController {
   private final QestnIemService qestnIemService;
-  
+
   /**
    * 질문등록
    */
@@ -32,7 +32,7 @@ public class QestnIemController {
   public List<QestnResponse> addQestn(@RequestBody @Valid List<QestnRequest> qestnReqList) {
     return qestnIemService.addQestn(qestnReqList);
   }
-  
+
   /**
    * 질문수정
    */
@@ -50,7 +50,7 @@ public class QestnIemController {
   public Long removeQestn(@RequestBody @Valid QestnRequest qestnRequest) {
     return qestnIemService.removeQestn(qestnRequest);
   }
-  
+
   /**
    * 투표항목등록
    */
@@ -59,7 +59,7 @@ public class QestnIemController {
   public List<VoteIemResponse> addVoteIem(@RequestBody @Valid List<VoteIemRequest> voteIemReqList) {
     return qestnIemService.addVoteIem(voteIemReqList);
   }
-  
+
   /**
    * 투표항목수정
    */
@@ -68,7 +68,7 @@ public class QestnIemController {
   public List<VoteIemResponse> modifyVoteIem(@RequestBody @Valid List<VoteIemRequest> voteIemReqList) {
     return qestnIemService.modifyVoteIem(voteIemReqList);
   }
-  
+
   /**
    * 투표항목삭제
    */

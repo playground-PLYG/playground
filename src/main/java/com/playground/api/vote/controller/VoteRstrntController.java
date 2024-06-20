@@ -9,15 +9,15 @@ import com.playground.api.vote.service.VoteRstrntService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Tag(name = "voteRstrnt", description = "식당메뉴투표를 관리하는 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/playground")
-@Slf4j
-public class VoteRstrntController {  
+
+public class VoteRstrntController {
   private final VoteRstrntService voteRstrntService;
+
   /**
    * 당일 점심투표 등록
    */
@@ -26,7 +26,7 @@ public class VoteRstrntController {
   public void addTodayLunchVote() {
     voteRstrntService.addTodayLunchVote();
   }
-  
+
   /**
    * 당일 점심투표 조회
    */

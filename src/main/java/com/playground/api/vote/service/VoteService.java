@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -189,8 +188,7 @@ public class VoteService {
       Collections.sort(prevQestnSnList);
       Collections.sort(afterQestnSnList);
 
-      removeQestnSnList =
-          prevQestnSnList.stream().filter(prev -> afterQestnSnList.stream().noneMatch(Predicate.isEqual(prev))).collect(Collectors.toList());
+      removeQestnSnList = prevQestnSnList.stream().filter(prev -> afterQestnSnList.stream().noneMatch(Predicate.isEqual(prev))).toList();
     }
 
     if (!ObjectUtils.isEmpty(removeQestnSnList)) {

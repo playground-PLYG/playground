@@ -7,7 +7,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +19,7 @@ import com.playground.api.code.model.CodeSearchRequest;
 import com.playground.api.code.model.CodeSrchRequest;
 import com.playground.api.code.model.CodeSrchResponse;
 import com.playground.api.code.repository.CodeRepository;
+import com.playground.api.common.service.impl.CachedPageImpl;
 import com.playground.constants.CacheType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +36,9 @@ public class CodeService {
    * @param reqData
    * @return Page<CodeResponse>
    */
-  /*
-   * @Cacheable(cacheManager = CacheType.ONE_HOUR, cacheNames = "codes", key = "#reqData.code + '_' + #reqData.codeName + '_' + #reqData.upperCode + '_' + #reqData.groupCode + '_' + #pageable.getPageSize() + '_' + #pageable.getPageNumber()", unless = "#result == null")
-   */
+  @Cacheable(cacheManager = CacheType.ONE_HOUR, cacheNames = "codes",
+      key = "#reqData.code + '_' + #reqData.codeName + '_' + #reqData.upperCode + '_' + #reqData.groupCode + '_' + #pageable.getPageSize() + '_' + #pageable.getPageNumber()",
+      unless = "#result == null")
   @Transactional(readOnly = true)
   public Page<CodeResponse> getCodePageList(Pageable pageable, CodeSearchRequest reqData) {
 
@@ -54,7 +54,7 @@ public class CodeService {
             .updtDt(codeEntity.getUpdtDt()).build())
         .toList();
 
-    return new PageImpl<>(codeList, codePageList.getPageable(), codePageList.getTotalElements());
+    return new CachedPageImpl<>(codeList, codePageList.getPageable(), codePageList.getTotalElements());
   }
 
 

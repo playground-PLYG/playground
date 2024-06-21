@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.board.entity.CommentEntity;
@@ -55,16 +58,20 @@ public class BoardService {
 
   /** 전체 게시물 목록 조회 */
   @Transactional(readOnly = true)
-  public List<PostResponse> getPostList(PostRequest req) {
+  public Page<PostResponse> getPostList(Pageable pageable, PostRequest req) {
 
     PostEntity schEntity = PostEntity.builder().noticeEntity(NoticeEntity.builder().bbsId(req.getBoardId()).build()).nttSj(req.getNoticeSj()).build();
 
-    List<PostEntity> postEntity = postRepository.getPostList(schEntity);
-    return postEntity.stream()
+    Page<PostEntity> postPageList = postRepository.getPostList(schEntity, pageable);
+
+    List<PostResponse> postList = postPageList.stream()
         .map(entity -> PostResponse.builder().noticeNo(entity.getNttSn()).boardId(entity.getNoticeEntity().getBbsId()).noticeSj(entity.getNttSj())
             .noticeCn(entity.getNttCn()).registUsrId(entity.getRegistUsrId()).registDt(entity.getRegistDt()).updtUsrId(entity.getUpdtUsrId())
             .updtDt(entity.getUpdtDt()).build())
         .toList();
+
+    return new PageImpl<>(postList, postPageList.getPageable(), postPageList.getTotalElements());
+
   }
 
   /** 게시물 생성 */

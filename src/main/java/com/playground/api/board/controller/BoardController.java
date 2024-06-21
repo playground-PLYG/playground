@@ -1,6 +1,8 @@
 package com.playground.api.board.controller;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import com.playground.api.board.model.PostResponse;
 import com.playground.api.board.service.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "board", description = "게시판")
@@ -61,8 +64,8 @@ public class BoardController {
    */
   @Operation(summary = "게시물 전체 조회", description = "게시물 조회")
   @PostMapping("/public/post/getPostList")
-  public List<PostResponse> getPostList(@RequestBody PostRequest req) {
-    return boardService.getPostList(req);
+  public Page<PostResponse> getPostList(Pageable pageable, @RequestBody @Valid PostRequest req) {
+    return boardService.getPostList(pageable, req);
   }
 
   /**

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.member.model.MberSrchRequest;
 import com.playground.api.member.model.MberSrchResponse;
 import com.playground.api.member.model.MberInfoResponse;
+import com.playground.api.member.model.MberModifyInfoRequest;
 import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
@@ -101,6 +102,15 @@ public class MberController {
     log.debug(">>> 회원조회 : {}", req);
 
     return mberService.getMberDupCeck(req);
+  }
+
+  /**
+   * 회원 정보 수정
+   */
+  @Operation(summary = "회원 정보 수정", description = "회원 정보 수정 ")
+  @PostMapping("/api/member/modifyMberinfo")
+  public void getMberDupCeck(@RequestBody @Valid MberModifyInfoRequest req) {
+    mberService.modifyMberinfo(req);
   }
 
 }

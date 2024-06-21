@@ -19,6 +19,7 @@ import com.google.common.net.HttpHeaders;
 import com.playground.api.member.entity.MberEntity;
 import com.playground.api.member.entity.specification.MemberSpecification;
 import com.playground.api.member.model.MberInfoResponse;
+import com.playground.api.member.model.MberModifyInfoRequest;
 import com.playground.api.member.model.MberSrchRequest;
 import com.playground.api.member.model.MberSrchResponse;
 import com.playground.api.member.model.SignInRequest;
@@ -34,6 +35,7 @@ import com.playground.model.LoginMemberDto;
 import com.playground.utils.CryptoUtil;
 import com.playground.utils.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -158,6 +160,12 @@ public class MberService {
     MberEntity rstMember = mberRepository.findByMberIdOrMberEmailAdres(req.getMberId(), req.getMberEmailAdres());
 
     return ObjectUtils.isEmpty(rstMember) ? "N" : "Y";
+  }
+
+  @Transactional
+  public void modifyMberinfo(@Valid MberModifyInfoRequest req) {
+    mberRepository.updateMberinfoByMberId(req);
+
   }
 
 }

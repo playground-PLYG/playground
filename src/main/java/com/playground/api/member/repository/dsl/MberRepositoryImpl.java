@@ -8,15 +8,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.util.ObjectUtils;
 import com.playground.api.member.entity.MberEntity;
 import com.playground.api.member.model.MberInfoResponse;
-import com.querydsl.core.types.Predicate;
+import com.playground.api.member.model.MberModifyInfoRequest;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -37,22 +37,28 @@ public class MberRepositoryImpl implements MberRepositoryCustom {
   @Override
   public Page<MberEntity> getMberPageList(String mberId, String mberNm, Pageable pageable) {
 
-    List<MberEntity> content =  queryFactory
-    .selectFrom(mberEntity)
-    .where(mberIdLike(mberId), mberNmLike(mberNm)).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
-    
-    JPAQuery<Long> countQuery =
-        queryFactory.select(mberEntity.count()).from(mberEntity).where(mberIdLike(mberId), mberNmLike(mberNm));
+    List<MberEntity> content = queryFactory.selectFrom(mberEntity).where(mberIdLike(mberId), mberNmLike(mberNm)).offset(pageable.getOffset())
+        .limit(pageable.getPageSize()).fetch();
+
+    JPAQuery<Long> countQuery = queryFactory.select(mberEntity.count()).from(mberEntity).where(mberIdLike(mberId), mberNmLike(mberNm));
 
     return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
   }
-  
+
   private BooleanExpression mberNmLike(String mberNm) {
     return StringUtils.isNotBlank(mberNm) ? mberEntity.mberNm.startsWith(mberNm) : null;
   }
 
   private BooleanExpression mberIdLike(String mberId) {
     return StringUtils.isNotBlank(mberId) ? mberEntity.mberId.startsWith(mberId) : null;
+  }
+
+  @Override
+  public void updateMberinfoByMberId(MberModifyInfoRequest req) {
+    queryFactory.update(mberEntity).set(mberEntity.mberNm, req.getMberNm()).set(mberEntity.mberBymd, req.getMberBymd())
+        .set(mberEntity.mberSexdstnCode, req.getMberSexdstnCode()).set(mberEntity.mberTelno, req.getMberTelno())
+        .where(mberEntity.mberId.eq(req.getMberId())).execute();
+
   }
 
 }

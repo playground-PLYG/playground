@@ -41,6 +41,10 @@ public class StatisticsDetailDetailResponse extends BaseDto {
   @Schema(description = "특표수", example = "14")
   private Long itemCount;
 
+  /**
+   * 해당 항목 투표한 유저
+   */
+  @Schema(description = "투표한 유저들", example = "[test1, test2, test3]")
   private List<String> selUserIdList;
 
 }

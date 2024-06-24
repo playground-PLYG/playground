@@ -21,4 +21,6 @@ public interface QestnAnswerRepositoryCustom {
   StatisticsResponse selectVoteStatistics(StatisticsRequest reqData);
 
   List<StatisticsDetailResponse> selectVoteDetailStatistics(StatisticsRequest reqData);
+
+  List<String> selectAnswerUserIds(Integer voteSsno, Integer questionSsno, Integer itemSsno);
 }

@@ -25,6 +25,8 @@ public class JoinResponse extends BaseDto {
   @Serial
   private static final long serialVersionUID = 1L;
 
+  private String test;
+  
   /**
    * 샘플일련번호
    */

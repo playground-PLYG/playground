@@ -145,7 +145,7 @@ public class SampleController {
    * @return SmpleResponse - 조회한 샘플 단건
    */
   @Operation(summary = "샘플 QueryDsl 단건 조회", description = "샘플 테이블 정보를 단건 조회")
-  @PostMapping("/public/sample/getSmpleDsl")
+  @PostMapping("/api/sample/getSmpleDsl")
   public SmpleResponse getSmpleDsl(@RequestBody SmpleRequest req) {
     return sampleService.getSmpleDsl(req);
   }

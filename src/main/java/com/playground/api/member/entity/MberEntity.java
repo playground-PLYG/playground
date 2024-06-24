@@ -1,10 +1,21 @@
 package com.playground.api.member.entity;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import com.playground.annotation.Secret;
 import com.playground.entity.BaseEntity;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +30,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Entity
 @Table(name = "tb_mber")
-public class MberEntity extends BaseEntity {
+public class MberEntity extends BaseEntity implements UserDetails{
+
+  private static final long serialVersionUID = -7358017835959401676L;
 
   /**
    * 회원ID
@@ -76,4 +89,29 @@ public class MberEntity extends BaseEntity {
    */
   @Column(name = "mber_telno")
   private String mberTelno;
+  
+  @Column(name= "author_id")
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name= "TB_MBER_AUTHOR_MAPNG", joinColumns = 
+    @JoinColumn(name = "mber_id")
+  )
+  @Builder.Default
+  private List<String> roles = new ArrayList<>();
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+      return this.roles.stream()
+              .map(SimpleGrantedAuthority::new)
+              .collect(Collectors.toList());
+  }
+
+  @Override
+  public String getPassword() {
+    return mberPassword;
+  }
+
+  @Override
+  public String getUsername() {
+    return mberNm;
+  }
 }

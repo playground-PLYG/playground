@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import com.playground.constants.MessageCode;
 import com.playground.model.BaseResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -19,21 +20,27 @@ import io.jsonwebtoken.UnsupportedJwtException;
 public class ExceptionControllerAdvice {
 
   @ExceptionHandler(UnsupportedJwtException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public BaseResponse<Void> unsupportedJwtException(Exception e) {
-    return new BaseResponse<>("UnsupportedJwtException");
+    return new BaseResponse<>(new BizException(MessageCode.UNSUPPROTED_TOKEN, MessageCode.UNSUPPROTED_TOKEN.getMessage()));
   }
 
   @ExceptionHandler(MalformedJwtException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public BaseResponse<Void> malformedJwtException(Exception e) {
-    return new BaseResponse<>("MalformedJwtException");
+    return new BaseResponse<>(new BizException(MessageCode.INVALID_TOKEN, MessageCode.INVALID_TOKEN.getMessage()));
   }
 
   @ExceptionHandler(ExpiredJwtException.class)
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public BaseResponse<Void> expiredJwtException(Exception e) {
-    return new BaseResponse<>("ExpiredJwtException");
+    return new BaseResponse<>(new BizException(MessageCode.EXPIRED_TOKEN, MessageCode.EXPIRED_TOKEN.getMessage()));
+  }
+  
+  @ExceptionHandler(IllegalArgumentException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public BaseResponse<Void> illegalArgumentException(Exception e) {
+    return new BaseResponse<>(new BizException(MessageCode.WRONG_TOKEN, MessageCode.WRONG_TOKEN.getMessage()));
   }
 
   @ExceptionHandler(SecurityException.class)

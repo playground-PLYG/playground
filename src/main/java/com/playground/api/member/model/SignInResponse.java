@@ -16,10 +16,19 @@ import lombok.Getter;
 public class SignInResponse extends BaseDto {
   @Serial
   private static final long serialVersionUID = 1L;
-
-  @Schema(description = "토큰", example = "JWT 토큰")
-  private final String token;
   
   @Schema(description = "회원ID", example = "abc12")
   private String mberId;
+  
+  @Schema(description = "access 토큰", example = "JWT 토큰")
+  private String accessToken;
+  
+  @Schema(description = "refresh 토큰", example = "JWT 토큰")
+  private String refreshToken;
+  
+  @Schema(description = "refresh 토큰 유효시간")
+  private Long refreshTokenExpirationTime;
+  
+  @Schema(description = "권한 타입")
+  private String grantType;
 }

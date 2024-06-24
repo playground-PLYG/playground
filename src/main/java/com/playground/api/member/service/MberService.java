@@ -1,15 +1,17 @@
 package com.playground.api.member.service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -26,12 +28,12 @@ import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
+import com.playground.api.member.model.TokenRequest;
 import com.playground.api.member.repository.MberRepository;
 import com.playground.api.sample.service.RedisService;
 import com.playground.constants.CacheType;
 import com.playground.constants.MessageCode;
 import com.playground.exception.BizException;
-import com.playground.model.LoginMemberDto;
 import com.playground.utils.CryptoUtil;
 import com.playground.utils.JwtTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +48,9 @@ public class MberService {
   private final MemberSpecification memberSpecification;
   private final MberRepository mberRepository;
   private final ModelMapper modelMapper;
-  private final RedisService redisService;
+  private final AuthenticationManagerBuilder authenticationManagerBuilder;
+  private final RedisTemplate<String, String> redisTemplate;
+  private final JwtTokenUtil jwtTokenUtil;
 
   @Transactional
   public SignUpResponse addMber(SignUpRequest req) {
@@ -69,21 +73,23 @@ public class MberService {
   public SignInResponse signIn(SignInRequest req) {
     MberEntity rstMember = mberRepository.findById(req.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER));
 
+    /*
     if (!CryptoUtil.comparePassword(req.getMberPassword(), rstMember.getMberPassword())) {
       throw new BizException(MessageCode.INVALID_PASSWD);
     }
+    */
 
     log.debug(">>> rstMember : {}", rstMember);
-
+    /*
     // 토큰 발급 및 로그인 처리
-    SignInResponse signRes =
-        SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId()).build();
-
+    SignInResponse signRes = SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId())
+        .build();
+    
     // 토큰 유효여부 확인 후 securityContext 등록
     String token = signRes.getToken();
-
+    
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-
+    
     if (Boolean.TRUE.equals(JwtTokenUtil.isValidToken(token))) {
       LoginMemberDto userDto = LoginMemberDto.builder().mberId(rstMember.getMberId()).mberNm(rstMember.getMberNm()).build();
 
@@ -94,20 +100,86 @@ public class MberService {
 
       SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
+    */
+    
+    // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+    // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(req.getMberId(),req.getMberPassword());
 
-    return signRes;
+    // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+    // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+    // 3. 인증 정보를 기반으로 JWT 토큰 생성
+    SignInResponse tokenInfo = jwtTokenUtil.generateToken(authentication, rstMember.getMberNm());
+
+    // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+    // 추후 타입 설정 필요
+    redisTemplate.opsForValue()
+            .set("RefreshToken:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+    
+    return tokenInfo;
   }
 
   @Transactional(readOnly = true)
   public void signOut(String token) {
-    // refresh Token expired 시간 1초로
+    
+   // 1. Access Token 검증
+    if (!jwtTokenUtil.validateToken(token)) {
+        throw new BizException("잘못된 요청입니다.");
+    }
+
+    // 2. Access Token 에서 User id 을 가져옵니다.
+    Authentication authentication = jwtTokenUtil.getAuthentication(token);
+
+    // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+    if (redisTemplate.opsForValue().get("RefreshToken:" + authentication.getName()) != null) {
+        // Refresh Token 삭제
+        redisTemplate.delete("RefreshToken:" + authentication.getName());
+    }
+
+    // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
+    Long expiration = jwtTokenUtil.getExpiration(token);
+    redisTemplate.opsForValue()
+            .set(token, "logout", expiration, TimeUnit.MILLISECONDS);
+
   }
+  
+  public SignInResponse reissue(TokenRequest reissue) {
+    // 1. Refresh Token 검증
+    if (!jwtTokenUtil.validateToken(reissue.getRefreshToken())) {
+        throw new BizException("Refresh Token 정보가 유효하지 않습니다.");
+    }
+
+    // 2. Access Token 에서 User id 을 가져옵니다.
+    Authentication authentication = jwtTokenUtil.getAuthentication(reissue.getAccessToken());
+
+    // 3. Redis 에서 User id를 기반으로 저장된 Refresh Token 값을 가져옵니다.
+    String refreshToken = (String)redisTemplate.opsForValue().get("RefreshToken:" + authentication.getName());
+
+    //(추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
+    if(ObjectUtils.isEmpty(refreshToken)) {
+        throw new BizException("잘못된 요청입니다.");
+    }
+    if(!refreshToken.equals(reissue.getRefreshToken())) {
+        throw new BizException("Refresh Token 정보가 일치하지 않습니다.");
+    }
+    
+    // 4. 새로운 토큰 생성
+    SignInResponse tokenInfo = jwtTokenUtil.generateToken(authentication, jwtTokenUtil.getUsernameFromToken(reissue.getAccessToken()));
+
+    // 5. RefreshToken Redis 업데이트
+    redisTemplate.opsForValue()
+            .set("RefreshToken:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+
+    return tokenInfo;
+}
 
   @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#token", unless = "#result == null")
   @Transactional(readOnly = true)
   public MberInfoResponse getMyInfo(String token) {
     if (!ObjectUtils.isEmpty(token)) {
-      MberInfoResponse member = JwtTokenUtil.autholriztionCheckUser(token); // 넘겨받은 토큰 값으로 토큰에 있는 값 꺼내기
+      MberInfoResponse member = jwtTokenUtil.autholriztionCheckUser(token); // 넘겨받은 토큰 값으로 토큰에 있는 값 꺼내기
 
       log.debug("szs/me : {}", member);
 
@@ -118,7 +190,6 @@ public class MberService {
     }
   }
 
-  @Cacheable(cacheManager = CacheType.ONE_MINUTES, cacheNames = "members", key = "#token", unless = "#result == null")
   @Transactional(readOnly = true)
   public MberInfoResponse getMember() {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();

@@ -1,6 +1,7 @@
 package com.playground.api.member.repository;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -19,5 +20,6 @@ public interface MberRepository extends JpaRepository<MberEntity, String>, JpaSp
 
   List<MberEntity> findAll(Specification<MberEntity> searchCondition);
   
-
+  Optional<MberEntity> findByMberId(String username);
+  
 }

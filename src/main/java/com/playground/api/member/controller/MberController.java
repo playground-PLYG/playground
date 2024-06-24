@@ -3,23 +3,23 @@ package com.playground.api.member.controller;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.playground.api.member.model.MberSrchRequest;
-import com.playground.api.member.model.MberSrchResponse;
 import com.playground.api.member.model.MberInfoResponse;
 import com.playground.api.member.model.MberModifyInfoRequest;
+import com.playground.api.member.model.MberSrchRequest;
+import com.playground.api.member.model.MberSrchResponse;
 import com.playground.api.member.model.SignInRequest;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.api.member.model.SignUpRequest;
 import com.playground.api.member.model.SignUpResponse;
+import com.playground.api.member.model.TokenRequest;
 import com.playground.api.member.service.MberService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -69,6 +69,15 @@ public class MberController {
   @GetMapping("/api/member/getMyInfo")
   public MberInfoResponse getMyInfo(@RequestHeader(value = "Authorization") String token) {
     return mberService.getMyInfo(token);
+  }
+  
+  /**
+   * 토큰재발급
+   */
+  @Operation(summary = "토큰 재발급", description = "AccessToken, RefreshToken 검증 및 재발급")
+  @PostMapping("/api/member/reissue")
+  public SignInResponse reissue(@Valid TokenRequest reissue) {
+    return mberService.reissue(reissue);
   }
 
   /**

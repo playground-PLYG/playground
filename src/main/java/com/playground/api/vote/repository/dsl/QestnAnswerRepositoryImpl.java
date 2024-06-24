@@ -150,5 +150,11 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
     return tbQestnAnswer.qestnSn.eq(itemSsno);
   }
 
+  @Override
+  public List<String> selectAnswerUserIds(Integer voteSsno, Integer questionSsno, Integer itemSsno) {
+    return queryFactory.select(tbQestnAnswer.answerUserId).from(tbQestnAnswer)
+        .where(tbQestnAnswer.voteSn.eq(voteSsno).and(tbQestnAnswer.qestnSn.eq(questionSsno)).and(tbQestnAnswer.iemSn.eq(itemSsno))).fetch();
+  }
+
 
 }

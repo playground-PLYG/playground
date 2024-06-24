@@ -1,6 +1,7 @@
 package com.playground.api.statistics.model;
 
 import java.io.Serial;
+import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,7 @@ public class StatisticsDetailDetailResponse extends BaseDto {
    */
   @Schema(description = "특표수", example = "14")
   private Long itemCount;
+
+  private List<String> selUserIdList;
 
 }

@@ -108,36 +108,11 @@ public class JwtTokenUtil {
   // 토큰 정보를 검증하는 메서드
   public boolean validateToken(String token) {
     Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-    /*
-    try {
-      Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-      return true;
-    } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      throw new BizException(MessageCode.INVALID_TOKEN);
-    } catch (ExpiredJwtException e) {
-      throw new BizException(MessageCode.EXPIRED_TOKEN);
-    } catch (UnsupportedJwtException e) {
-      log.info("Unsupported JWT Token", e);
-    } catch (IllegalArgumentException e) {
-      log.info("JWT claims string is empty.", e);
-    }
-    return false;
-    
-    return claim.getPayload().getExpiration().after(new Date(System.currentTimeMillis()));
-    */
-    
     return true;
   }
 
   private Claims parseClaims(String accessToken) {
     return Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken).getPayload();
-    /*
-    try {
-      
-    } catch (ExpiredJwtException e) {
-      return e.getClaims();
-    }
-    */
   }
 
   public Long getExpiration(String accessToken) {
@@ -153,13 +128,6 @@ public class JwtTokenUtil {
    */
   private Claims getAllClaims(String token) {
     return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
-    /*
-    try {
-      
-    } catch (Exception e) {
-      throw new BizException(MessageCode.INVALID_TOKEN);
-    }
-    */
   }
 
   /**
@@ -167,13 +135,6 @@ public class JwtTokenUtil {
    */
   public String getUsernameFromToken(String token) {
     return String.valueOf(getAllClaims(token).get(USER_NM));
-    /*
-    try {
-      
-    } catch (NullPointerException e) {
-      throw new BizException(MessageCode.INVALID_TOKEN);
-    }
-    */
   }
 
   /**

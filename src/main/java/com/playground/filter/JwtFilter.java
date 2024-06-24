@@ -12,10 +12,7 @@ import com.playground.constants.PlaygroundConstants;
 import com.playground.exception.BizException;
 import com.playground.utils.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,20 +53,6 @@ public class JwtFilter extends OncePerRequestFilter {
           }
         }
       }
-    /*
-    } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      request.setAttribute("exception", MessageCode.INVALID_TOKEN.getCode());
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-    } catch (ExpiredJwtException e) {
-      request.setAttribute("exception", MessageCode.EXPIRED_TOKEN.getCode());
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-    } catch (UnsupportedJwtException e) {
-      request.setAttribute("exception", MessageCode.UNSUPPROTED_TOKEN.getCode());
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-    } catch (IllegalArgumentException e) {
-      request.setAttribute("exception", MessageCode.WRONG_TOKEN.getCode());
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-    */
     } catch(Exception e) {
       request.setAttribute("exception", MessageCode.UNKNOWN.getCode());
     } finally {
@@ -78,43 +61,6 @@ public class JwtFilter extends OncePerRequestFilter {
     
     MDC.put("mberId", userId);
     filterChain.doFilter(request, response);
-    
-    /*
-    String userName;
-    
-    String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    String url = request.getRequestURI();
-
-    if (url.matches("^/\\w+/api/.*") && authorizationHeader != null && authorizationHeader.startsWith(PlaygroundConstants.TOKEN_PREFIX)) { // Bearer 토큰 파싱
-      token = authorizationHeader.substring(7); // jwt token 파싱
-      userName = JwtTokenUtil.getUsernameFromToken(token); // username 얻어오기
-      
-
-      // 현재 SecurityContextHolder 에 인증객체가 있는지 확인
-      if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-        // 토큰 유효여부 확인
-        log.debug(">>> JWT Filter token = {}", token);
-        if (Boolean.TRUE.equals(JwtTokenUtil.isValidToken(token))) {
-          LoginMemberDto userDto = LoginMemberDto.builder().mberId(userId).mberNm(userName).build();
-
-          UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-              new UsernamePasswordAuthenticationToken(userDto, null, List.of(new SimpleGrantedAuthority("USER")));
-
-          usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-          SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-        }
-      }
-    }
-    */
-
-    try {
-      
-      
-    } finally {
-      
-    }
   }
 
   public Claims parseJwtToken(String authorizationHeader) {

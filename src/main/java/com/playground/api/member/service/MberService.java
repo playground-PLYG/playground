@@ -73,34 +73,7 @@ public class MberService {
   public SignInResponse signIn(SignInRequest req) {
     MberEntity rstMember = mberRepository.findById(req.getMberId()).orElseThrow(() -> new BizException(MessageCode.INVALID_USER));
 
-    /*
-    if (!CryptoUtil.comparePassword(req.getMberPassword(), rstMember.getMberPassword())) {
-      throw new BizException(MessageCode.INVALID_PASSWD);
-    }
-    */
-
     log.debug(">>> rstMember : {}", rstMember);
-    /*
-    // 토큰 발급 및 로그인 처리
-    SignInResponse signRes = SignInResponse.builder().token(JwtTokenUtil.createToken(rstMember.getMberId(), rstMember.getMberNm())).mberId(rstMember.getMberId())
-        .build();
-    
-    // 토큰 유효여부 확인 후 securityContext 등록
-    String token = signRes.getToken();
-    
-    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-    
-    if (Boolean.TRUE.equals(JwtTokenUtil.isValidToken(token))) {
-      LoginMemberDto userDto = LoginMemberDto.builder().mberId(rstMember.getMberId()).mberNm(rstMember.getMberNm()).build();
-
-      UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-          new UsernamePasswordAuthenticationToken(userDto, null, List.of(new SimpleGrantedAuthority("USER")));
-
-      usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-      SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-    }
-    */
     
     // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
     // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false

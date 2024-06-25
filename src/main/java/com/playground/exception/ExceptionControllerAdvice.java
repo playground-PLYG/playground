@@ -15,6 +15,7 @@ import com.playground.model.BaseResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
@@ -42,10 +43,16 @@ public class ExceptionControllerAdvice {
   public BaseResponse<Void> illegalArgumentException(Exception e) {
     return new BaseResponse<>(new BizException(MessageCode.WRONG_TOKEN, MessageCode.WRONG_TOKEN.getMessage()));
   }
+  
+  @ExceptionHandler(SignatureException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public BaseResponse<Void> signatureException(Exception e) {
+    return new BaseResponse<>(new BizException(MessageCode.NOT_SIGNATRUE_TOKEN, MessageCode.NOT_SIGNATRUE_TOKEN.getMessage()));
+  }
 
   @ExceptionHandler(SecurityException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public BaseResponse<Void> signatureException(Exception e) {
+  public BaseResponse<Void> securityException(Exception e) {
     return new BaseResponse<>("SignatureException");
   }
 

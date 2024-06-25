@@ -35,32 +35,31 @@ public class JwtFilter extends OncePerRequestFilter {
     String userId = "";
     String url = request.getRequestURI();
     
-    try {
+    
       
-      // 1. Request Header 에서 JWT 토큰 추출
-      String token = jwtTokenUtil.resolveToken(request);
-      
-      // 2. validateToken 으로 토큰 유효성 검사
-      if (url.matches("^/\\w+/api/.*") && token != null) {
-        if(jwtTokenUtil.validateToken(token)) {
-          // (추가) Redis 에 해당 accessToken logout 여부 확인
-          String isLogout = (String)redisTemplate.opsForValue().get(token);
-          if (ObjectUtils.isEmpty(isLogout)) {  
-            // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
-            Authentication authentication = jwtTokenUtil.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            userId = jwtTokenUtil.getUserIdFromToken(token);
-          }
+    // 1. Request Header 에서 JWT 토큰 추출
+    String token = jwtTokenUtil.resolveToken(request);
+    
+    // 2. validateToken 으로 토큰 유효성 검사
+    if (url.matches("^/\\w+/api/.*") && token != null) {
+      if(jwtTokenUtil.validateToken(token)) {
+        // (추가) Redis 에 해당 accessToken logout 여부 확인
+        String isLogout = (String)redisTemplate.opsForValue().get(token);
+        if (ObjectUtils.isEmpty(isLogout)) {  
+          // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
+          Authentication authentication = jwtTokenUtil.getAuthentication(token);
+          SecurityContextHolder.getContext().setAuthentication(authentication);
+          userId = jwtTokenUtil.getUserIdFromToken(token);
         }
       }
-    } catch(Exception e) {
-      request.setAttribute("exception", MessageCode.UNKNOWN.getCode());
+    }
+    
+    try {
+      MDC.put("mberId", userId);
+      filterChain.doFilter(request, response);
     } finally {
       MDC.clear();
     }
-    
-    MDC.put("mberId", userId);
-    filterChain.doFilter(request, response);
   }
 
   public Claims parseJwtToken(String authorizationHeader) {

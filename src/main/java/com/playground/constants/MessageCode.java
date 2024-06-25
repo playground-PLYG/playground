@@ -17,7 +17,8 @@ public enum MessageCode {
   ,ACESS_DENIED_EMAIL("EC0007", "접근 권한이 없는 사용자 요청입니다.")
   ,FAIL_EXCEL_DOWNLOAD("EC0008", "엑셀 다운로드 처리 중 오류가 발생했습니다.")
   ,UNSUPPROTED_TOKEN("EC0009", "지원하지 않는 토큰입니다.")
-  ,WRONG_TOKEN("EC0010", "변조된 토큰입니다.")
+  ,WRONG_TOKEN("EC0010", "JWT의 Claim이 비어있습니다.")
+  ,NOT_SIGNATRUE_TOKEN("EC0011","JWT 서명 확인을 실패하였습니다.")
 
   // Member Error
   ,ACCESS_NOT_USER("EM0001", "회원 가입 대상이 아닙니다.")

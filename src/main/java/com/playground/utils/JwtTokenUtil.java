@@ -20,18 +20,11 @@ import com.google.common.net.HttpHeaders;
 import com.playground.api.member.model.MberInfoResponse;
 import com.playground.api.member.model.MberInfoResponse.MberInfoResponseBuilder;
 import com.playground.api.member.model.SignInResponse;
-import com.playground.constants.MessageCode;
 import com.playground.constants.PlaygroundConstants;
-import com.playground.exception.BizException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -54,7 +47,7 @@ public class JwtTokenUtil {
   private static final long ACCESS_TOKEN_EXPIRE_TIME = 1 * 60 * 1000L; // 1분 테스트 용도
 
   private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
-
+  
   // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
   public SignInResponse generateToken(Authentication authentication, String userNm) {
     // 권한 가져오기

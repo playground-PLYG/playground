@@ -17,21 +17,21 @@ springdoc:
 spring:
  data:
    redis:
-     port: ${sm://redis-port}
-     host: ${sm://redis-url}
+     port: 16379
+     host: ${sm://db-host}
      password: ${sm://db-pwd}
  datasource:
   master:
    hikari:
     driver-class-name: org.postgresql.Driver
-    jdbc-url: ${sm://jdbc-url}
+    jdbc-url: jdbc:postgresql://${sm://db-host}:5432/playground
     username: app_user
     password: ${sm://db-pwd}
     read-only: false
   slave: # DB replication 적용 후 replica DB로 정보 수정
    hikari:
     driver-class-name: org.postgresql.Driver
-    jdbc-url: ${sm://jdbc-url}
+    jdbc-url: jdbc:postgresql://${sm://db-host}:5432/playground
     username: app_user
     password: ${sm://db-pwd}
     read-only: true

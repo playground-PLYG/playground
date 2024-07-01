@@ -36,6 +36,7 @@ import com.playground.constants.MessageCode;
 import com.playground.exception.BizException;
 import com.playground.utils.CryptoUtil;
 import com.playground.utils.JwtTokenUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -138,8 +139,9 @@ public class MberService {
         throw new BizException("Refresh Token 정보가 일치하지 않습니다.");
     }
     
-    // 4. 새로운 토큰 생성
-    SignInResponse tokenInfo = jwtTokenUtil.generateToken(authentication, jwtTokenUtil.getUsernameFromToken(reissue.getAccessToken()));
+    // 4. 새로운 토큰을 만들기 위하여 claim에서 사용자 명을 조회 후 새로운 토큰 발급
+    Claims claims = jwtTokenUtil.parseClaims(reissue.getAccessToken());
+    SignInResponse tokenInfo = jwtTokenUtil.generateToken(authentication, claims.get("mberNm").toString());
 
     // 5. RefreshToken Redis 업데이트
     redisTemplate.opsForValue()

@@ -22,6 +22,7 @@ import com.playground.api.member.model.MberInfoResponse.MberInfoResponseBuilder;
 import com.playground.api.member.model.SignInResponse;
 import com.playground.constants.PlaygroundConstants;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
@@ -104,8 +105,12 @@ public class JwtTokenUtil {
     return true;
   }
 
-  private Claims parseClaims(String accessToken) {
-    return Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken).getPayload();
+  public Claims parseClaims(String accessToken) {
+    try {
+      return Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken).getPayload();
+    } catch (ExpiredJwtException e) {
+      return e.getClaims();
+    }
   }
 
   public Long getExpiration(String accessToken) {

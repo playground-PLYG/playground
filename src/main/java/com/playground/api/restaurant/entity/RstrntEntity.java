@@ -1,7 +1,6 @@
 package com.playground.api.restaurant.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import com.playground.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,13 +55,6 @@ public class RstrntEntity extends BaseEntity {
   private String kakaoMapId;
 
   /**
-   * 식당이미지파일일련번호
-   */
-  @Column(name = "rstrnt_image_file_sn")
-  private Integer rstrntImageFileSn;
-
-
-  /**
    * 식당종류코드
    */
   @Column(name = "rstrnt_knd_code")
@@ -74,16 +66,5 @@ public class RstrntEntity extends BaseEntity {
   @Column(name = "rstrnt_dstnc")
   private BigDecimal rstrntDstnc;
 
-  /**
-   * 최근선택일시
-   */
-  @Column(name = "recent_choise_dt")
-  private LocalDateTime recentChoiseDt;
 
-
-  /**
-   * 누적선택수
-   */
-  @Column(name = "accmlt_choise_co")
-  private Long accmltChoiseCo;
 }

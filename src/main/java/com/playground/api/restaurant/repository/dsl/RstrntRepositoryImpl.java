@@ -23,10 +23,9 @@ public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
     return queryFactory
         .select(Projections.fields(RstrntSrchResponse.class, tbRstrnt.rstrntSn.as("restaurantSerialNo"), tbRstrnt.rstrntNm.as("restaurantName"),
             tbRstrnt.kakaoMapId, tbRstrnt.laLc.as("la"), tbRstrnt.loLc.as("lo"), tbRstrnt.rstrntKndCode.as("restaurantKindCode"),
-            tbRstrnt.rstrntDstnc.as("restaurantDistance"), tbRstrnt.recentChoiseDt.as("recentChoiseDate"),
-            tbRstrnt.rstrntImageFileSn.as("imageFileId")))
+            tbRstrnt.rstrntDstnc.as("restaurantDistance")))
         .where(rstrntNmLike(entity.getRstrntNm()), rstrntKndCodeEq(entity.getRstrntKndCode())).from(tbRstrnt).leftJoin(tbFile)
-        .on(tbRstrnt.rstrntImageFileSn.eq(tbFile.fileSn)).orderBy(tbRstrnt.rstrntSn.desc()).fetch();
+        .orderBy(tbRstrnt.rstrntSn.desc()).fetch();
   }
 
   private BooleanExpression rstrntNmLike(String rstrntNm) {
@@ -39,16 +38,14 @@ public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
 
   @Override
   public RstrntDetailSrchResponse findByIdDetail(Integer rstrntSn) {
-    return queryFactory
-        .select(Projections.fields(RstrntDetailSrchResponse.class, tbRstrnt.rstrntSn.as("restaurantSerialNo"), tbRstrnt.rstrntNm.as("restaurantName"),
-            tbRstrnt.kakaoMapId, tbRstrnt.laLc.as("la"), tbRstrnt.loLc.as("lo"), tbRstrnt.rstrntKndCode.as("restaurantKindCode"),
-            tbRstrnt.rstrntDstnc.as("restaurantDistance"), tbRstrnt.recentChoiseDt.as("recentChoiseDate"),
-            tbRstrnt.rstrntImageFileSn.as("imageFileId")))
-        .where(tbRstrnt.rstrntSn.eq(rstrntSn)).from(tbRstrnt).leftJoin(tbFile).on(tbRstrnt.rstrntImageFileSn.eq(tbFile.fileSn)).fetchOne();
+    return queryFactory.select(Projections.fields(RstrntDetailSrchResponse.class, tbRstrnt.rstrntSn.as("restaurantSerialNo"),
+        tbRstrnt.rstrntNm.as("restaurantName"), tbRstrnt.kakaoMapId, tbRstrnt.laLc.as("la"), tbRstrnt.loLc.as("lo"),
+        tbRstrnt.rstrntKndCode.as("restaurantKindCode"), tbRstrnt.rstrntDstnc.as("restaurantDistance"))).where(tbRstrnt.rstrntSn.eq(rstrntSn))
+        .from(tbRstrnt).leftJoin(tbFile).fetchOne();
   }
 
   @Override
   public long updateRstrntImageFileSnById(Integer rstrntSn, Integer rstrntImageFileSn) {
-    return queryFactory.update(tbRstrnt).set(tbRstrnt.rstrntImageFileSn, rstrntImageFileSn).where(tbRstrnt.rstrntSn.eq(rstrntSn)).execute();
+    return queryFactory.update(tbRstrnt).where(tbRstrnt.rstrntSn.eq(rstrntSn)).execute();
   }
 }

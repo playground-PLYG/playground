@@ -106,29 +106,6 @@ public class VoteAnswerRepositoryImpl implements VoteAnswerRepositoryCustom {
         .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSsno())).fetchOne();
 
     Long questionCount = queryFactory.select(Wildcard.count).from(tbQestn).where(tbQestn.voteSn.eq(reqData.getVoteSsno())).fetchOne();
-
-    // List<StatisticsDetailResponse> detailResponse = queryFactory.select(
-    // Projections.fields(StatisticsDetailResponse.class,
-    // tbQestnAnswer.qestnSn.as("questionSsno"),
-    // tbQestnAnswer.iemSn.as("itemSsno"),
-    // Wildcard.count.as("itemCount"),
-    // tbQVoteIem.iemNm.as("itemName"),
-    // tbQestn.qestnCn.as("questionContents")))
-    // .from(tbQestnAnswer)
-    // .join(tbQVoteIem)
-    // .on(tbQestnAnswer.voteSn.eq(tbQVoteIem.voteSn)
-    // .and(tbQestnAnswer.qestnSn.eq(tbQVoteIem.qestnSn))
-    // .and(tbQestnAnswer.iemSn.eq(tbQVoteIem.iemSn)))
-    // .join(tbQestn)
-    // .on(tbQestnAnswer.voteSn.eq(tbQestn.voteSn)
-    // .and(tbQestnAnswer.qestnSn.eq(tbQestn.qestnSn)))
-    // .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSsno())
-    // .and(checkQestnSSnoAtStatistic(reqData.getQuestionSsno()))
-    // .and(checkItemSSnoAtStatistic(reqData.getItemSsno())))
-    // .groupBy(tbQestnAnswer.qestnSn, tbQestnAnswer.iemSn, tbQVoteIem.iemNm, tbQestn.qestnCn)
-    // .orderBy(tbQestnAnswer.qestnSn.asc(), tbQestnAnswer.iemSn.asc())
-    // .fetch();
-
     return StatisticsResponse.builder().totalVoteCount(totalVoteCount.intValue()).totalVoterCount(totalVoterCount.intValue())
         .questionCount(questionCount.intValue())
         // .staDetailList(detailResponse)

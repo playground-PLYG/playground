@@ -52,10 +52,10 @@ public class RstrntMenuEntity extends BaseEntity {
   private String rstrntMenuNm;
 
   /**
-   * 식당이미지 URL
+   * 식당메뉴파일일련번호
    */
-  @Column(name = "rstrnt_menu_image_url")
-  private String rstrntMenuImageUrl;
+  @Column(name = "rstrnt_menu_file_sn")
+  private Integer rstrntMenuFileSn;
 
   /**
    * 식당메뉴가격

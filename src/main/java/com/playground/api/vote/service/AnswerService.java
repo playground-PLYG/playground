@@ -6,15 +6,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import com.playground.api.vote.entity.QestnAnswerEntity;
-import com.playground.api.vote.entity.QestnAnswerPK;
+import com.playground.api.vote.entity.VoteAnswerEntity;
+import com.playground.api.vote.entity.VoteAnswerPK;
 import com.playground.api.vote.entity.VoteEntity;
-import com.playground.api.vote.model.QestnAnswerRequest;
-import com.playground.api.vote.model.QestnAnswerResponse;
-import com.playground.api.vote.model.QestnResponse;
+import com.playground.api.vote.model.VoteAnswerRequest;
+import com.playground.api.vote.model.VoteAnswerResponse;
+import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteResponse;
-import com.playground.api.vote.repository.QestnAnswerRepository;
+import com.playground.api.vote.repository.VoteAnswerRepository;
 import com.playground.api.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class AnswerService {
-  private final QestnAnswerRepository qestnAnswerRepository;
+  private final VoteAnswerRepository qestnAnswerRepository;
   private final VoteRepository voteRepository;
 
   @Transactional(readOnly = true)
-  public Boolean isDuplicateVote(QestnAnswerRequest reqData) {
+  public Boolean isDuplicateVote(VoteAnswerRequest reqData) {
     Boolean isDuplicate = true; // true = 중복투표, false = 처음투표
     if (!ObjectUtils.isEmpty(reqData.getVoteSsno()) && !StringUtils.isEmpty(reqData.getAnswerUserId())) {
       Long resultCount = qestnAnswerRepository.selectByAnswerUserId(reqData.getVoteSsno(), reqData.getAnswerUserId());
@@ -44,11 +44,12 @@ public class AnswerService {
   public VoteResponse getVoteDetail(VoteRequest reqData) {
     if (!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
       VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
-      VoteResponse voteResponse = VoteResponse.builder().voteSsno(voteEntity.getVoteSn()).voteKindCode(voteEntity.getVoteKndCode())
-          .voteSubject(voteEntity.getVoteSj()).anonymityVoteAlternative(voteEntity.getAnnymtyVoteAt()).voteBeginDate(voteEntity.getVoteBeginDt())
-          .voteEndDate(voteEntity.getVoteEndDt()).voteDeleteAlternative(voteEntity.getVoteDeleteAt()).build();
+      VoteResponse voteResponse = VoteResponse.builder().voteSsno(voteEntity.getVoteSn())// .voteKindCode(voteEntity.getVoteKndCode())
+          .voteSubject(voteEntity.getVoteSj())// .anonymityVoteAlternative(voteEntity.getAnnymtyVoteAt())
+          .voteBeginDate(voteEntity.getVoteBeginDt()).voteEndDate(voteEntity.getVoteEndDt())// .voteDeleteAlternative(voteEntity.getVoteDeleteAt())
+          .build();
 
-      List<QestnResponse> qestnResponseList = voteRepository.getQestnDetail(reqData.getVoteSsno(), reqData.getQuestionSsno());
+      List<VoteQestnResponse> qestnResponseList = voteRepository.getQestnDetail(reqData.getVoteSsno(), reqData.getQuestionSsno());
       if (qestnResponseList.size() != 0) {
         voteResponse.setQestnResponseList(qestnResponseList);
       }
@@ -60,59 +61,54 @@ public class AnswerService {
   }
 
   @Transactional(readOnly = true)
-  public List<QestnAnswerResponse> getAnswer(QestnAnswerRequest reqData) {
+  public List<VoteAnswerResponse> getAnswer(VoteAnswerRequest reqData) {
     log.debug("AnswerService.getAnswer ::: request ::: {}", reqData);
-    List<QestnAnswerEntity> qestnAnswerEntities =
-        qestnAnswerRepository.findBySsno(QestnAnswerEntity.builder().voteSn(reqData.getVoteSsno()).qestnSn(reqData.getQuestionSsno()).build());
 
-    return qestnAnswerEntities.stream()
-        .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-            .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn()).build())
-        .toList();
+    // 임시 조치
+    return new ArrayList<VoteAnswerResponse>();
   }
 
 
   @Transactional
-  public List<QestnAnswerResponse> addAnswer(List<QestnAnswerRequest> reqDataList) {
-    List<QestnAnswerEntity> resEntityList = new ArrayList<>();
+  public List<VoteAnswerResponse> addAnswer(List<VoteAnswerRequest> reqDataList) {
+    List<VoteAnswerEntity> resEntityList = new ArrayList<>();
     reqDataList.forEach(req -> {
-      resEntityList.add(QestnAnswerEntity.builder().voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno()).iemSn(req.getItemSsno())
-          .answerUserId(StringUtils.defaultString(req.getAnswerUserId())).answerCn(StringUtils.defaultString(req.getAnswerContents())).build());
+      resEntityList.add(VoteAnswerEntity.builder().voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno()).iemSn(req.getItemSsno())
+          // .answerUserId(StringUtils.defaultString(req.getAnswerUserId())).answerCn(StringUtils.defaultString(req.getAnswerContents()))
+          .build());
     });
 
-    List<QestnAnswerEntity> saveAllEntities = qestnAnswerRepository.saveAll(resEntityList);
-    return saveAllEntities.stream()
-        .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-            .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn()).build())
-        .toList();
+    // 임시 조치
+    return new ArrayList<VoteAnswerResponse>();
   }
 
   @Transactional
-  public List<QestnAnswerResponse> modifyAnswer(List<QestnAnswerRequest> reqDataList) {
-    List<QestnAnswerEntity> resEntityList = new ArrayList<>();
+  public List<VoteAnswerResponse> modifyAnswer(List<VoteAnswerRequest> reqDataList) {
+    List<VoteAnswerEntity> resEntityList = new ArrayList<>();
     reqDataList.forEach(req -> {
-      QestnAnswerEntity reqAnswer = QestnAnswerEntity.builder().answerSn(req.getAnswerSsno()).voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno())
-          .answerUserId(StringUtils.defaultString(req.getAnswerUserId())).iemSn(req.getItemSsno())
-          .answerCn(StringUtils.defaultString(req.getAnswerContents())).build();
+      VoteAnswerEntity reqAnswer = VoteAnswerEntity.builder()// .answerSn(req.getAnswerSsno())
+          .voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno())
+          // .answerUsrId(StringUtils.defaultString(req.getAnswerUserId()))
+          .iemSn(req.getItemSsno())
+          // .answerCn(StringUtils.defaultString(req.getAnswerContents()))
+          .build();
 
-      QestnAnswerEntity resAnswer = qestnAnswerRepository.selectByEntity(reqAnswer);
+      VoteAnswerEntity resAnswer = qestnAnswerRepository.selectByEntity(reqAnswer);
 
       if (!ObjectUtils.isEmpty(resAnswer)) {
-        qestnAnswerRepository.deleteById(QestnAnswerPK.builder().answerSn(resAnswer.getAnswerSn()).voteSn(resAnswer.getVoteSn())
-            .qestnSn(resAnswer.getQestnSn()).iemSn(resAnswer.getIemSn()).build());
+        qestnAnswerRepository.deleteById(VoteAnswerPK.builder()// .answerSn(resAnswer.getAnswerSn())
+            .voteSn(resAnswer.getVoteSn()).qestnSn(resAnswer.getQestnSn()).iemSn(resAnswer.getIemSn()).build());
       }
-      QestnAnswerEntity saveAnswer = qestnAnswerRepository.save(reqAnswer);
+      VoteAnswerEntity saveAnswer = qestnAnswerRepository.save(reqAnswer);
       resEntityList.add(saveAnswer);
     });
 
-    return resEntityList.stream()
-        .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-            .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn()).build())
-        .toList();
+    // 임시 조치
+    return new ArrayList<VoteAnswerResponse>();
   }
 
   @Transactional
-  public Long removeAnswer(QestnAnswerRequest qestnAnswerRequest) {
+  public Long removeAnswer(VoteAnswerRequest qestnAnswerRequest) {
     if (!ObjectUtils.isEmpty(qestnAnswerRequest.getAnswerSsno())) {
       return qestnAnswerRepository.deleteBySsno(qestnAnswerRequest.getAnswerSsno());
     } else {

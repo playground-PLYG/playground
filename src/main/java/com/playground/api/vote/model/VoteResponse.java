@@ -91,5 +91,5 @@ public class VoteResponse extends BaseDto {
   private String excuteResult;
 
   @Schema(description = "질문객체", example = "qestnResponse")
-  private List<QestnResponse> qestnResponseList;
+  private List<VoteQestnResponse> qestnResponseList;
 }

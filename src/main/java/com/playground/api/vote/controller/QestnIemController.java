@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.playground.api.vote.model.QestnRequest;
-import com.playground.api.vote.model.QestnResponse;
-import com.playground.api.vote.model.VoteIemRequest;
-import com.playground.api.vote.model.VoteIemResponse;
+import com.playground.api.vote.model.VoteQestnIemRequest;
+import com.playground.api.vote.model.VoteQestnIemResponse;
+import com.playground.api.vote.model.VoteQestnRequest;
+import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.service.QestnIemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +29,7 @@ public class QestnIemController {
    */
   @Operation(summary = "질문등록", description = "관리자가 질문을 등록")
   @PostMapping("/api/qestn/addQestn")
-  public List<QestnResponse> addQestn(@RequestBody @Valid List<QestnRequest> qestnReqList) {
+  public List<VoteQestnResponse> addQestn(@RequestBody @Valid List<VoteQestnRequest> qestnReqList) {
     return qestnIemService.addQestn(qestnReqList);
   }
 
@@ -38,7 +38,7 @@ public class QestnIemController {
    */
   @Operation(summary = "질문수정", description = "관리자가 질문을 수정")
   @PutMapping("/api/qestn/modifyQestn")
-  public List<QestnResponse> modifyQestn(@RequestBody @Valid List<QestnRequest> qestnReqList) {
+  public List<VoteQestnResponse> modifyQestn(@RequestBody @Valid List<VoteQestnRequest> qestnReqList) {
     return qestnIemService.modifyQestn(qestnReqList);
   }
 
@@ -47,7 +47,7 @@ public class QestnIemController {
    */
   @Operation(summary = "질문삭제", description = "관리자가 질문을 삭제")
   @DeleteMapping("/api/qestn/removeQestn")
-  public Long removeQestn(@RequestBody @Valid QestnRequest qestnRequest) {
+  public Long removeQestn(@RequestBody @Valid VoteQestnRequest qestnRequest) {
     return qestnIemService.removeQestn(qestnRequest);
   }
 
@@ -56,7 +56,7 @@ public class QestnIemController {
    */
   @Operation(summary = "투표항목등록", description = "관리자가 투표항목을 등록")
   @PostMapping("/api/voteIem/addVoteIem")
-  public List<VoteIemResponse> addVoteIem(@RequestBody @Valid List<VoteIemRequest> voteIemReqList) {
+  public List<VoteQestnIemResponse> addVoteIem(@RequestBody @Valid List<VoteQestnIemRequest> voteIemReqList) {
     return qestnIemService.addVoteIem(voteIemReqList);
   }
 
@@ -65,7 +65,7 @@ public class QestnIemController {
    */
   @Operation(summary = "투표항목수정", description = "관리자가 투표항목을 수정")
   @PutMapping("/api/voteIem/modifyVoteIem")
-  public List<VoteIemResponse> modifyVoteIem(@RequestBody @Valid List<VoteIemRequest> voteIemReqList) {
+  public List<VoteQestnIemResponse> modifyVoteIem(@RequestBody @Valid List<VoteQestnIemRequest> voteIemReqList) {
     return qestnIemService.modifyVoteIem(voteIemReqList);
   }
 
@@ -74,7 +74,7 @@ public class QestnIemController {
    */
   @Operation(summary = "투표항목삭제", description = "관리자가 투표항목을 삭제")
   @DeleteMapping("/api/voteIem/removeVoteIem")
-  public Long removeVoteIem(@RequestBody @Valid VoteIemRequest voteIemRequest) {
+  public Long removeVoteIem(@RequestBody @Valid VoteQestnIemRequest voteIemRequest) {
     return qestnIemService.removeVoteIem(voteIemRequest);
   }
 

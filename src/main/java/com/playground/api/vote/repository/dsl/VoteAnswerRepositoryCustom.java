@@ -4,14 +4,14 @@ import java.util.List;
 import com.playground.api.statistics.model.StatisticsDetailResponse;
 import com.playground.api.statistics.model.StatisticsRequest;
 import com.playground.api.statistics.model.StatisticsResponse;
-import com.playground.api.vote.entity.QestnAnswerEntity;
+import com.playground.api.vote.entity.VoteAnswerEntity;
 
-public interface QestnAnswerRepositoryCustom {
-  List<QestnAnswerEntity> findBySsno(QestnAnswerEntity qestnAnswerEntity);
+public interface VoteAnswerRepositoryCustom {
+  List<VoteAnswerEntity> findBySsno(VoteAnswerEntity qestnAnswerEntity);
 
   Long deleteBySsno(Integer answerSsno);
 
-  QestnAnswerEntity selectByEntity(QestnAnswerEntity qestnAnswerEntity);
+  VoteAnswerEntity selectByEntity(VoteAnswerEntity qestnAnswerEntity);
 
   Long selectByAnswerUserId(Integer voteSsno, String answerUserId);
 

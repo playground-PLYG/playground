@@ -15,7 +15,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 @Getter
 @Setter
-public class QestnPK implements Serializable {
+public class VoteQestnPK implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 

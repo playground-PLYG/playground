@@ -15,12 +15,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class VoteIemPK implements Serializable {
+public class VoteQestnIemPK implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 
   /**
-   * 항목ID
+   * 항목일련번호
    */
   private Integer iemSn;
 

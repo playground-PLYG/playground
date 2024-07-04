@@ -23,36 +23,45 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_qestn")
-@IdClass(QestnPK.class)
-@SequenceGenerator(name = "qestn_sn_seq", sequenceName = "tb_qestn_qestn_sn_seq", initialValue = 1, allocationSize = 1)
-public class QestnEntity extends BaseEntity {
+@Table(name = "tb_vote_qestn_iem")
+@IdClass(VoteQestnIemPK.class)
+@SequenceGenerator(name = "iem_sn_seq", sequenceName = "tb_vote_qestn_iem_iem_sn_seq", initialValue = 1, allocationSize = 1)
+public class VoteQestnIemEntity extends BaseEntity {
 
   /**
-   * 질문일련번호
+   * 항목일련번호
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "qestn_sn_seq")
-  @Column(name = "qestn_sn")
-  private Integer qestnSn;
+  @Column(name = "iem_sn")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "iem_sn_seq")
+  private Integer iemSn;
 
   /**
-   * 투표일련번호
+   * 투표 일련번호
    */
   @Id
   @Column(name = "vote_sn")
   private Integer voteSn;
 
   /**
-   * 질문내용
+   * 질문일련번호
    */
-  @Column(name = "qestn_cn")
-  private String qestnCn;
+  @Id
+  @Column(name = "qestn_sn")
+  private Integer qestnSn;
+
 
   /**
-   * 복수선택여부
+   * 항목명
    */
-  @Column(name = "compno_choise_at")
-  private String compnoChoiseAt;
+  @Column(name = "iem_nm")
+  private String iemNm;
+
+
+  /**
+   * 항목식별ID
+   */
+  @Column(name = "iem_idntfc_id")
+  private String iemIdntfcId;
 
 }

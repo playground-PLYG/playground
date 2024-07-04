@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.playground.api.vote.model.QestnAnswerRequest;
-import com.playground.api.vote.model.QestnAnswerResponse;
+import com.playground.api.vote.model.VoteAnswerRequest;
+import com.playground.api.vote.model.VoteAnswerResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteResponse;
 import com.playground.api.vote.service.AnswerService;
@@ -31,7 +31,7 @@ public class AnswerController {
    */
   @Operation(summary = "중복투표여부 조회", description = "회원아이디로 검색해서 투표가 중복인지 여부 조회")
   @PostMapping("/public/voteAnswer/isDuplicateVote")
-  public Boolean isDuplicateVote(@RequestBody @Valid QestnAnswerRequest reqData) {
+  public Boolean isDuplicateVote(@RequestBody @Valid VoteAnswerRequest reqData) {
     return answerService.isDuplicateVote(reqData);
   }
 
@@ -49,7 +49,7 @@ public class AnswerController {
    */
   @Operation(summary = "답변조회", description = "답변정보를 조회")
   @PostMapping("/public/voteAnswer/getAnswer")
-  public List<QestnAnswerResponse> getAnswer(@RequestBody @Valid QestnAnswerRequest reqData) {
+  public List<VoteAnswerResponse> getAnswer(@RequestBody @Valid VoteAnswerRequest reqData) {
     log.debug("############## request ::: {}", reqData);
     return answerService.getAnswer(reqData);
   }
@@ -59,7 +59,7 @@ public class AnswerController {
    */
   @Operation(summary = "답변등록", description = "답변정보를 등록하는 api")
   @PostMapping("/public/voteAnswer/addAnswer")
-  public List<QestnAnswerResponse> addAnswer(@RequestBody @Valid List<QestnAnswerRequest> reqDataList) {
+  public List<VoteAnswerResponse> addAnswer(@RequestBody @Valid List<VoteAnswerRequest> reqDataList) {
     return answerService.addAnswer(reqDataList);
   }
 
@@ -68,7 +68,7 @@ public class AnswerController {
    */
   @Operation(summary = "답변수정", description = "사용자가 답변을 수정")
   @PutMapping("/public/voteAnswer/modifyAnswer")
-  public List<QestnAnswerResponse> modifyAnswer(@RequestBody @Valid List<QestnAnswerRequest> reqDataList) {
+  public List<VoteAnswerResponse> modifyAnswer(@RequestBody @Valid List<VoteAnswerRequest> reqDataList) {
     return answerService.modifyAnswer(reqDataList);
   }
 
@@ -77,7 +77,7 @@ public class AnswerController {
    */
   @Operation(summary = "답변삭제", description = "사용자가 답변을 삭제..? 해당 API 는 사용 안할 것 같음")
   @DeleteMapping("/public/voteAnswer/removeAnswer")
-  public Long removeAnswer(@RequestBody @Valid QestnAnswerRequest qestnAnswerRequest) {
+  public Long removeAnswer(@RequestBody @Valid VoteAnswerRequest qestnAnswerRequest) {
     return answerService.removeAnswer(qestnAnswerRequest);
   }
 

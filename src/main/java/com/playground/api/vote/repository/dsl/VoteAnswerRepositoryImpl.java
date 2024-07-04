@@ -9,10 +9,10 @@ import com.playground.api.statistics.model.StatisticsDetailDetailResponse;
 import com.playground.api.statistics.model.StatisticsDetailResponse;
 import com.playground.api.statistics.model.StatisticsRequest;
 import com.playground.api.statistics.model.StatisticsResponse;
-import com.playground.api.vote.entity.QQestnAnswerEntity;
-import com.playground.api.vote.entity.QQestnEntity;
-import com.playground.api.vote.entity.QVoteIemEntity;
-import com.playground.api.vote.entity.QestnAnswerEntity;
+import com.playground.api.vote.entity.QVoteAnswerEntity;
+import com.playground.api.vote.entity.QVoteQestnEntity;
+import com.playground.api.vote.entity.QVoteQestnIemEntity;
+import com.playground.api.vote.entity.VoteAnswerEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
@@ -22,22 +22,23 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 
-public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
+public class VoteAnswerRepositoryImpl implements VoteAnswerRepositoryCustom {
   private final JPAQueryFactory queryFactory;
-  QQestnAnswerEntity tbQestnAnswer = QQestnAnswerEntity.qestnAnswerEntity;
-  QVoteIemEntity tbQVoteIem = QVoteIemEntity.voteIemEntity;
-  QQestnEntity tbQestn = QQestnEntity.qestnEntity;
+  QVoteAnswerEntity tbQestnAnswer = QVoteAnswerEntity.voteAnswerEntity;
+  QVoteQestnIemEntity tbQVoteIem = QVoteQestnIemEntity.voteQestnIemEntity;
+  QVoteQestnEntity tbQestn = QVoteQestnEntity.voteQestnEntity;
 
   @Override
-  public List<QestnAnswerEntity> findBySsno(QestnAnswerEntity reqData) {
+  public List<VoteAnswerEntity> findBySsno(VoteAnswerEntity reqData) {
     return queryFactory.selectFrom(tbQestnAnswer)
-        .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(checkQestnSSno(reqData.getQestnSn())).and(checkUserID(reqData.getAnswerUserId())))
+        .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(checkQestnSSno(reqData.getQestnSn())).and(checkUserID(reqData.getAnswerUsrId())))
         .orderBy(tbQestnAnswer.voteSn.asc(), tbQestnAnswer.qestnSn.asc()).fetch();
   }
 
   @Override
   public Long deleteBySsno(Integer answerSsno) {
-    return queryFactory.delete(tbQestnAnswer).where(tbQestnAnswer.answerSn.eq(answerSsno)).execute();
+    return queryFactory.delete(tbQestnAnswer)// .where(tbQestnAnswer.answerSn.eq(answerSsno))
+        .execute();
   }
 
   private BooleanExpression checkQestnSSno(Integer qestionSsno) {
@@ -51,18 +52,17 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
     if (ObjectUtils.isEmpty(answerUserId)) {
       return null;
     }
-    return tbQestnAnswer.answerUserId.eq(answerUserId);
+    return tbQestnAnswer.answerUsrId.eq(answerUserId);
   }
 
   @Override
-  public QestnAnswerEntity selectByEntity(QestnAnswerEntity reqData) {
+  public VoteAnswerEntity selectByEntity(VoteAnswerEntity reqData) {
     return queryFactory.selectFrom(tbQestnAnswer)
-        .where(tbQestnAnswer.answerSn.eq(reqData.getAnswerSn()).and(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()))
-            .and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))
+        .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))
             .and(checkAnonymous(
-                queryFactory.select(tbQestnAnswer.answerUserId).from(tbQestnAnswer).where(tbQestnAnswer.answerSn.eq(reqData.getAnswerSn())
-                    .and(tbQestnAnswer.voteSn.eq(reqData.getVoteSn())).and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))).fetchOne(),
-                reqData.getAnswerUserId())))
+                queryFactory.select(tbQestnAnswer.answerUsrId).from(tbQestnAnswer)
+                    .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))).fetchOne(),
+                reqData.getAnswerUsrId())))
         .fetchOne();
   }
 
@@ -72,14 +72,14 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
     } else if ("anonymous".equals(tbAnswerUserId)) {
       return tbQestnAnswer.registUsrId.eq(reqAnswerUserId);
     } else {
-      return tbQestnAnswer.answerUserId.eq(reqAnswerUserId);
+      return tbQestnAnswer.answerUsrId.eq(reqAnswerUserId);
     }
   }
 
   @Override
   public Long selectByAnswerUserId(Integer voteSsno, String answerUserId) {
     return queryFactory.select(Wildcard.count).from(tbQestnAnswer)
-        .where(tbQestnAnswer.voteSn.eq(voteSsno).and(tbQestnAnswer.answerUserId.eq(answerUserId))).fetchOne();
+        .where(tbQestnAnswer.voteSn.eq(voteSsno).and(tbQestnAnswer.answerUsrId.eq(answerUserId))).fetchOne();
   }
 
   @Override
@@ -102,33 +102,10 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
   public StatisticsResponse selectVoteStatistics(StatisticsRequest reqData) {
     Long totalVoteCount = queryFactory.select(Wildcard.count).from(tbQestnAnswer).where(tbQestnAnswer.voteSn.eq(reqData.getVoteSsno())).fetchOne();
 
-    Long totalVoterCount = queryFactory.select(tbQestnAnswer.answerUserId.countDistinct()).from(tbQestnAnswer)
+    Long totalVoterCount = queryFactory.select(tbQestnAnswer.answerUsrId.countDistinct()).from(tbQestnAnswer)
         .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSsno())).fetchOne();
 
     Long questionCount = queryFactory.select(Wildcard.count).from(tbQestn).where(tbQestn.voteSn.eq(reqData.getVoteSsno())).fetchOne();
-
-    // List<StatisticsDetailResponse> detailResponse = queryFactory.select(
-    // Projections.fields(StatisticsDetailResponse.class,
-    // tbQestnAnswer.qestnSn.as("questionSsno"),
-    // tbQestnAnswer.iemSn.as("itemSsno"),
-    // Wildcard.count.as("itemCount"),
-    // tbQVoteIem.iemNm.as("itemName"),
-    // tbQestn.qestnCn.as("questionContents")))
-    // .from(tbQestnAnswer)
-    // .join(tbQVoteIem)
-    // .on(tbQestnAnswer.voteSn.eq(tbQVoteIem.voteSn)
-    // .and(tbQestnAnswer.qestnSn.eq(tbQVoteIem.qestnSn))
-    // .and(tbQestnAnswer.iemSn.eq(tbQVoteIem.iemSn)))
-    // .join(tbQestn)
-    // .on(tbQestnAnswer.voteSn.eq(tbQestn.voteSn)
-    // .and(tbQestnAnswer.qestnSn.eq(tbQestn.qestnSn)))
-    // .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSsno())
-    // .and(checkQestnSSnoAtStatistic(reqData.getQuestionSsno()))
-    // .and(checkItemSSnoAtStatistic(reqData.getItemSsno())))
-    // .groupBy(tbQestnAnswer.qestnSn, tbQestnAnswer.iemSn, tbQVoteIem.iemNm, tbQestn.qestnCn)
-    // .orderBy(tbQestnAnswer.qestnSn.asc(), tbQestnAnswer.iemSn.asc())
-    // .fetch();
-
     return StatisticsResponse.builder().totalVoteCount(totalVoteCount.intValue()).totalVoterCount(totalVoterCount.intValue())
         .questionCount(questionCount.intValue())
         // .staDetailList(detailResponse)
@@ -152,7 +129,7 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
 
   @Override
   public List<String> selectAnswerUserIds(Integer voteSsno, Integer questionSsno, Integer itemSsno) {
-    return queryFactory.select(tbQestnAnswer.answerUserId).from(tbQestnAnswer)
+    return queryFactory.select(tbQestnAnswer.answerUsrId).from(tbQestnAnswer)
         .where(tbQestnAnswer.voteSn.eq(voteSsno).and(tbQestnAnswer.qestnSn.eq(questionSsno)).and(tbQestnAnswer.iemSn.eq(itemSsno))).fetch();
   }
 

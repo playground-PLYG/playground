@@ -38,14 +38,16 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
 
   @Override
   public Page<VoteEntity> getVotePageList(VoteRequest reqData, Pageable pageable) {
-    List<VoteEntity> content = queryFactory
-        .selectFrom(voteEntity).where(firstCnLike(reqData.getVoteKindCode()), secondCnLike(reqData.getVoteSubject()),
-            thirdCnEq(reqData.getAnonymityVoteAlternative()), fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate()))
-        .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+    List<VoteEntity> content = queryFactory.selectFrom(voteEntity).where(// firstCnLike(reqData.getVoteKindCode()),
+        secondCnLike(reqData.getVoteSubject()),
+        // thirdCnEq(reqData.getAnonymityVoteAlternative()),
+        fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate())).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 
-    JPAQuery<Long> countQuery =
-        queryFactory.select(voteEntity.count()).from(voteEntity).where(firstCnLike(reqData.getVoteKindCode()), secondCnLike(reqData.getVoteSubject()),
-            thirdCnEq(reqData.getAnonymityVoteAlternative()), fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate()));
+    JPAQuery<Long> countQuery = queryFactory.select(voteEntity.count()).from(voteEntity).where(
+        // firstCnLike(reqData.getVoteKindCode()),
+        secondCnLike(reqData.getVoteSubject()),
+        // thirdCnEq(reqData.getAnonymityVoteAlternative()),
+        fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate()));
 
     return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
   }
@@ -64,14 +66,14 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   }
 
   /* 동적쿼리를 위한 함수 */
-  private BooleanExpression firstCnLike(String firstCn) {
-    if (ObjectUtils.isEmpty(firstCn)) {
-      return null;
-    }
-
-    // return voteEntity.voteKndCode.like("%" + fstCn + "%");
-    return voteEntity.voteKndCode.contains(firstCn);
-  }
+  // private BooleanExpression firstCnLike(String firstCn) {
+  // if (ObjectUtils.isEmpty(firstCn)) {
+  // return null;
+  // }
+  //
+  //
+  // return voteEntity.voteKndCode.contains(firstCn); // voteEntity.voteKndCode.like("%" + fstCn + "%");
+  // }
 
   private BooleanExpression secondCnLike(String secondCn) {
     if (ObjectUtils.isEmpty(secondCn)) {
@@ -81,13 +83,13 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
     return voteEntity.voteSj.contains(secondCn);
   }
 
-  private BooleanExpression thirdCnEq(String thirdCn) {
-    if (ObjectUtils.isEmpty(thirdCn)) {
-      return null;
-    }
-
-    return voteEntity.annymtyVoteAt.eq(thirdCn);
-  }
+  // private BooleanExpression thirdCnEq(String thirdCn) {
+  // if (ObjectUtils.isEmpty(thirdCn)) {
+  // return null;
+  // }
+  //
+  // return voteEntity.annymtyVoteAt.eq(thirdCn);
+  // }
 
   private BooleanExpression fourthCnEq(String startDate, String finDate) {
     boolean sdBoo = true;
@@ -125,8 +127,8 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   @Override
   public Long updateByIdForVote(VoteRequest reqData) {
     LocalDateTime nowDateTime = LocalDateTime.now();
-    return queryFactory.update(voteEntity).set(voteEntity.voteDeleteAt, reqData.getVoteDeleteAlternative()).set(voteEntity.updtDt, nowDateTime)
-        .where(voteEntity.voteSn.eq(reqData.getVoteSsno())).execute();
+    return queryFactory.update(voteEntity)// .set(voteEntity.voteDeleteAt, reqData.getVoteDeleteAlternative())
+        .set(voteEntity.updtDt, nowDateTime).where(voteEntity.voteSn.eq(reqData.getVoteSsno())).execute();
   }
 
   @Override

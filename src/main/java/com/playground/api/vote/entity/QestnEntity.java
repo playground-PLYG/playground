@@ -44,15 +44,28 @@ public class QestnEntity extends BaseEntity {
   private Integer voteSn;
 
   /**
-   * 질문내용
+   * 투표종류코드
    */
-  @Column(name = "qestn_cn")
-  private String qestnCn;
+  @Column(name = "vote_knd_code")
+  private String voteKndCode;
 
   /**
    * 복수선택여부
    */
   @Column(name = "compno_choise_at")
   private String compnoChoiseAt;
+
+  /**
+   * 익명투표여부
+   */
+  @Column(name = "annymty_vote_at")
+  private String annymtyVoteAt;
+
+
+  /**
+   * 질문내용
+   */
+  @Column(name = "qestn_cn")
+  private String qestnCn;
 
 }

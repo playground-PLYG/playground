@@ -20,9 +20,9 @@ public class QestnAnswerPK implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 답변일련번호
+   * 답변사용자ID
    */
-  private Integer answerSn;
+  private String answerUsrId;
 
   /**
    * 질문일련번호
@@ -35,7 +35,7 @@ public class QestnAnswerPK implements Serializable {
   private Integer voteSn;
 
   /**
-   * 항목ID
+   * 항목일련번호
    */
   private Integer iemSn;
 }

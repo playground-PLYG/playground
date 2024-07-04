@@ -31,13 +31,14 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
   @Override
   public List<QestnAnswerEntity> findBySsno(QestnAnswerEntity reqData) {
     return queryFactory.selectFrom(tbQestnAnswer)
-        .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(checkQestnSSno(reqData.getQestnSn())).and(checkUserID(reqData.getAnswerUserId())))
+        .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(checkQestnSSno(reqData.getQestnSn())).and(checkUserID(reqData.getAnswerUsrId())))
         .orderBy(tbQestnAnswer.voteSn.asc(), tbQestnAnswer.qestnSn.asc()).fetch();
   }
 
   @Override
   public Long deleteBySsno(Integer answerSsno) {
-    return queryFactory.delete(tbQestnAnswer).where(tbQestnAnswer.answerSn.eq(answerSsno)).execute();
+    return queryFactory.delete(tbQestnAnswer)// .where(tbQestnAnswer.answerSn.eq(answerSsno))
+        .execute();
   }
 
   private BooleanExpression checkQestnSSno(Integer qestionSsno) {
@@ -51,18 +52,17 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
     if (ObjectUtils.isEmpty(answerUserId)) {
       return null;
     }
-    return tbQestnAnswer.answerUserId.eq(answerUserId);
+    return tbQestnAnswer.answerUsrId.eq(answerUserId);
   }
 
   @Override
   public QestnAnswerEntity selectByEntity(QestnAnswerEntity reqData) {
     return queryFactory.selectFrom(tbQestnAnswer)
-        .where(tbQestnAnswer.answerSn.eq(reqData.getAnswerSn()).and(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()))
-            .and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))
+        .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))
             .and(checkAnonymous(
-                queryFactory.select(tbQestnAnswer.answerUserId).from(tbQestnAnswer).where(tbQestnAnswer.answerSn.eq(reqData.getAnswerSn())
-                    .and(tbQestnAnswer.voteSn.eq(reqData.getVoteSn())).and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))).fetchOne(),
-                reqData.getAnswerUserId())))
+                queryFactory.select(tbQestnAnswer.answerUsrId).from(tbQestnAnswer)
+                    .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))).fetchOne(),
+                reqData.getAnswerUsrId())))
         .fetchOne();
   }
 
@@ -72,14 +72,14 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
     } else if ("anonymous".equals(tbAnswerUserId)) {
       return tbQestnAnswer.registUsrId.eq(reqAnswerUserId);
     } else {
-      return tbQestnAnswer.answerUserId.eq(reqAnswerUserId);
+      return tbQestnAnswer.answerUsrId.eq(reqAnswerUserId);
     }
   }
 
   @Override
   public Long selectByAnswerUserId(Integer voteSsno, String answerUserId) {
     return queryFactory.select(Wildcard.count).from(tbQestnAnswer)
-        .where(tbQestnAnswer.voteSn.eq(voteSsno).and(tbQestnAnswer.answerUserId.eq(answerUserId))).fetchOne();
+        .where(tbQestnAnswer.voteSn.eq(voteSsno).and(tbQestnAnswer.answerUsrId.eq(answerUserId))).fetchOne();
   }
 
   @Override
@@ -102,7 +102,7 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
   public StatisticsResponse selectVoteStatistics(StatisticsRequest reqData) {
     Long totalVoteCount = queryFactory.select(Wildcard.count).from(tbQestnAnswer).where(tbQestnAnswer.voteSn.eq(reqData.getVoteSsno())).fetchOne();
 
-    Long totalVoterCount = queryFactory.select(tbQestnAnswer.answerUserId.countDistinct()).from(tbQestnAnswer)
+    Long totalVoterCount = queryFactory.select(tbQestnAnswer.answerUsrId.countDistinct()).from(tbQestnAnswer)
         .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSsno())).fetchOne();
 
     Long questionCount = queryFactory.select(Wildcard.count).from(tbQestn).where(tbQestn.voteSn.eq(reqData.getVoteSsno())).fetchOne();
@@ -152,7 +152,7 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
 
   @Override
   public List<String> selectAnswerUserIds(Integer voteSsno, Integer questionSsno, Integer itemSsno) {
-    return queryFactory.select(tbQestnAnswer.answerUserId).from(tbQestnAnswer)
+    return queryFactory.select(tbQestnAnswer.answerUsrId).from(tbQestnAnswer)
         .where(tbQestnAnswer.voteSn.eq(voteSsno).and(tbQestnAnswer.qestnSn.eq(questionSsno)).and(tbQestnAnswer.iemSn.eq(itemSsno))).fetch();
   }
 

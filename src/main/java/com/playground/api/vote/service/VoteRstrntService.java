@@ -73,8 +73,10 @@ public class VoteRstrntService {
     }
 
     // 1. tb_vote 테이블 등록
-    VoteEntity resVote = voteRepository.save(VoteEntity.builder().voteKndCode("LUN").voteSj(formatedNow + " 점심 투표").annymtyVoteAt(annymtyYn)
-        .voteBeginDt(now).voteEndDt(now.plusDays(1)).voteDeleteAt("N").build());
+    VoteEntity resVote = voteRepository.save(VoteEntity.builder()// .voteKndCode("LUN")
+        .voteSj(formatedNow + " 점심 투표")// .annymtyVoteAt(annymtyYn)
+        .voteBeginDt(now).voteEndDt(now.plusDays(1))// .voteDeleteAt("N")
+        .build());
 
 
     // 2. tb_qestn 테이블 등록

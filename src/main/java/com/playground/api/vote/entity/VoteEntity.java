@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,34 +24,22 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "tb_vote")
+@SequenceGenerator(name = "vote_sn_seq", sequenceName = "tb_vote_vote_sn_seq", initialValue = 1, allocationSize = 1)
 public class VoteEntity extends BaseEntity {
 
   /**
    * 투표일련번호
    */
-
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vote_sn_seq")
   @Column(name = "vote_sn")
   private Integer voteSn;
-
-  /**
-   * 투표종류코드
-   */
-  @Column(name = "vote_knd_code")
-  private String voteKndCode;
 
   /**
    * 투표제목
    */
   @Column(name = "vote_sj")
   private String voteSj;
-
-  /**
-   * 익명투표여부
-   */
-  @Column(name = "annymty_vote_at")
-  private String annymtyVoteAt;
 
   /**
    * 투표시작일시
@@ -65,18 +54,21 @@ public class VoteEntity extends BaseEntity {
   private LocalDateTime voteEndDt;
 
   /**
-   * 투표삭제여부
+   * 투표노출여부
    */
-  @Column(name = "vote_delete_at")
-  private String voteDeleteAt;
+  @Column(name = "vote_expsr_at")
+  private String voteExpsrAt;
 
+  /**
+   * 투표전송여부
+   */
+  @Column(name = "vote_trnsmin_at")
+  private String voteTrnsminAt;
 
-  // @OneToMany
-  // @JoinColumn(name = "qestn_sn")
-  // private List<QestnEntity> qestnList;
-
-  // @OneToMany
-  // @JoinColumn(name="vote_sn")
-  // private List<VoteIemEntity> voteIemList;
+  /**
+   * 투표전송코드
+   */
+  @Column(name = "vote_trnsmin_code")
+  private String voteTrnsminCode;
 
 }

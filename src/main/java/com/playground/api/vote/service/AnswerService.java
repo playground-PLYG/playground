@@ -44,9 +44,10 @@ public class AnswerService {
   public VoteResponse getVoteDetail(VoteRequest reqData) {
     if (!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
       VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
-      VoteResponse voteResponse = VoteResponse.builder().voteSsno(voteEntity.getVoteSn()).voteKindCode(voteEntity.getVoteKndCode())
-          .voteSubject(voteEntity.getVoteSj()).anonymityVoteAlternative(voteEntity.getAnnymtyVoteAt()).voteBeginDate(voteEntity.getVoteBeginDt())
-          .voteEndDate(voteEntity.getVoteEndDt()).voteDeleteAlternative(voteEntity.getVoteDeleteAt()).build();
+      VoteResponse voteResponse = VoteResponse.builder().voteSsno(voteEntity.getVoteSn())// .voteKindCode(voteEntity.getVoteKndCode())
+          .voteSubject(voteEntity.getVoteSj())// .anonymityVoteAlternative(voteEntity.getAnnymtyVoteAt())
+          .voteBeginDate(voteEntity.getVoteBeginDt()).voteEndDate(voteEntity.getVoteEndDt())// .voteDeleteAlternative(voteEntity.getVoteDeleteAt())
+          .build();
 
       List<QestnResponse> qestnResponseList = voteRepository.getQestnDetail(reqData.getVoteSsno(), reqData.getQuestionSsno());
       if (qestnResponseList.size() != 0) {
@@ -65,10 +66,15 @@ public class AnswerService {
     List<QestnAnswerEntity> qestnAnswerEntities =
         qestnAnswerRepository.findBySsno(QestnAnswerEntity.builder().voteSn(reqData.getVoteSsno()).qestnSn(reqData.getQuestionSsno()).build());
 
-    return qestnAnswerEntities.stream()
-        .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-            .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn()).build())
-        .toList();
+    // return qestnAnswerEntities.stream()
+    // .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
+    // .itemSsno(entity.getIemSn()).answerUsrId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn()).build())
+    // .toList();
+
+
+    // 임시 조치
+    List<QestnAnswerResponse> tempList = new ArrayList<>();
+    return tempList;
   }
 
 
@@ -77,38 +83,50 @@ public class AnswerService {
     List<QestnAnswerEntity> resEntityList = new ArrayList<>();
     reqDataList.forEach(req -> {
       resEntityList.add(QestnAnswerEntity.builder().voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno()).iemSn(req.getItemSsno())
-          .answerUserId(StringUtils.defaultString(req.getAnswerUserId())).answerCn(StringUtils.defaultString(req.getAnswerContents())).build());
+          // .answerUserId(StringUtils.defaultString(req.getAnswerUserId())).answerCn(StringUtils.defaultString(req.getAnswerContents()))
+          .build());
     });
 
     List<QestnAnswerEntity> saveAllEntities = qestnAnswerRepository.saveAll(resEntityList);
-    return saveAllEntities.stream()
-        .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-            .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn()).build())
-        .toList();
+    // return saveAllEntities.stream()
+    // .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
+    // .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUsrId()).answerContents(entity.getAnswerCn()).build())
+    // .toList();
+
+    // 임시 조치
+    List<QestnAnswerResponse> tempList = new ArrayList<>();
+    return tempList;
   }
 
   @Transactional
   public List<QestnAnswerResponse> modifyAnswer(List<QestnAnswerRequest> reqDataList) {
     List<QestnAnswerEntity> resEntityList = new ArrayList<>();
     reqDataList.forEach(req -> {
-      QestnAnswerEntity reqAnswer = QestnAnswerEntity.builder().answerSn(req.getAnswerSsno()).voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno())
-          .answerUserId(StringUtils.defaultString(req.getAnswerUserId())).iemSn(req.getItemSsno())
-          .answerCn(StringUtils.defaultString(req.getAnswerContents())).build();
+      QestnAnswerEntity reqAnswer = QestnAnswerEntity.builder()// .answerSn(req.getAnswerSsno())
+          .voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno())
+          // .answerUsrId(StringUtils.defaultString(req.getAnswerUserId()))
+          .iemSn(req.getItemSsno())
+          // .answerCn(StringUtils.defaultString(req.getAnswerContents()))
+          .build();
 
       QestnAnswerEntity resAnswer = qestnAnswerRepository.selectByEntity(reqAnswer);
 
       if (!ObjectUtils.isEmpty(resAnswer)) {
-        qestnAnswerRepository.deleteById(QestnAnswerPK.builder().answerSn(resAnswer.getAnswerSn()).voteSn(resAnswer.getVoteSn())
-            .qestnSn(resAnswer.getQestnSn()).iemSn(resAnswer.getIemSn()).build());
+        qestnAnswerRepository.deleteById(QestnAnswerPK.builder()// .answerSn(resAnswer.getAnswerSn())
+            .voteSn(resAnswer.getVoteSn()).qestnSn(resAnswer.getQestnSn()).iemSn(resAnswer.getIemSn()).build());
       }
       QestnAnswerEntity saveAnswer = qestnAnswerRepository.save(reqAnswer);
       resEntityList.add(saveAnswer);
     });
 
-    return resEntityList.stream()
-        .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-            .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn()).build())
-        .toList();
+    // return resEntityList.stream()
+    // .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
+    // .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUsrId()).answerContents(entity.getAnswerCn()).build())
+    // .toList();
+
+    // 임시 조치
+    List<QestnAnswerResponse> tempList = new ArrayList<>();
+    return tempList;
   }
 
   @Transactional

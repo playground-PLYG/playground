@@ -20,7 +20,7 @@ public class VoteIemPK implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 항목ID
+   * 항목일련번호
    */
   private Integer iemSn;
 

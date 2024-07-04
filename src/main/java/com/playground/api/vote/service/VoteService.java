@@ -51,8 +51,7 @@ public class VoteService {
     // .map(entity -> VoteResponse.builder().voteSsno(entity.getVoteSn()).voteKindCode(entity.getVoteKndCode()).voteSubject(entity.getVoteSj())
     // .anonymityVoteAlternative(entity.getAnnymtyVoteAt()).voteBeginDate(entity.getVoteBeginDt()).voteEndDate(entity.getVoteEndDt())
     // .voteDeleteAlternative(entity.getVoteDeleteAt()).registUsrId(entity.getRegistUsrId()).registDt(entity.getRegistDt())
-    // .updtUsrId(entity.getUpdtUsrId()).updtDt(entity.getUpdtDt()).build())
-    // .toList();
+    // .updtUsrId(entity.getUpdtUsrId()).updtDt(entity.getUpdtDt()).build()).toList();
 
     // 임시조치
     List<VoteResponse> voteList = new ArrayList<>();
@@ -69,12 +68,9 @@ public class VoteService {
 
       modelMapper.typeMap(VoteEntity.class, VoteResponse.class).addMappings(mapper -> {
         mapper.map(VoteEntity::getVoteSn, VoteResponse::setVoteSsno);
-        // mapper.map(VoteEntity::getVoteKndCode, VoteResponse::setVoteKindCode);
         mapper.map(VoteEntity::getVoteSj, VoteResponse::setVoteSubject);
-        // mapper.map(VoteEntity::getAnnymtyVoteAt, VoteResponse::setAnonymityVoteAlternative);
         mapper.map(VoteEntity::getVoteBeginDt, VoteResponse::setVoteBeginDate);
         mapper.map(VoteEntity::getVoteEndDt, VoteResponse::setVoteEndDate);
-        // mapper.map(VoteEntity::getVoteDeleteAt, VoteResponse::setVoteDeleteAlternative);
       });
 
       VoteResponse voteResponse = modelMapper.map(voteEntity, VoteResponse.class);
@@ -100,12 +96,9 @@ public class VoteService {
     // builder 대신 modelMapper 사용해보기
     modelMapper.typeMap(VoteEntity.class, VoteResponse.class).addMappings(mapper -> {
       mapper.map(VoteEntity::getVoteSn, VoteResponse::setVoteSsno);
-      // mapper.map(VoteEntity::getVoteKndCode, VoteResponse::setVoteKindCode);
       mapper.map(VoteEntity::getVoteSj, VoteResponse::setVoteSubject);
-      // mapper.map(VoteEntity::getAnnymtyVoteAt, VoteResponse::setAnonymityVoteAlternative);
       mapper.map(VoteEntity::getVoteBeginDt, VoteResponse::setVoteBeginDate);
       mapper.map(VoteEntity::getVoteEndDt, VoteResponse::setVoteEndDate);
-      // mapper.map(VoteEntity::getVoteDeleteAt, VoteResponse::setVoteDeleteAlternative);
     });
 
     VoteEntity voteEntity = voteRepository.save(VoteEntity.builder().voteSj(reqData.getVoteSubject()) // .voteKndCode(reqData.getVoteKindCode())

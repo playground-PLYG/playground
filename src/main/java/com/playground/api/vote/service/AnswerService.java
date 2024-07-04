@@ -63,8 +63,8 @@ public class AnswerService {
   @Transactional(readOnly = true)
   public List<QestnAnswerResponse> getAnswer(QestnAnswerRequest reqData) {
     log.debug("AnswerService.getAnswer ::: request ::: {}", reqData);
-    List<QestnAnswerEntity> qestnAnswerEntities =
-        qestnAnswerRepository.findBySsno(QestnAnswerEntity.builder().voteSn(reqData.getVoteSsno()).qestnSn(reqData.getQuestionSsno()).build());
+    // List<QestnAnswerEntity> qestnAnswerEntities =
+    // qestnAnswerRepository.findBySsno(QestnAnswerEntity.builder().voteSn(reqData.getVoteSsno()).qestnSn(reqData.getQuestionSsno()).build());
 
     // return qestnAnswerEntities.stream()
     // .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
@@ -87,15 +87,14 @@ public class AnswerService {
           .build());
     });
 
-    List<QestnAnswerEntity> saveAllEntities = qestnAnswerRepository.saveAll(resEntityList);
+    // List<QestnAnswerEntity> saveAllEntities = qestnAnswerRepository.saveAll(resEntityList);
     // return saveAllEntities.stream()
     // .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
     // .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUsrId()).answerContents(entity.getAnswerCn()).build())
     // .toList();
 
     // 임시 조치
-    List<QestnAnswerResponse> tempList = new ArrayList<>();
-    return tempList;
+    return new ArrayList<QestnAnswerResponse>();
   }
 
   @Transactional
@@ -125,8 +124,7 @@ public class AnswerService {
     // .toList();
 
     // 임시 조치
-    List<QestnAnswerResponse> tempList = new ArrayList<>();
-    return tempList;
+    return new ArrayList<QestnAnswerResponse>();
   }
 
   @Transactional

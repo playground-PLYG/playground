@@ -66,15 +66,6 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   }
 
   /* 동적쿼리를 위한 함수 */
-  // private BooleanExpression firstCnLike(String firstCn) {
-  // if (ObjectUtils.isEmpty(firstCn)) {
-  // return null;
-  // }
-  //
-  //
-  // return voteEntity.voteKndCode.contains(firstCn); // voteEntity.voteKndCode.like("%" + fstCn + "%");
-  // }
-
   private BooleanExpression secondCnLike(String secondCn) {
     if (ObjectUtils.isEmpty(secondCn)) {
       return null;
@@ -82,14 +73,6 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
 
     return voteEntity.voteSj.contains(secondCn);
   }
-
-  // private BooleanExpression thirdCnEq(String thirdCn) {
-  // if (ObjectUtils.isEmpty(thirdCn)) {
-  // return null;
-  // }
-  //
-  // return voteEntity.annymtyVoteAt.eq(thirdCn);
-  // }
 
   private BooleanExpression fourthCnEq(String startDate, String finDate) {
     boolean sdBoo = true;

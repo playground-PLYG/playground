@@ -23,10 +23,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_vote_iem")
-@IdClass(VoteIemPK.class)
-@SequenceGenerator(name = "iem_sn_seq", sequenceName = "tb_vote_iem_iem_sn_seq", initialValue = 1, allocationSize = 1)
-public class VoteIemEntity extends BaseEntity {
+@Table(name = "tb_vote_qestn_iem")
+@IdClass(VoteQestnIemPK.class)
+@SequenceGenerator(name = "iem_sn_seq", sequenceName = "tb_vote_qestn_iem_iem_sn_seq", initialValue = 1, allocationSize = 1)
+public class VoteQestnIemEntity extends BaseEntity {
 
   /**
    * 항목일련번호

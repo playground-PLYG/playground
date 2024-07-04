@@ -17,16 +17,16 @@ import org.springframework.util.ObjectUtils;
 import com.playground.api.message.model.DiscordEmbedRequest;
 import com.playground.api.message.model.DiscordRequest;
 import com.playground.api.message.service.MessageService;
-import com.playground.api.vote.entity.QestnEntity;
 import com.playground.api.vote.entity.VoteEntity;
-import com.playground.api.vote.entity.VoteIemEntity;
-import com.playground.api.vote.model.QestnRequest;
-import com.playground.api.vote.model.QestnResponse;
-import com.playground.api.vote.model.VoteIemResponse;
+import com.playground.api.vote.entity.VoteQestnEntity;
+import com.playground.api.vote.entity.VoteQestnIemEntity;
+import com.playground.api.vote.model.VoteQestnIemResponse;
+import com.playground.api.vote.model.VoteQestnRequest;
+import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteResponse;
-import com.playground.api.vote.repository.QestnRepository;
-import com.playground.api.vote.repository.VoteIemRepository;
+import com.playground.api.vote.repository.VoteQestnIemRepository;
+import com.playground.api.vote.repository.VoteQestnRepository;
 import com.playground.api.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VoteService {
   private final VoteRepository voteRepository;
-  private final QestnRepository qestnRepository;
-  private final VoteIemRepository voteIemRepository;
+  private final VoteQestnRepository qestnRepository;
+  private final VoteQestnIemRepository voteIemRepository;
   private final ModelMapper modelMapper;
   private final MessageService messageService;
 
@@ -68,7 +68,7 @@ public class VoteService {
 
       VoteResponse voteResponse = modelMapper.map(voteEntity, VoteResponse.class);
 
-      List<QestnResponse> qestnResponseList = voteRepository.getQestnDetail(reqData.getVoteSsno(), reqData.getQuestionSsno());
+      List<VoteQestnResponse> qestnResponseList = voteRepository.getQestnDetail(reqData.getVoteSsno(), reqData.getQuestionSsno());
       if (qestnResponseList.size() != 0) {
         voteResponse.setQestnResponseList(qestnResponseList);
       }
@@ -101,26 +101,26 @@ public class VoteService {
 
     voteResponse = modelMapper.map(voteEntity, VoteResponse.class);
 
-    List<QestnResponse> setQestnList = new ArrayList<>();
+    List<VoteQestnResponse> setQestnList = new ArrayList<>();
     if (!ObjectUtils.isEmpty(reqData.getQestnRequestList())) {
-      List<QestnRequest> qestnReList = reqData.getQestnRequestList();
+      List<VoteQestnRequest> qestnReList = reqData.getQestnRequestList();
       qestnReList.forEach(qestn -> {
-        QestnEntity qestnRes = qestnRepository.save(QestnEntity.builder().voteSn(voteEntity.getVoteSn()).qestnCn(qestn.getQuestionContents())
+        VoteQestnEntity qestnRes = qestnRepository.save(VoteQestnEntity.builder().voteSn(voteEntity.getVoteSn()).qestnCn(qestn.getQuestionContents())
             .compnoChoiseAt(qestn.getCompoundNumberChoiceAlternative()).build());
 
-        QestnResponse setQestn = QestnResponse.builder().questionSsno(qestnRes.getQestnSn()).voteSsno(qestnRes.getVoteSn())
+        VoteQestnResponse setQestn = VoteQestnResponse.builder().questionSsno(qestnRes.getQestnSn()).voteSsno(qestnRes.getVoteSn())
             .questionContents(qestnRes.getQestnCn()).compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt()).build();
 
         if (!ObjectUtils.isEmpty(qestn.getVoteIemRequestList())) {
-          List<VoteIemEntity> iemEntities = new ArrayList<>();
+          List<VoteQestnIemEntity> iemEntities = new ArrayList<>();
           qestn.getVoteIemRequestList().forEach(voteIem -> {
-            iemEntities.add(VoteIemEntity.builder().voteSn(qestnRes.getVoteSn()).qestnSn(qestnRes.getQestnSn()).iemSn(voteIem.getItemSsno())
+            iemEntities.add(VoteQestnIemEntity.builder().voteSn(qestnRes.getVoteSn()).qestnSn(qestnRes.getQestnSn()).iemSn(voteIem.getItemSsno())
                 .iemNm(voteIem.getItemName()).build());
           });
 
-          List<VoteIemEntity> saveAllIemEntities = voteIemRepository.saveAll(iemEntities);
+          List<VoteQestnIemEntity> saveAllIemEntities = voteIemRepository.saveAll(iemEntities);
           setQestn.setVoteIemResponseList(saveAllIemEntities.stream()
-              .map(entity -> VoteIemResponse.builder().itemSsno(entity.getIemSn()).itemName(entity.getIemNm()).build()).toList());
+              .map(entity -> VoteQestnIemResponse.builder().itemSsno(entity.getIemSn()).itemName(entity.getIemNm()).build()).toList());
 
         }
         setQestnList.add(setQestn);
@@ -160,17 +160,17 @@ public class VoteService {
         .build();
 
     // voteEntity 에서 기존에 있었던 questionSsno 랑 reqData 로 들어온 queestionSsno랑 비교해서
-    List<QestnEntity> prevQestnList = voteRepository.getQestnList(reqData.getVoteSsno());
+    List<VoteQestnEntity> prevQestnList = voteRepository.getQestnList(reqData.getVoteSsno());
     List<Integer> prevQestnSnList = new ArrayList<>();
     List<Integer> afterQestnSnList = new ArrayList<>();
     List<Integer> removeQestnSnList = new ArrayList<>();
     if (!ObjectUtils.isEmpty(prevQestnList)) {
-      for (QestnEntity prev : prevQestnList) {
+      for (VoteQestnEntity prev : prevQestnList) {
         prevQestnSnList.add(prev.getQestnSn());
       }
 
       if (!ObjectUtils.isEmpty(reqData.getQestnRequestList())) {
-        for (QestnRequest after : reqData.getQestnRequestList()) {
+        for (VoteQestnRequest after : reqData.getQestnRequestList()) {
           afterQestnSnList.add(after.getQuestionSsno());
         }
       }
@@ -196,20 +196,20 @@ public class VoteService {
       });
     }
 
-    List<QestnResponse> setQestnList = new ArrayList<>();
+    List<VoteQestnResponse> setQestnList = new ArrayList<>();
     if (!ObjectUtils.isEmpty(reqData.getQestnRequestList())) {
-      List<QestnRequest> qestnReList = reqData.getQestnRequestList();
+      List<VoteQestnRequest> qestnReList = reqData.getQestnRequestList();
       qestnReList.forEach(qestn -> {
-        QestnEntity qestnRes = qestnRepository.save(QestnEntity.builder().qestnSn(qestn.getQuestionSsno()).voteSn(voteEntity.getVoteSn())
+        VoteQestnEntity qestnRes = qestnRepository.save(VoteQestnEntity.builder().qestnSn(qestn.getQuestionSsno()).voteSn(voteEntity.getVoteSn())
             .qestnCn(qestn.getQuestionContents()).compnoChoiseAt(qestn.getCompoundNumberChoiceAlternative()).build());
 
-        QestnResponse setQestn = QestnResponse.builder().questionSsno(qestnRes.getQestnSn()).voteSsno(qestnRes.getVoteSn())
+        VoteQestnResponse setQestn = VoteQestnResponse.builder().questionSsno(qestnRes.getQestnSn()).voteSsno(qestnRes.getVoteSn())
             .questionContents(qestnRes.getQestnCn()).compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt()).build();
 
         if (!ObjectUtils.isEmpty(qestn.getVoteIemRequestList())) {
-          List<VoteIemEntity> iemEntities = new ArrayList<>();
+          List<VoteQestnIemEntity> iemEntities = new ArrayList<>();
           qestn.getVoteIemRequestList().forEach(voteIem -> {
-            iemEntities.add(VoteIemEntity.builder().voteSn(qestnRes.getVoteSn()).qestnSn(qestnRes.getQestnSn()).iemSn(voteIem.getItemSsno())
+            iemEntities.add(VoteQestnIemEntity.builder().voteSn(qestnRes.getVoteSn()).qestnSn(qestnRes.getQestnSn()).iemSn(voteIem.getItemSsno())
                 .iemNm(voteIem.getItemName()).build());
           });
 
@@ -217,9 +217,9 @@ public class VoteService {
           voteRepository.deleteBySsnoForVoteIem(qestnRes.getVoteSn(), qestnRes.getQestnSn());
 
           // 등록
-          List<VoteIemEntity> saveAllIemEntities = voteIemRepository.saveAll(iemEntities);
+          List<VoteQestnIemEntity> saveAllIemEntities = voteIemRepository.saveAll(iemEntities);
           setQestn.setVoteIemResponseList(saveAllIemEntities.stream()
-              .map(entity -> VoteIemResponse.builder().itemSsno(entity.getIemSn()).itemName(entity.getIemNm()).build()).toList());
+              .map(entity -> VoteQestnIemResponse.builder().itemSsno(entity.getIemSn()).itemName(entity.getIemNm()).build()).toList());
         }
         setQestnList.add(setQestn);
       });

@@ -10,7 +10,7 @@ import lombok.Getter;
 @Schema(name = "QestnRequest", description = "질문목록조회 및 등록,수정 요청에 필요한 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public class QestnRequest extends BaseDto {
+public class VoteQestnRequest extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
@@ -43,5 +43,5 @@ public class QestnRequest extends BaseDto {
    * 투표항목 객체
    */
   @Schema(description = "항목객체", example = "voteIemRequest")
-  private List<VoteIemRequest> voteIemRequestList;
+  private List<VoteQestnIemRequest> voteIemRequestList;
 }

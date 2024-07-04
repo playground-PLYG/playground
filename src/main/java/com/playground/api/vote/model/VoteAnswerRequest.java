@@ -9,7 +9,7 @@ import lombok.Getter;
 @Schema(name = "QestnAnswerRequest", description = "사용자 답변들 조회 요청에 필요한 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public class QestnAnswerRequest extends BaseDto {
+public class VoteAnswerRequest extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;

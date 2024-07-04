@@ -21,8 +21,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "tb_qestn_answer")
-@IdClass(QestnAnswerPK.class)
-public class QestnAnswerEntity extends BaseEntity {
+@IdClass(VoteAnswerPK.class)
+public class VoteAnswerEntity extends BaseEntity {
 
   /**
    * 답변사용자ID

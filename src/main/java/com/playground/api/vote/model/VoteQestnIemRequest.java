@@ -3,21 +3,13 @@ package com.playground.api.vote.model;
 import java.io.Serial;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
-@Schema(name = "VoteIemResponse", description = "투표항목조회 및 등록,수정 응답에 필요한 데이터")
-@Builder
-@AllArgsConstructor
-@RequiredArgsConstructor
+@Schema(name = "VoteIemRequest", description = "투표항목조회 및 등록,수정 요청에 필요한 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
-public class VoteIemResponse extends BaseDto {
+public class VoteQestnIemRequest extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
@@ -29,10 +21,10 @@ public class VoteIemResponse extends BaseDto {
   private Integer itemSsno;
 
   /**
-   * 항목명
+   * 투표일련번호
    */
-  @Schema(description = "항목명", example = "또성골뱅이")
-  private String itemName;
+  @Schema(description = "투표일련번호", example = "1234567890")
+  private Integer voteSsno;
 
   /**
    * 질문일련번호
@@ -41,8 +33,8 @@ public class VoteIemResponse extends BaseDto {
   private Integer questionSsno;
 
   /**
-   * 투표일련번호
+   * 항목명
    */
-  @Schema(description = "투표일련번호", example = "1234567890")
-  private Integer voteSsno;
+  @Schema(description = "항목명", example = "또성골뱅이")
+  private String itemName;
 }

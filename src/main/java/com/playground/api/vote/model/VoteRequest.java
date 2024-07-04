@@ -64,5 +64,5 @@ public class VoteRequest extends BaseDto {
   private Integer questionSsno;
 
   @Schema(description = "질문객체", example = "qestnRequest")
-  private List<QestnRequest> qestnRequestList;
+  private List<VoteQestnRequest> qestnRequestList;
 }

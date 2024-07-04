@@ -1,8 +1,6 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
-import java.util.ArrayList;
-import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -12,17 +10,23 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Schema(name = "QestnResponse", description = "질문목록조회 및 등록,수정 응답에 필요한 데이터")
+@Schema(name = "QestnAnswerResponse", description = "사용자 답변들 조회 응답에 필요한 데이터")
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class QestnResponse extends BaseDto {
+public class VoteAnswerResponse extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 답변일련번호
+   */
+  @Schema(description = "답변일련번호", example = "1234567890")
+  private Integer answerSsno;
 
   /**
    * 질문일련번호
@@ -37,21 +41,20 @@ public class QestnResponse extends BaseDto {
   private Integer voteSsno;
 
   /**
-   * 질문내용
+   * 항목ID
    */
-  @Schema(description = "질문내용", example = "회식 가능한 날짜를 선택해주세요")
-  private String questionContents;
+  @Schema(description = "항목ID", example = "0000123456")
+  private Integer itemSsno;
 
   /**
-   * 복수 선택여부
+   * 답변사용자ID
    */
-  @Schema(description = "복수선택여부", example = "Y")
-  private String compoundNumberChoiceAlternative;
+  @Schema(description = "답변사용자ID", example = "sungjong2020")
+  private String answerUserId;
 
   /**
-   * 투표항목 객체
+   * 답변내용
    */
-  @Schema(description = "항목객체", example = "voteIemResponse")
-  @Builder.Default
-  private List<VoteIemResponse> voteIemResponseList = new ArrayList<>();
+  @Schema(description = "답변내용", example = "4월 25일 목요일")
+  private String answerContents;
 }

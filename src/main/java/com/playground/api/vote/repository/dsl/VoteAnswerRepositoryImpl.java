@@ -9,10 +9,10 @@ import com.playground.api.statistics.model.StatisticsDetailDetailResponse;
 import com.playground.api.statistics.model.StatisticsDetailResponse;
 import com.playground.api.statistics.model.StatisticsRequest;
 import com.playground.api.statistics.model.StatisticsResponse;
-import com.playground.api.vote.entity.QQestnAnswerEntity;
-import com.playground.api.vote.entity.QQestnEntity;
-import com.playground.api.vote.entity.QVoteIemEntity;
-import com.playground.api.vote.entity.QestnAnswerEntity;
+import com.playground.api.vote.entity.QVoteAnswerEntity;
+import com.playground.api.vote.entity.QVoteQestnEntity;
+import com.playground.api.vote.entity.QVoteQestnIemEntity;
+import com.playground.api.vote.entity.VoteAnswerEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
@@ -22,14 +22,14 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 
-public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
+public class VoteAnswerRepositoryImpl implements VoteAnswerRepositoryCustom {
   private final JPAQueryFactory queryFactory;
-  QQestnAnswerEntity tbQestnAnswer = QQestnAnswerEntity.qestnAnswerEntity;
-  QVoteIemEntity tbQVoteIem = QVoteIemEntity.voteIemEntity;
-  QQestnEntity tbQestn = QQestnEntity.qestnEntity;
+  QVoteAnswerEntity tbQestnAnswer = QVoteAnswerEntity.voteAnswerEntity;
+  QVoteQestnIemEntity tbQVoteIem = QVoteQestnIemEntity.voteQestnIemEntity;
+  QVoteQestnEntity tbQestn = QVoteQestnEntity.voteQestnEntity;
 
   @Override
-  public List<QestnAnswerEntity> findBySsno(QestnAnswerEntity reqData) {
+  public List<VoteAnswerEntity> findBySsno(VoteAnswerEntity reqData) {
     return queryFactory.selectFrom(tbQestnAnswer)
         .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(checkQestnSSno(reqData.getQestnSn())).and(checkUserID(reqData.getAnswerUsrId())))
         .orderBy(tbQestnAnswer.voteSn.asc(), tbQestnAnswer.qestnSn.asc()).fetch();
@@ -56,7 +56,7 @@ public class QestnAnswerRepositoryImpl implements QestnAnswerRepositoryCustom {
   }
 
   @Override
-  public QestnAnswerEntity selectByEntity(QestnAnswerEntity reqData) {
+  public VoteAnswerEntity selectByEntity(VoteAnswerEntity reqData) {
     return queryFactory.selectFrom(tbQestnAnswer)
         .where(tbQestnAnswer.voteSn.eq(reqData.getVoteSn()).and(tbQestnAnswer.qestnSn.eq(reqData.getQestnSn()))
             .and(checkAnonymous(

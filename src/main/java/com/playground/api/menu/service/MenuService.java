@@ -1,7 +1,10 @@
 package com.playground.api.menu.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +15,7 @@ import com.playground.api.menu.entity.MenuEntity;
 import com.playground.api.menu.model.MenuRequest;
 import com.playground.api.menu.model.MenuResponse;
 import com.playground.api.menu.repository.MenuRepository;
+import com.playground.constants.CacheType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -24,22 +28,23 @@ public class MenuService {
 
   /**
    * 사이드바 노출메뉴 조회
-   * 
+   *
    * @param req
    * @return
    */
+  @Cacheable(cacheManager = CacheType.ONE_HOUR, cacheNames = "menus", key = "#req.mberId", unless = "#result == null")
   @Transactional(readOnly = true)
   public List<MenuResponse> getMenuList(@Valid MberSrchRequest req) {
     List<MenuResponse> upperList = menuRepository.getUpperMenuList(req.getMberId());
     List<MenuResponse> lowerList = menuRepository.getLowerMenuList(req.getMberId());
 
-    return Stream.concat(upperList.stream(), lowerList.stream()).toList();
+    return new ArrayList<>(Stream.concat(upperList.stream(), lowerList.stream()).toList());
   }
 
 
   /**
    * 메뉴 목록 페이지 조회
-   * 
+   *
    * @param pageable
    * @param request
    * @return
@@ -61,7 +66,7 @@ public class MenuService {
 
   /**
    * 메뉴 상세 조회
-   * 
+   *
    * @param upperMenuSn
    * @return
    */
@@ -83,10 +88,11 @@ public class MenuService {
 
   /**
    * 메뉴 등록
-   * 
+   *
    * @param request
    * @return
    */
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public MenuResponse addMenu(MenuRequest request) {
 
@@ -103,10 +109,11 @@ public class MenuService {
 
   /**
    * 메뉴 수정
-   * 
+   *
    * @param request
    * @return
    */
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public MenuResponse modifyMenu(MenuRequest request) {
 
@@ -123,10 +130,11 @@ public class MenuService {
 
   /**
    * 메뉴 삭제
-   * 
+   *
    * @param menuSn
    * @return
    */
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public void removeMenu(List<MenuRequest> request) {
 
@@ -141,10 +149,11 @@ public class MenuService {
 
   /**
    * 메뉴 사용여부 변경
-   * 
+   *
    * @param menuSn
    * @return
    */
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public void modifyUseAtMenu(List<MenuRequest> request) {
 

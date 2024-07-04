@@ -47,16 +47,9 @@ public class VoteService {
   @Transactional(readOnly = true)
   public Page<VoteResponse> getVotePageList(VoteRequest reqData, Pageable pageable) {
     Page<VoteEntity> votePageList = voteRepository.getVotePageList(reqData, pageable);
-    // List<VoteResponse> voteList = votePageList.getContent().stream()
-    // .map(entity -> VoteResponse.builder().voteSsno(entity.getVoteSn()).voteKindCode(entity.getVoteKndCode()).voteSubject(entity.getVoteSj())
-    // .anonymityVoteAlternative(entity.getAnnymtyVoteAt()).voteBeginDate(entity.getVoteBeginDt()).voteEndDate(entity.getVoteEndDt())
-    // .voteDeleteAlternative(entity.getVoteDeleteAt()).registUsrId(entity.getRegistUsrId()).registDt(entity.getRegistDt())
-    // .updtUsrId(entity.getUpdtUsrId()).updtDt(entity.getUpdtDt()).build()).toList();
 
     // 임시조치
     List<VoteResponse> voteList = new ArrayList<>();
-
-
     return new PageImpl<>(voteList, votePageList.getPageable(), votePageList.getTotalElements());
   }
 

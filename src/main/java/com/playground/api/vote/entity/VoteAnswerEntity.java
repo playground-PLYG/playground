@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_qestn_answer")
+@Table(name = "tb_vote_answer")
 @IdClass(VoteAnswerPK.class)
 public class VoteAnswerEntity extends BaseEntity {
 
@@ -46,7 +46,7 @@ public class VoteAnswerEntity extends BaseEntity {
   private Integer qestnSn;
 
   /**
-   * 항목 ID
+   * 항목일련번호
    */
   @Id
   @Column(name = "iem_sn")

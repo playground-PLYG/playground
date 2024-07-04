@@ -63,18 +63,9 @@ public class AnswerService {
   @Transactional(readOnly = true)
   public List<QestnAnswerResponse> getAnswer(QestnAnswerRequest reqData) {
     log.debug("AnswerService.getAnswer ::: request ::: {}", reqData);
-    // List<QestnAnswerEntity> qestnAnswerEntities =
-    // qestnAnswerRepository.findBySsno(QestnAnswerEntity.builder().voteSn(reqData.getVoteSsno()).qestnSn(reqData.getQuestionSsno()).build());
-
-    // return qestnAnswerEntities.stream()
-    // .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-    // .itemSsno(entity.getIemSn()).answerUsrId(entity.getAnswerUserId()).answerContents(entity.getAnswerCn()).build())
-    // .toList();
-
 
     // 임시 조치
-    List<QestnAnswerResponse> tempList = new ArrayList<>();
-    return tempList;
+    return new ArrayList<QestnAnswerResponse>();
   }
 
 
@@ -86,12 +77,6 @@ public class AnswerService {
           // .answerUserId(StringUtils.defaultString(req.getAnswerUserId())).answerCn(StringUtils.defaultString(req.getAnswerContents()))
           .build());
     });
-
-    // List<QestnAnswerEntity> saveAllEntities = qestnAnswerRepository.saveAll(resEntityList);
-    // return saveAllEntities.stream()
-    // .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-    // .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUsrId()).answerContents(entity.getAnswerCn()).build())
-    // .toList();
 
     // 임시 조치
     return new ArrayList<QestnAnswerResponse>();
@@ -117,11 +102,6 @@ public class AnswerService {
       QestnAnswerEntity saveAnswer = qestnAnswerRepository.save(reqAnswer);
       resEntityList.add(saveAnswer);
     });
-
-    // return resEntityList.stream()
-    // .map(entity -> QestnAnswerResponse.builder().answerSsno(entity.getAnswerSn()).voteSsno(entity.getVoteSn()).questionSsno(entity.getQestnSn())
-    // .itemSsno(entity.getIemSn()).answerUserId(entity.getAnswerUsrId()).answerContents(entity.getAnswerCn()).build())
-    // .toList();
 
     // 임시 조치
     return new ArrayList<QestnAnswerResponse>();

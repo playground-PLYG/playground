@@ -1,10 +1,10 @@
 package com.playground.api.vote.repository.dsl;
 
 import java.util.List;
-import com.playground.api.statistics.model.StatisticsDetailResponse;
-import com.playground.api.statistics.model.StatisticsRequest;
-import com.playground.api.statistics.model.StatisticsResponse;
 import com.playground.api.vote.entity.VoteAnswerEntity;
+import com.playground.api.vote.model.StatisticsDetailResponse;
+import com.playground.api.vote.model.StatisticsRequest;
+import com.playground.api.vote.model.StatisticsResponse;
 
 public interface VoteAnswerRepositoryCustom {
   List<VoteAnswerEntity> findBySsno(VoteAnswerEntity qestnAnswerEntity);

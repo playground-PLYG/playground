@@ -1,4 +1,4 @@
-package com.playground.api.statistics.model;
+package com.playground.api.vote.model;
 
 import java.io.Serial;
 import java.util.List;

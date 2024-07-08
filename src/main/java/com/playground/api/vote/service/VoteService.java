@@ -70,6 +70,7 @@ public class VoteService {
 
   @Value("${CLIENT_URL}")
   private String clientUrl;
+  private static final String DATETIME_1 = "yyyy-MM-dd HH";
 
   @Transactional(readOnly = true)
   // 투표목록조회 메소드 이전꺼... 새로 개발 하셔야 합니다 (to.서유진연구원님)
@@ -137,7 +138,6 @@ public class VoteService {
     DiscordEmbedRequest embed = new DiscordEmbedRequest();
     embed.setTitle(reqData.getVoteSubject());
     embed.setDescription("[투표하기](" + clientUrl + "/vote?ssno=" + voteEntity.getVoteSn() + ")");
-    // embed.addField("익명투표여부", "N".equals(reqData.getAnonymityVoteAlternative()) ? "회원투표" : "익명투표", true);
 
     dto.addEmbed(embed);
 
@@ -153,8 +153,8 @@ public class VoteService {
       VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
 
       // yyyy-MM-dd HH 형태로 변경
-      String beginDate = voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH"));
-      String endDate = voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH"));
+      String beginDate = voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
+      String endDate = voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
 
       VoteResponse voteResponse = VoteResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate)
           .voteEndDate(endDate).voteExposureAlternative(voteEntity.getVoteExpsrAt()).voteTransmissionAlternative(voteEntity.getVoteTrnsmisAt())
@@ -228,8 +228,8 @@ public VoteResponse getVoteResult(VoteRequest reqData) {
     VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
 
     // yyyy-MM-dd HH 형태로 변경
-    String beginDate = voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH"));
-    String endDate = voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH"));
+    String beginDate = voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
+    String endDate = voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
 
     List<VoteResultResponse> voteResultList = voteAnswerRepository.getVoteQestnResult(reqData);
     Integer voteSsno = reqData.getVoteSsno();

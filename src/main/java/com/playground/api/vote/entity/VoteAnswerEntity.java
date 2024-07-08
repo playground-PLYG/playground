@@ -28,8 +28,8 @@ public class VoteAnswerEntity extends BaseEntity {
    * 답변사용자ID
    */
   @Id
-  @Column(name = "answer_usr_id")
-  private String answerUsrId;
+  @Column(name = "answer_user_id")
+  private String answerUserId;
 
   /**
    * 투표일련번호

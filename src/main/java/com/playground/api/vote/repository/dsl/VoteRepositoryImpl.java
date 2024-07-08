@@ -37,6 +37,45 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   QVoteQestnIemEntity tbIem = QVoteQestnIemEntity.voteQestnIemEntity;
 
   @Override
+  public List<VoteQestnResponse> getVoteQestnDetail(Integer voteSsno) {
+    return queryFactory.select(tbQestn).from(tbQestn)
+        .leftJoin(tbIem)
+        .on(tbQestn.voteSn.eq(tbIem.voteSn)
+            .and(tbQestn.qestnSn.eq(tbIem.qestnSn)))
+        .where(tbQestn.voteSn.eq(voteSsno))
+        .orderBy(tbQestn.voteSn.asc(), tbQestn.qestnSn.asc())
+        .transform(groupBy(tbQestn.voteSn, tbQestn.qestnSn)
+            .list(
+                Projections.fields(VoteQestnResponse.class, 
+                    tbQestn.voteSn.as("voteSsno"),
+                    tbQestn.qestnSn.as("questionSsno"), 
+                    tbQestn.voteKndCode.as("voteKindCode"), 
+                    tbQestn.compnoChoiseAt.as("compoundNumberChoiceAlternative"),
+                    tbQestn.annymtyVoteAt.as("anonymityVoteAlternative"), 
+                    tbQestn.qestnCn.as("questionContents"), 
+                    tbQestn.registUsrId.as("registUserId"),
+                    tbQestn.registDt.as("registDate"), 
+                    tbQestn.updtUsrId.as("updateUserId"), 
+                    tbQestn.updtDt.as("updateDate"),
+            list(
+                Projections.fields(VoteQestnIemResponse.class, 
+                    tbIem.iemSn.as("itemSsno"), 
+                    tbIem.qestnSn.as("questionSno"),
+                    tbIem.voteSn.as("voteSno"), 
+                    tbIem.iemIdntfcId.as("itemIdentificationId"), 
+                    tbIem.iemNm.as("itemName"))).as("voteQestnIemResponseList")
+            )
+                )
+            );
+  }
+
+
+
+  /////////////////////////////////////////////////////////////////////////////////
+  ////////////////////// 이하 메소드 사용하는거는 위로 올릴 것 개발 완료후 삭제 예정/////////////////
+
+
+  @Override
   public Page<VoteEntity> getVotePageList(VoteRequest reqData, Pageable pageable) {
     List<VoteEntity> content = queryFactory.selectFrom(tbVote).where(// firstCnLike(reqData.getVoteKindCode()),
         secondCnLike(reqData.getVoteSubject()),
@@ -50,17 +89,6 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
         fourthCnEq(reqData.getVoteBeginDate(), reqData.getVoteEndDate()));
 
     return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-  }
-
-  @Override
-  public List<VoteQestnResponse> getQestnDetail(Integer voteSsno, Integer questionSsno) {
-    return queryFactory.select(tbQestn).from(tbQestn).leftJoin(tbIem).on(tbQestn.voteSn.eq(tbIem.voteSn).and(tbQestn.qestnSn.eq(tbIem.qestnSn)))
-        .where(tbQestn.voteSn.eq(voteSsno))
-        // .where(qestnEntity.qestnSn.eq(questionSsno).and(qestnEntity.voteSn.eq(voteSsno)))
-        .orderBy(tbQestn.voteSn.asc(), tbQestn.qestnSn.asc())
-        .transform(groupBy(tbQestn.voteSn, tbQestn.qestnSn).list(Projections.fields(VoteQestnResponse.class, tbQestn.voteSn.as("voteSsno"),
-            tbQestn.qestnSn.as("questionSsno"), tbQestn.qestnCn.as("questionContents"), tbQestn.compnoChoiseAt.as("compoundNumberChoiceAlternative"),
-            list(Projections.fields(VoteQestnIemResponse.class, tbIem.iemSn.as("itemSsno"), tbIem.iemNm.as("itemName"))).as("voteIemResponseList"))));
   }
 
   /* 동적쿼리를 위한 함수 */
@@ -136,7 +164,5 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   public Long deleteBySsnoForQestn(Integer voteSsno, Integer questionSsno) {
     return queryFactory.delete(tbQestn).where(tbQestn.voteSn.eq(voteSsno).and(tbQestn.qestnSn.eq(questionSsno))).execute();
   }
-
-
 
 }

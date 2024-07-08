@@ -1,6 +1,7 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import com.playground.model.BaseDto;
@@ -37,10 +38,10 @@ public class VoteQestnResponse extends BaseDto {
   private Integer voteSsno;
 
   /**
-   * 질문내용
+   * 투표종류코드
    */
-  @Schema(description = "질문내용", example = "회식 가능한 날짜를 선택해주세요")
-  private String questionContents;
+  @Schema(description = "투표종류코드", example = "LUN")
+  private String voteKindCode;
 
   /**
    * 복수 선택여부
@@ -49,9 +50,33 @@ public class VoteQestnResponse extends BaseDto {
   private String compoundNumberChoiceAlternative;
 
   /**
+   * 익명투표여부
+   */
+  @Schema(description = "익명투표여부", example = "Y")
+  private String anonymityVoteAlternative;
+
+  /**
+   * 질문내용
+   */
+  @Schema(description = "질문내용", example = "회식 가능한 날짜를 선택해주세요")
+  private String questionContents;
+
+  @Schema(description = "등록사용자ID")
+  private String registUserId;
+
+  @Schema(description = "등록일시")
+  private LocalDateTime registDate;
+
+  @Schema(description = "수정사용자ID")
+  private String updateUserId;
+
+  @Schema(description = "수정일시")
+  private LocalDateTime updateDate;
+
+  /**
    * 투표항목 객체
    */
-  @Schema(description = "항목객체", example = "voteIemResponse")
+  @Schema(description = "항목객체", example = "voteQestnIemResponse")
   @Builder.Default
-  private List<VoteQestnIemResponse> voteIemResponseList = new ArrayList<>();
+  private List<VoteQestnIemResponse> voteQestnIemResponseList = new ArrayList<>();
 }

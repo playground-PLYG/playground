@@ -9,9 +9,14 @@ import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 
 public interface VoteRepositoryCustom {
-  Page<VoteEntity> getVotePageList(VoteRequest reqData, Pageable pageable);
 
-  List<VoteQestnResponse> getQestnDetail(Integer voteSsno, Integer questionSsno);
+  List<VoteQestnResponse> getVoteQestnDetail(Integer voteSsno);
+
+
+
+  /////////////////////////////////////////////////////////////////////////////////
+  ////////////////////// 이하 메소드 사용하는거는 위로 올릴 것 개발 완료후 삭제 예정/////////////////
+  Page<VoteEntity> getVotePageList(VoteRequest reqData, Pageable pageable);
 
   List<VoteQestnEntity> getQestnList(Integer voteSsno);
 

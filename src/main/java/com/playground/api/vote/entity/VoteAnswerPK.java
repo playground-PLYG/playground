@@ -22,7 +22,7 @@ public class VoteAnswerPK implements Serializable {
   /**
    * 답변사용자ID
    */
-  private String answerUsrId;
+  private String answerUserId;
 
   /**
    * 질문일련번호

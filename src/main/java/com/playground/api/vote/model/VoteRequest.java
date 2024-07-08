@@ -22,40 +22,10 @@ public class VoteRequest extends BaseDto {
   private Integer voteSsno;
 
   /**
-   * 투표종류코드
+   * 사용자ID
    */
-  @Schema(description = "투표종류코드", example = "LUN")
-  private String voteKindCode;
-
-  /**
-   * 투표제목
-   */
-  @Schema(description = "투표제목", example = "오점뭐")
-  private String voteSubject;
-
-  /**
-   * 익명투표여부
-   */
-  @Schema(description = "익명투표여부", example = "Y")
-  private String anonymityVoteAlternative;
-
-  /**
-   * 투표시작일시
-   */
-  @Schema(description = "투표시작일시", example = "yyyy-mm-dd hh:mm:ss")
-  private String voteBeginDate;
-
-  /**
-   * 투표종료일시
-   */
-  @Schema(description = "투표종료일시", example = "yyyy-mm-dd hh:mm:ss")
-  private String voteEndDate;
-
-  /**
-   * 투표삭제여부
-   */
-  @Schema(description = "투표삭제여부", example = "N")
-  private String voteDeleteAlternative;
+  @Schema(description = "사용자ID", example = "sungjong")
+  private String answerUserId;
 
   /**
    * 질문일련번호
@@ -63,6 +33,50 @@ public class VoteRequest extends BaseDto {
   @Schema(description = "질문일련번호", example = "12347890")
   private Integer questionSsno;
 
-  @Schema(description = "질문객체", example = "qestnRequest")
-  private List<VoteQestnRequest> qestnRequestList;
+
+  //////////////////////////////////////////
+  // 사용하는 변수는 위로 올리기 -> 추후 사용안하면 삭제 예정
+  //////////////////////////////////////////
+  /**
+   * 투표제목
+   */
+  @Schema(description = "투표제목", example = "오점뭐")
+  private String voteSubject;
+
+  /**
+   * 투표시작일시
+   */
+  @Schema(description = "투표시작일시", example = "yyyy-mm-dd HH")
+  private String voteBeginDate;
+
+  /**
+   * 투표종료일시
+   */
+  @Schema(description = "투표종료일시", example = "yyyy-mm-dd HH")
+  private String voteEndDate;
+
+  /**
+   * 투표노출여부
+   */
+  @Schema(description = "투표노출여부", example = "Y")
+  private String voteExposureAlternative;
+
+  /**
+   * 투표전송여부
+   */
+  @Schema(description = "투표전송여부", example = "Y")
+  private String voteTransmissionAlternative;
+
+  /**
+   * 투표전송코드
+   */
+  @Schema(description = "투표전송코드", example = "NOW")
+  private String voteTransmissionCode;
+
+
+  /**
+   * 질문들
+   */
+  @Schema(description = "질문객체", example = "voteQestnRequestList")
+  private List<VoteQestnRequest> voteQestnRequestList;
 }

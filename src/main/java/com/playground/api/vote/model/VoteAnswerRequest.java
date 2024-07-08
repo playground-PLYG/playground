@@ -1,12 +1,13 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
+import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@Schema(name = "QestnAnswerRequest", description = "사용자 답변들 조회 요청에 필요한 데이터")
+@Schema(name = "VoteAnswerRequest", description = "사용자 답변들 조회 요청에 필요한 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 public class VoteAnswerRequest extends BaseDto {
@@ -15,16 +16,10 @@ public class VoteAnswerRequest extends BaseDto {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 답변일련번호
+   * 답변사용자ID
    */
-  @Schema(description = "답변일련번호", example = "1234567890")
-  private Integer answerSsno;
-
-  /**
-   * 질문일련번호
-   */
-  @Schema(description = "질문일련번호", example = "1234567890")
-  private Integer questionSsno;
+  @Schema(description = "답변사용자ID", example = "sungjong2020")
+  private String answerUserId;
 
   /**
    * 투표일련번호
@@ -33,20 +28,15 @@ public class VoteAnswerRequest extends BaseDto {
   private Integer voteSsno;
 
   /**
-   * 항목ID
+   * 질문일련번호
    */
-  @Schema(description = "항목ID", example = "0000123456")
-  private Integer itemSsno;
+  @Schema(description = "질문일련번호", example = "1234567890")
+  private Integer questionSsno;
 
   /**
-   * 답변사용자ID
+   * 선택한항목일련번호들
    */
-  @Schema(description = "답변사용자ID", example = "sungjong2020")
-  private String answerUserId;
+  @Schema(description = "선택한항목일련번호들", example = "{1,2,3,...}")
+  private List<Integer> itemSsnoList;
 
-  /**
-   * 답변내용
-   */
-  @Schema(description = "답변내용", example = "4월 25일 목요일")
-  private String answerContents;
 }

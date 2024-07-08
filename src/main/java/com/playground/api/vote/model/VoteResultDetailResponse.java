@@ -11,14 +11,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Schema(name = "StatisticsDetailDetailResponse", description = "사용자 답변들을 통계 내기 위한 Detail Detail response")
+@Schema(name = "VoteResultDetailResponse", description = "사용자 답변들을 통계 내기 위한 Detail Detail response")
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class StatisticsDetailDetailResponse extends BaseDto {
+public class VoteResultDetailResponse extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
@@ -40,6 +40,12 @@ public class StatisticsDetailDetailResponse extends BaseDto {
    */
   @Schema(description = "특표수", example = "14")
   private Long itemCount;
+
+  /**
+   * 항목식별ID
+   */
+  @Schema(description = "항목식별ID", example = "1234567890")
+  private String itemIdentificationId;
 
   /**
    * 해당 항목 투표한 유저

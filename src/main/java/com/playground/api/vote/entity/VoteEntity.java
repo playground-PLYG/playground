@@ -62,13 +62,13 @@ public class VoteEntity extends BaseEntity {
   /**
    * 투표전송여부
    */
-  @Column(name = "vote_trnsmin_at")
-  private String voteTrnsminAt;
+  @Column(name = "vote_trnsmis_at")
+  private String voteTrnsmisAt;
 
   /**
    * 투표전송코드
    */
-  @Column(name = "vote_trnsmin_code")
-  private String voteTrnsminCode;
+  @Column(name = "vote_trnsmis_code")
+  private String voteTrnsmisCode;
 
 }

@@ -38,11 +38,17 @@ public class VoteQestnIemResponse extends BaseDto {
    * 질문일련번호
    */
   @Schema(description = "질문일련번호", example = "1234567890")
-  private Integer questionSsno;
+  private Integer questionSno;
 
   /**
    * 투표일련번호
    */
   @Schema(description = "투표일련번호", example = "1234567890")
-  private Integer voteSsno;
+  private Integer voteSno;
+
+  /**
+   * 항목식별ID
+   */
+  @Schema(description = "항목식별ID", example = "1234567890")
+  private String itemIdentificationId;
 }

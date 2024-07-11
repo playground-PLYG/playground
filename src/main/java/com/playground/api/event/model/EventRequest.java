@@ -30,6 +30,9 @@ public class EventRequest extends BaseDto {
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime eventEndDate;
 
+  @Schema(description = "진행상태")
+  private String progrsSttus;
+
   @Schema(description = "이벤트썸네일파일일련번호")
   private Integer eventThumbFileSn;
 

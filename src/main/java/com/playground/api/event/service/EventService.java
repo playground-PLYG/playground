@@ -91,4 +91,9 @@ public class EventService {
       });
     }
   }
+
+  @Transactional
+  public void modifyEndEvent(EventRequest req) {
+    eventRepository.modifyEndEvent(req.getEventSerial());
+  }
 }

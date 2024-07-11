@@ -78,6 +78,10 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     clause.execute();
   }
 
+  @Override
+  public void modifyEndEvent(int eventSn) {
+    queryFactory.update(eventEntity).set(eventEntity.eventEndDt, LocalDateTime.now()).where(eventEntity.eventSn.eq(eventSn)).execute();
+  }
 
   /* 이벤트명 조회 동적쿼리 */
   private BooleanExpression eventNmLkie(String eventNm) {
@@ -102,8 +106,6 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     }
     return null;
   }
-
-
 
 }
 

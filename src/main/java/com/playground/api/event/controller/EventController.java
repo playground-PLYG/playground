@@ -50,4 +50,17 @@ public class EventController {
   public void modifyEvent(@RequestBody EventRequest req) {
     eventService.modifyEvent(req);
   }
+
+  /**
+   * 게시판 삭제
+   *
+   */
+  @Operation(summary = "게시판 종료일자 수정", description = "게시판 종료일자 수정")
+  @PostMapping("/api/event/modifyEndEvent")
+  public void modifyEndEvent(@RequestBody EventRequest req) {
+    eventService.modifyEndEvent(req);
+  }
+
+
+
 }

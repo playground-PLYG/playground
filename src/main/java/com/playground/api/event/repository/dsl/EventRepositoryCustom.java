@@ -9,4 +9,7 @@ public interface EventRepositoryCustom {
   Page<EventEntity> getEventList(EventEntity request, Pageable pageable);
 
   void modifyEvent(EventEntity request);
+
+  void modifyEndEvent(int eventSn);
+
 }

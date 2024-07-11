@@ -1,6 +1,9 @@
 package com.playground.api.event.service;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.event.entity.EventEntity;
@@ -48,9 +51,22 @@ public class EventService {
 
 
   /** 이벤트 목록 조회 */
-  public List<EventResponse> getEventList() {
-    return null;
-  }
+  @Transactional(readOnly = true)
+  public Page<EventResponse> getEventList(Pageable pageable, EventRequest req) {
+    EventEntity schEntity =
+        EventEntity.builder().eventNm(req.getEventName()).eventSeCodeId(req.getEventSectionCodeId()).progrsSttus(req.getProgrsSttus()).build();
 
+    Page<EventEntity> eventPageList = eventRepository.getEventList(schEntity, pageable);
+
+    List<EventResponse> eventList = eventPageList.stream()
+        .map(entity -> EventResponse.builder().eventSerial(entity.getEventSn()).eventName(entity.getEventNm())
+            .eventSectionCodeId(entity.getEventSeCodeId()).progrsSttus(entity.getProgrsSttus()).eventBeginDate(entity.getEventBeginDt())
+            .eventEndDate(entity.getEventEndDt()).registUsrId(entity.getRegistUsrId()).updtUsrId(entity.getUpdtUsrId()).registDt(entity.getRegistDt())
+            .updtDt(entity.getUpdtDt()).build())
+        .toList();
+
+    return new PageImpl<>(eventList, eventPageList.getPageable(), eventPageList.getTotalElements());
+
+  }
 
 }

@@ -11,5 +11,4 @@ public interface EventRepositoryCustom {
   void modifyEvent(EventEntity request);
 
   void modifyEndEvent(int eventSn);
-
 }

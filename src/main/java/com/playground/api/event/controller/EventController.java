@@ -41,4 +41,13 @@ public class EventController {
   public Page<EventResponse> getEventList(Pageable pageable, @RequestBody @Valid EventRequest req) {
     return eventService.getEventList(pageable, req);
   }
+
+  /**
+   * 이벤트 페이징 목록조회
+   */
+  @Operation(summary = "이벤트수정", description = "이벤트수정")
+  @PostMapping("/api/event/modifyEvent")
+  public void modifyEvent(@RequestBody EventRequest req) {
+    eventService.modifyEvent(req);
+  }
 }

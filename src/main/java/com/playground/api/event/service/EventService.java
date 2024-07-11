@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import com.playground.api.event.entity.EventEntity;
 import com.playground.api.event.entity.PointPaymentEntity;
 import com.playground.api.event.model.EventRequest;
@@ -69,4 +70,25 @@ public class EventService {
 
   }
 
+  @Transactional
+  public void modifyEvent(EventRequest req) {
+    EventEntity updateEntity = EventEntity.builder().eventSn(req.getEventSerial()).eventNm(req.getEventName()).eventBeginDt(req.getEventBeginDate())
+        .eventEndDt(req.getEventEndDate()).eventThumbFileSn(req.getEventThumbFileSn()).przwnerCo(req.getPrzwnerCount())
+        .eventSeCodeId(req.getEventSectionCodeId()).drwtMthdCodeId(req.getDrwtMethodCodeId()).pointPymntMthdCodeId(req.getPointPymntMethodCodeId())
+        .totPointValue(req.getTotalPointValue()).cntntsCn(req.getCntntsContents()).expsrAt(req.getExpsrAt()).build();
+    eventRepository.modifyEvent(updateEntity);
+    if (!ObjectUtils.isEmpty(req.getPointPayment())) {
+
+      pointPaymentRepository.deleteByEventSn(req.getEventSerial());
+
+      List<PointPaymentRequest> pointPayment = req.getPointPayment();
+
+      pointPayment.forEach(pntPymnt -> {
+        PointPaymentEntity entity = PointPaymentEntity.builder().eventSn(req.getEventSerial())// .pointPymntSn(eventSerial)
+            .pointPymntUnitValue(pntPymnt.getPointPaymentUnitValue()).fixingPointPayrCo(pntPymnt.getFixingPointPayrCount())
+            .fixingPointValue(pntPymnt.getFixingPointValue()).build();
+        pointPaymentRepository.save(entity);
+      });
+    }
+  }
 }

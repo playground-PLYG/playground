@@ -14,6 +14,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -36,6 +37,47 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
 
     return PageableExecutionUtils.getPage(event, pageable, countQuery::fetchOne);
   }
+
+  @Override
+  public void modifyEvent(EventEntity req) {
+    JPAUpdateClause clause = queryFactory.update(eventEntity).where(eventEntity.eventSn.eq(req.getEventSn()));
+    // .set(eventEntity.eventNm, req.getEventNm());
+    if (req.getEventNm() != null) { // 이벤트명
+      clause.set(eventEntity.eventNm, req.getEventNm());
+    }
+    if (req.getEventBeginDt() != null) { // 이벤트 시작일시
+      clause.set(eventEntity.eventBeginDt, req.getEventBeginDt());
+    }
+    if (req.getEventEndDt() != null) { // 이벤트 종료일시
+      clause.set(eventEntity.eventEndDt, req.getEventEndDt());
+    }
+    if (req.getEventThumbFileSn() != null) { // 이벤트썸네일파일일련번호
+      clause.set(eventEntity.eventThumbFileSn, req.getEventThumbFileSn());
+    }
+    if (req.getPrzwnerCo() != null) { // 당첨자수
+      clause.set(eventEntity.przwnerCo, req.getPrzwnerCo());
+    }
+    if (req.getEventSeCodeId() != null) { // 이벤트구분코드ID
+      clause.set(eventEntity.eventSeCodeId, req.getEventSeCodeId());
+    }
+    if (req.getDrwtMthdCodeId() != null) { // 추첨방식코드ID
+      clause.set(eventEntity.drwtMthdCodeId, req.getDrwtMthdCodeId());
+    }
+    if (req.getPointPymntMthdCodeId() != null) { // 포인트지급방식코드ID
+      clause.set(eventEntity.pointPymntMthdCodeId, req.getPointPymntMthdCodeId());
+    }
+    if (req.getTotPointValue() != null) { // 총포인트값
+      clause.set(eventEntity.totPointValue, req.getTotPointValue());
+    }
+    if (req.getCntntsCn() != null) { // 컨테츠내용
+      clause.set(eventEntity.cntntsCn, req.getCntntsCn());
+    }
+    if (req.getExpsrAt() != null) { // 노출여부
+      clause.set(eventEntity.expsrAt, req.getExpsrAt());
+    }
+    clause.execute();
+  }
+
 
   /* 이벤트명 조회 동적쿼리 */
   private BooleanExpression eventNmLkie(String eventNm) {
@@ -60,6 +102,8 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     }
     return null;
   }
+
+
 
 }
 

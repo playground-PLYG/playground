@@ -2,6 +2,7 @@ package com.playground.api.event.entity;
 
 import java.time.LocalDateTime;
 import com.playground.entity.BaseEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +39,9 @@ public class EventEntity extends BaseEntity {
 
   @Column(name = "event_end_dt")
   private LocalDateTime eventEndDt;
+
+  @Column(name = "progrs_sttus")
+  private String progrsSttus;
 
   @Column(name = "event_thumb_file_sn")
   private Integer eventThumbFileSn;

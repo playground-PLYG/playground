@@ -32,6 +32,9 @@ public class EventResponse extends BaseDto {
   @Schema(description = "이벤트종료일시")
   private LocalDateTime eventEndDate;
 
+  @Schema(description = "진행상태")
+  private String progrsSttus;
+
   @Schema(description = "이벤트썸네일파일일련번호")
   private Integer eventThumbFileSn;
 
@@ -59,4 +62,15 @@ public class EventResponse extends BaseDto {
   @Schema(description = "추첨일시")
   private LocalDateTime drwtDate;
 
+  @Schema(description = "등록사용자ID")
+  private String registUsrId;
+
+  @Schema(description = "등록일시")
+  private LocalDateTime registDt;
+
+  @Schema(description = "수정사용자ID")
+  private String updtUsrId;
+
+  @Schema(description = "수정일시")
+  private LocalDateTime updtDt;
 }

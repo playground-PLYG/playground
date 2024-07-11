@@ -1,7 +1,7 @@
 package com.playground.api.event.controller;
 
-import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +11,7 @@ import com.playground.api.event.model.EventResponse;
 import com.playground.api.event.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "event", description = "이벤트")
@@ -36,8 +37,8 @@ public class EventController {
    * 이벤트 페이징 목록조회
    */
   @Operation(summary = "이벤트 목록 조회", description = "이벤트 목록 조회")
-  @GetMapping("/public/event/getEventList")
-  public List<EventResponse> getEventList() {
-    return eventService.getEventList();
+  @PostMapping("/public/event/getEventList")
+  public Page<EventResponse> getEventList(Pageable pageable, @RequestBody @Valid EventRequest req) {
+    return eventService.getEventList(pageable, req);
   }
 }

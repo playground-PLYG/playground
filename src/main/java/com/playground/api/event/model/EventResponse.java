@@ -1,6 +1,8 @@
 package com.playground.api.event.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -73,4 +75,7 @@ public class EventResponse extends BaseDto {
 
   @Schema(description = "수정일시")
   private LocalDateTime updtDt;
+
+  @Builder.Default
+  private List<PointPaymentResponse> pointPayment = new ArrayList<>();
 }

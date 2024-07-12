@@ -50,4 +50,25 @@ public class EventController {
   public void modifyEvent(@RequestBody EventRequest req) {
     eventService.modifyEvent(req);
   }
+
+  /**
+   * 게시판 종료일자 수정
+   *
+   */
+  @Operation(summary = "게시판 종료일자 수정", description = "게시판 종료일자 수정")
+  @PostMapping("/api/event/modifyEndEvent")
+  public void modifyEndEvent(@RequestBody EventRequest req) {
+    eventService.modifyEndEvent(req);
+  }
+
+  /**
+   * 게시판 상세 조회
+   *
+   */
+  @Operation(summary = "게시판 상세 조회", description = "게시판 상세 조회")
+  @PostMapping("/api/event/getMberDetail")
+  public EventResponse getMberDetail(@RequestBody EventRequest req) {
+    return eventService.getMberDetail(req);
+  }
+
 }

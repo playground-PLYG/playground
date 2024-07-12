@@ -1,6 +1,7 @@
 package com.playground.api.event.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import com.playground.api.event.entity.PointPaymentEntity;
 import com.playground.api.event.model.EventRequest;
 import com.playground.api.event.model.EventResponse;
 import com.playground.api.event.model.PointPaymentRequest;
+import com.playground.api.event.model.PointPaymentResponse;
 import com.playground.api.event.repository.EventRepository;
 import com.playground.api.event.repository.PointPaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -90,5 +92,35 @@ public class EventService {
         pointPaymentRepository.save(entity);
       });
     }
+  }
+
+  @Transactional
+  public void modifyEndEvent(EventRequest req) {
+    eventRepository.modifyEndEvent(req.getEventSerial());
+  }
+
+  /** 이벤트 목록 조회 */
+  @Transactional(readOnly = true)
+  public EventResponse getMberDetail(EventRequest req) {
+    EventEntity entity = eventRepository.getMberDetail(req.getEventSerial());
+
+    EventResponse eventResponse = EventResponse.builder().eventSerial(entity.getEventSn()).eventName(entity.getEventNm())
+        .eventBeginDate(entity.getEventBeginDt()).eventEndDate(entity.getEventEndDt()).eventThumbFileSn(entity.getEventThumbFileSn())
+        .przwnerCount(entity.getPrzwnerCo()).eventSectionCodeId(entity.getEventSeCodeId()).drwtMethodCodeId(entity.getDrwtMthdCodeId())
+        .pointPymntMethodCodeId(entity.getPointPymntMthdCodeId()).totalPointValue(entity.getTotPointValue()).cntntsContents(entity.getCntntsCn())
+        .drwtDate(entity.getDrwtDt()).build();
+
+    List<PointPaymentEntity> pointEntityList = pointPaymentRepository.findByEventSn(req.getEventSerial());
+
+    List<PointPaymentResponse> pointList = pointEntityList.stream()
+        .map(entityList -> PointPaymentResponse.builder().eventSerial(entityList.getEventSn()).pointPymntSerial(entityList.getPointPymntSn())
+            .pointPaymentUnitValue(entityList.getPointPymntUnitValue()).fixingPointPayrCount(entityList.getFixingPointPayrCo())
+            .fixingPointValue(entityList.getFixingPointValue()).build())
+        .collect(Collectors.toList());
+
+    eventResponse.setPointPayment(pointList);
+
+
+    return eventResponse;
   }
 }

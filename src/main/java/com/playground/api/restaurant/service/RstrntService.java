@@ -85,7 +85,7 @@ public class RstrntService {
 
     return RstrntSrchResponse.builder().restaurantSerialNo(entity.getRstrntSn()).restaurantName(entity.getRstrntNm())
         .restaurantKindCode(entity.getRstrntKndCode()).restaurantDistance(entity.getRstrntDstnc()).la(entity.getLaLc()).lo(entity.getLoLc())
-        .kakaoMapId(entity.getKakaoMapId()).kakaoMapId(entity.getKakaoMapId()).build();
+        .kakaoMapId(entity.getKakaoMapId()).build();
   }
 
   @Transactional

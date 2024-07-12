@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 
 @Builder
@@ -18,7 +17,6 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@Setter
 @Entity
 @Table(name = "tb_rstrnt_file")
 public class RstrntFileEntity extends BaseEntity {

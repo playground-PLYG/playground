@@ -43,7 +43,7 @@ public class EventController {
   }
 
   /**
-   * 이벤트 페이징 목록조회
+   * 이벤트 수정
    */
   @Operation(summary = "이벤트 수정", description = "이벤트 수정")
   @PostMapping("/api/event/modifyEvent")

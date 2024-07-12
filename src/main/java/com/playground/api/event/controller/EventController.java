@@ -61,6 +61,14 @@ public class EventController {
     eventService.modifyEndEvent(req);
   }
 
-
+  /**
+   * 게시판 상세 조회
+   *
+   */
+  @Operation(summary = "게시판 상세 조회", description = "게시판 상세 조회")
+  @PostMapping("/api/event/getMberDetail")
+  public EventResponse getMberDetail(@RequestBody EventRequest req) {
+    return eventService.getMberDetail(req);
+  }
 
 }

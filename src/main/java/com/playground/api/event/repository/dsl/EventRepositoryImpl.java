@@ -83,6 +83,16 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
     queryFactory.update(eventEntity).set(eventEntity.eventEndDt, LocalDateTime.now()).where(eventEntity.eventSn.eq(eventSn)).execute();
   }
 
+  @Override
+  public EventEntity getMberDetail(int eventSn) {
+    // TODO Auto-generated method stub
+    return queryFactory
+        .select(Projections.fields(EventEntity.class, eventEntity.eventSn, eventEntity.eventNm, eventEntity.eventBeginDt, eventEntity.eventEndDt,
+            eventEntity.eventThumbFileSn, eventEntity.przwnerCo, eventEntity.eventSeCodeId, eventEntity.drwtMthdCodeId,
+            eventEntity.pointPymntMthdCodeId, eventEntity.totPointValue, eventEntity.cntntsCn, eventEntity.expsrAt, eventEntity.drwtDt))
+        .from(eventEntity).where(eventEntity.eventSn.eq(eventSn)).fetchOne();
+  }
+
   /* 이벤트명 조회 동적쿼리 */
   private BooleanExpression eventNmLkie(String eventNm) {
     return StringUtils.isNotBlank(eventNm) ? eventEntity.eventNm.like(eventNm + "%") : null;

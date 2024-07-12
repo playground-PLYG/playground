@@ -1,12 +1,15 @@
 package com.playground.api.restaurant.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 import com.playground.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,5 +69,11 @@ public class RstrntEntity extends BaseEntity {
   @Column(name = "rstrnt_dstnc")
   private BigDecimal rstrntDstnc;
 
+
+  /**
+   * 식당 파일
+   */
+  @OneToMany(mappedBy = "rstrntSn", fetch = FetchType.LAZY)
+  private List<RstrntFileEntity> rstrntFiles;
 
 }

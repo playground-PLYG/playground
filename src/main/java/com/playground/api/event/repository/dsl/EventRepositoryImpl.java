@@ -84,7 +84,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
   }
 
   @Override
-  public EventEntity getMberDetail(int eventSn) {
+  public EventEntity getEventDetail(int eventSn) {
     // TODO Auto-generated method stub
     return queryFactory
         .select(Projections.fields(EventEntity.class, eventEntity.eventSn, eventEntity.eventNm, eventEntity.eventBeginDt, eventEntity.eventEndDt,

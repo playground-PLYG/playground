@@ -23,7 +23,6 @@ public class EventController {
 
   /**
    * 이벤트 생성
-   *
    */
   @Operation(summary = "이벤트 생성", description = "이벤트 생성")
   @PostMapping("/api/event/addEvent")
@@ -32,8 +31,6 @@ public class EventController {
   }
 
   /**
-   *
-   *
    * 이벤트 페이징 목록조회
    */
   @Operation(summary = "이벤트 목록 조회", description = "이벤트 목록 조회")
@@ -52,23 +49,30 @@ public class EventController {
   }
 
   /**
-   * 게시판 종료일자 수정
-   *
+   * 이벤트 종료일자 수정
    */
-  @Operation(summary = "게시판 종료일자 수정", description = "게시판 종료일자 수정")
+  @Operation(summary = "이벤트 종료일자 수정", description = "이벤트 종료일자 수정")
   @PostMapping("/api/event/modifyEndEvent")
   public void modifyEndEvent(@RequestBody EventRequest req) {
     eventService.modifyEndEvent(req);
   }
 
   /**
-   * 게시판 상세 조회
-   *
+   * 이벤트 상세 조회
    */
-  @Operation(summary = "게시판 상세 조회", description = "게시판 상세 조회")
-  @PostMapping("/api/event/getMberDetail")
-  public EventResponse getMberDetail(@RequestBody EventRequest req) {
-    return eventService.getMberDetail(req);
+  @Operation(summary = "이벤트 상세 조회", description = "이벤트 상세 조회")
+  @PostMapping("/api/event/getEventDetail")
+  public EventResponse getEventDetail(@RequestBody EventRequest req) {
+    return eventService.getEventDetail(req);
+  }
+
+  /**
+   * 이벤트 상세 조회
+   */
+  @Operation(summary = "이벤트 추첨", description = "이벤트 추첨")
+  @PostMapping("/api/event/executeEventRaffle")
+  public void executeEventRaffle(@RequestBody EventRequest req) {
+    eventService.executeEventRaffle(req);
   }
 
 }

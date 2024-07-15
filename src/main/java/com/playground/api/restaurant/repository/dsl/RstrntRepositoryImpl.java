@@ -1,3 +1,5 @@
+
+
 package com.playground.api.restaurant.repository.dsl;
 
 import java.util.List;
@@ -44,8 +46,5 @@ public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
         .from(tbRstrnt).fetchOne();
   }
 
-  @Override
-  public long updateRstrntImageFileSnById(Integer rstrntSn, Integer rstrntImageFileSn) {
-    return queryFactory.update(tbFile).where(tbFile.rstrntSn.eq(rstrntSn)).execute();
-  }
+
 }

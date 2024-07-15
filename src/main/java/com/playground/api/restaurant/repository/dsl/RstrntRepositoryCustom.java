@@ -10,5 +10,4 @@ public interface RstrntRepositoryCustom {
 
   RstrntDetailSrchResponse findByIdDetail(Integer rstrntSn);
 
-  long updateRstrntImageFileSnById(Integer rstrntSn, Integer rstrntImageFileSn);
 }

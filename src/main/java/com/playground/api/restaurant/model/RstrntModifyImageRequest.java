@@ -22,7 +22,15 @@ public class RstrntModifyImageRequest extends BaseDto {
   @Schema(description = "식당일련번호", requiredMode = RequiredMode.REQUIRED)
   private Integer restaurantSerialNo;
 
-  @NotNull(message = "이미지파일는 필수 값 입니다.")
+  @NotNull(message = "기존이미지파일은 필수 값 입니다.")
+  @Schema(description = "기존이미지파일ID", requiredMode = RequiredMode.REQUIRED)
+  private Integer oldImageFileId;
+
+  @NotNull(message = "이미지파일은 필수 값 입니다.")
   @Schema(description = "이미지파일ID", requiredMode = RequiredMode.REQUIRED)
   private Integer imageFileId;
+
+  // @NotNull(message = "이미지파일는 필수 값 입니다.")
+  // @Schema(description = "이미지파일ID 리스트", requiredMode = RequiredMode.REQUIRED)
+  // private List<Integer> imageFileIds;
 }

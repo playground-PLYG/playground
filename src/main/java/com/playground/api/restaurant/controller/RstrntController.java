@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.restaurant.model.RstrntAddRequest;
+import com.playground.api.restaurant.model.RstrntAddResponse;
 import com.playground.api.restaurant.model.RstrntDetailSrchRequest;
 import com.playground.api.restaurant.model.RstrntDetailSrchResponse;
 import com.playground.api.restaurant.model.RstrntExistCheckRequest;
@@ -50,7 +51,7 @@ public class RstrntController {
    */
   @Operation(summary = "식당 등록", description = "식당 등록")
   @PostMapping("/public/restaurant/addRstrnt")
-  public RstrntSrchResponse addRstrnt(@RequestBody @Valid RstrntAddRequest req) {
+  public RstrntAddResponse addRstrnt(@RequestBody @Valid RstrntAddRequest req) {
     return rstrntService.addRstrnt(req);
   }
 

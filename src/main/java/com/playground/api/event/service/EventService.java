@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -15,6 +16,7 @@ import com.playground.api.event.entity.PointEntity;
 import com.playground.api.event.entity.PointPaymentEntity;
 import com.playground.api.event.model.EventRequest;
 import com.playground.api.event.model.EventResponse;
+import com.playground.api.event.model.EventResultExcelResponse;
 import com.playground.api.event.model.EventResultResponse;
 import com.playground.api.event.model.PointPaymentRequest;
 import com.playground.api.event.model.PointPaymentResponse;
@@ -22,6 +24,8 @@ import com.playground.api.event.repository.EventParticipateRepository;
 import com.playground.api.event.repository.EventRepository;
 import com.playground.api.event.repository.PointPaymentRepository;
 import com.playground.api.event.repository.PointRepository;
+import com.playground.api.sample.repository.ExcelDownRepository;
+import com.playground.utils.ExcelDownUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,6 +40,8 @@ public class EventService {
   private final EventParticipateRepository eventParticipateRepository;
 
   private final PointRepository pointRepository;
+
+  private final ExcelDownRepository excelDownRepository;
 
   /** 이벤트 생성 */
   @Transactional
@@ -164,4 +170,12 @@ public class EventService {
   public List<EventResultResponse> getEventResultList(int eventSn) {
     return eventRepository.getEventResultList(eventSn);
   }
+
+  public ResponseEntity<byte[]> getEventExcelList(Integer eventSn) {
+    // List<ExcelDownEntity> list = excelDownRepository.findAll();
+    List<EventResultExcelResponse> list = eventRepository.getEventExcelList(eventSn);
+    ExcelDownUtil<EventResultExcelResponse> excel = new ExcelDownUtil<>(list.get(0).getEventName(), "Sheet명", EventResultExcelResponse.class, list);
+    return excel.download();
+  }
+
 }

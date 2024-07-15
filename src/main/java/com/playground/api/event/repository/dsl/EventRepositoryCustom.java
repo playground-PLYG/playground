@@ -12,5 +12,5 @@ public interface EventRepositoryCustom {
 
   void modifyEndEvent(int eventSn);
 
-  EventEntity getMberDetail(int eventSn);
+  EventEntity getEventDetail(int eventSn);
 }

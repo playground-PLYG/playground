@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.restaurant.model.RstrntAddRequest;
 import com.playground.api.restaurant.model.RstrntDetailSrchRequest;
 import com.playground.api.restaurant.model.RstrntDetailSrchResponse;
 import com.playground.api.restaurant.model.RstrntExistCheckRequest;
 import com.playground.api.restaurant.model.RstrntModifyImageRequest;
+import com.playground.api.restaurant.model.RstrntRemoveRequest;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
 import com.playground.api.restaurant.service.RstrntService;
@@ -48,7 +50,7 @@ public class RstrntController {
    */
   @Operation(summary = "식당 등록", description = "식당 등록")
   @PostMapping("/public/restaurant/addRstrnt")
-  public RstrntSrchResponse addRstrnt(@RequestBody @Valid RstrntSrchRequest req) {
+  public RstrntSrchResponse addRstrnt(@RequestBody @Valid RstrntAddRequest req) {
     return rstrntService.addRstrnt(req);
   }
 
@@ -57,7 +59,7 @@ public class RstrntController {
    */
   @Operation(summary = "식당 삭제", description = "식당 삭제")
   @PostMapping("/public/restaurant/removeRstrnt")
-  public void removeRstrnt(@RequestBody @Valid List<RstrntSrchRequest> req) {
+  public void removeRstrnt(@RequestBody @Valid List<RstrntRemoveRequest> req) {
     rstrntService.removeRstrnt(req);
   }
 

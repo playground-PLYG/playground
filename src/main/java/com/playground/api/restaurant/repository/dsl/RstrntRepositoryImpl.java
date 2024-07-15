@@ -2,8 +2,8 @@ package com.playground.api.restaurant.repository.dsl;
 
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import com.playground.api.file.entity.QFileEntity;
 import com.playground.api.restaurant.entity.QRstrntEntity;
+import com.playground.api.restaurant.entity.QRstrntFileEntity;
 import com.playground.api.restaurant.entity.RstrntEntity;
 import com.playground.api.restaurant.model.RstrntDetailSrchResponse;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
   private final JPAQueryFactory queryFactory;
   QRstrntEntity tbRstrnt = QRstrntEntity.rstrntEntity;
-  QFileEntity tbFile = QFileEntity.fileEntity;
+  QRstrntFileEntity tbFile = QRstrntFileEntity.rstrntFileEntity;
 
   @Override
   public List<RstrntSrchResponse> findAll(RstrntEntity entity) {
@@ -24,12 +24,12 @@ public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
         .select(Projections.fields(RstrntSrchResponse.class, tbRstrnt.rstrntSn.as("restaurantSerialNo"), tbRstrnt.rstrntNm.as("restaurantName"),
             tbRstrnt.kakaoMapId, tbRstrnt.laLc.as("la"), tbRstrnt.loLc.as("lo"), tbRstrnt.rstrntKndCode.as("restaurantKindCode"),
             tbRstrnt.rstrntDstnc.as("restaurantDistance")))
-        .where(rstrntNmLike(entity.getRstrntNm()), rstrntKndCodeEq(entity.getRstrntKndCode())).from(tbRstrnt).leftJoin(tbFile)
-        .orderBy(tbRstrnt.rstrntSn.desc()).fetch();
+        .where(rstrntNmLike(entity.getRstrntNm()), rstrntKndCodeEq(entity.getRstrntKndCode())).from(tbRstrnt).orderBy(tbRstrnt.rstrntSn.desc())
+        .fetch();
   }
 
   private BooleanExpression rstrntNmLike(String rstrntNm) {
-    return StringUtils.isNotBlank(rstrntNm) ? tbRstrnt.rstrntNm.like(rstrntNm) : null;
+    return StringUtils.isNotBlank(rstrntNm) ? tbRstrnt.rstrntNm.like("%" + rstrntNm + "%") : null;
   }
 
   private BooleanExpression rstrntKndCodeEq(String rstrntKndCode) {
@@ -41,11 +41,11 @@ public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
     return queryFactory.select(Projections.fields(RstrntDetailSrchResponse.class, tbRstrnt.rstrntSn.as("restaurantSerialNo"),
         tbRstrnt.rstrntNm.as("restaurantName"), tbRstrnt.kakaoMapId, tbRstrnt.laLc.as("la"), tbRstrnt.loLc.as("lo"),
         tbRstrnt.rstrntKndCode.as("restaurantKindCode"), tbRstrnt.rstrntDstnc.as("restaurantDistance"))).where(tbRstrnt.rstrntSn.eq(rstrntSn))
-        .from(tbRstrnt).leftJoin(tbFile).fetchOne();
+        .from(tbRstrnt).fetchOne();
   }
 
   @Override
   public long updateRstrntImageFileSnById(Integer rstrntSn, Integer rstrntImageFileSn) {
-    return queryFactory.update(tbRstrnt).where(tbRstrnt.rstrntSn.eq(rstrntSn)).execute();
+    return queryFactory.update(tbFile).where(tbFile.rstrntSn.eq(rstrntSn)).execute();
   }
 }

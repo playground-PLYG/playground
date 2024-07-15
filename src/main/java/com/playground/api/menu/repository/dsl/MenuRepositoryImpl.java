@@ -1,6 +1,9 @@
 package com.playground.api.menu.repository.dsl;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static com.playground.api.author.entity.QAuthorMenuEntity.authorMenuEntity;
+import static com.playground.api.author.entity.QMberAuthorEntity.mberAuthorEntity;
+import static com.playground.api.member.entity.QMberEntity.mberEntity;
+import static com.playground.api.menu.entity.QMenuEntity.menuEntity;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

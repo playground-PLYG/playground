@@ -1,8 +1,10 @@
 package com.playground.api.event.repository.dsl;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.playground.api.event.entity.EventEntity;
+import com.playground.api.event.model.EventResultResponse;
 
 public interface EventRepositoryCustom {
 
@@ -13,4 +15,6 @@ public interface EventRepositoryCustom {
   void modifyEndEvent(int eventSn);
 
   EventEntity getEventDetail(int eventSn);
+
+  List<EventResultResponse> getEventResultList(int eventSn);
 }

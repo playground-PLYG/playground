@@ -15,6 +15,7 @@ import com.playground.api.event.entity.PointEntity;
 import com.playground.api.event.entity.PointPaymentEntity;
 import com.playground.api.event.model.EventRequest;
 import com.playground.api.event.model.EventResponse;
+import com.playground.api.event.model.EventResultResponse;
 import com.playground.api.event.model.PointPaymentRequest;
 import com.playground.api.event.model.PointPaymentResponse;
 import com.playground.api.event.repository.EventParticipateRepository;
@@ -160,4 +161,7 @@ public class EventService {
     }
   }
 
+  public List<EventResultResponse> getEventResultList(int eventSn) {
+    return eventRepository.getEventResultList(eventSn);
+  }
 }

@@ -1,6 +1,8 @@
 package com.playground.api.event.repository.dsl;
 
 import static com.playground.api.event.entity.QEventEntity.eventEntity;
+import static com.playground.api.event.entity.QEventParticipateEntity.eventParticipateEntity;
+import static com.playground.api.member.entity.QMberEntity.mberEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import com.playground.api.event.entity.EventEntity;
+import com.playground.api.event.model.EventResultResponse;
+import com.playground.api.restaurant.model.RstrntFileResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -91,6 +95,29 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
             eventEntity.eventThumbFileSn, eventEntity.przwnerCo, eventEntity.eventSeCodeId, eventEntity.drwtMthdCodeId,
             eventEntity.pointPymntMthdCodeId, eventEntity.totPointValue, eventEntity.cntntsCn, eventEntity.expsrAt, eventEntity.drwtDt))
         .from(eventEntity).where(eventEntity.eventSn.eq(eventSn)).fetchOne();
+  }
+
+  @Override
+  public List<EventResultResponse> getEventResultList(int eventSn) {
+    // TODO Auto-generated method stub
+    //List<EventResultResponse> eventResultResponse =
+
+    return queryFactory.select(Projections.fields(EventResultResponse.class,
+        eventEntity.eventSn.as("eventSerial"),
+        eventEntity.totPointValue.as("totalPointValue"),
+        mberEntity.mberNm.as("memberNm"),
+        mberEntity.mberId.as("memberId"),
+        mberEntity.mberTelno.as("memberTelno"),
+        eventParticipateEntity.przwinPointValue.as("przwinPointVal"),
+        eventParticipateEntity.eventPrzwinAt.as("eventPrzwinAlter"),
+        eventParticipateEntity.eventPartcptnDt.as("eventPartcptnDate")
+        ))
+        .from(eventEntity)
+        .join(eventParticipateEntity).on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn))
+        .join(mberEntity).on(eventParticipateEntity.mberId.eq(mberEntity.mberId))
+        .where(eventEntity.eventSn.eq(eventSn))
+        .orderBy(eventParticipateEntity.przwinPointValue.desc(), eventParticipateEntity.eventPartcptnDt.asc())
+        .fetch();
   }
 
   /* 이벤트명 조회 동적쿼리 */

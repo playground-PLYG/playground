@@ -1,9 +1,6 @@
 package com.playground.api.menu.repository.dsl;
 
-import static com.playground.api.author.entity.QAuthorMenuEntity.authorMenuEntity;
-import static com.playground.api.author.entity.QMberAuthorEntity.mberAuthorEntity;
-import static com.playground.api.member.entity.QMberEntity.mberEntity;
-import static com.playground.api.menu.entity.QMenuEntity.menuEntity;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +50,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         .distinct().from(mberEntity).rightJoin(mberAuthorEntity).on(mberEntity.mberId.eq(mberAuthorEntity.mberId)).rightJoin(authorMenuEntity)
         .on(mberAuthorEntity.authorId.eq(authorMenuEntity.authorId)).rightJoin(menuEntity).on(authorMenuEntity.menuSn.eq(menuEntity.menuSn))
         .where(mberIdEq(mberId).or(authorMenuEntity.authorId.eq("ROLE_DEFAULT")), menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNotNull())
-        .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
+        .orderBy(menuEntity.menuSortOrdr.desc()).fetch();
   }
 
 

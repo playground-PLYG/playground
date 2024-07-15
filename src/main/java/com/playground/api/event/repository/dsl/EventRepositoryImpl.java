@@ -32,7 +32,10 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
                 .then("진행중").otherwise("예정").as("progrsSttus")))
         .from(eventEntity).where(eventNmLkie(req.getEventNm()), eventSeCodeIdLkie(req.getEventSeCodeId()), progrsSttusSch(req.getProgrsSttus()))
         .orderBy(eventEntity.registDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
-
+    // CaseBuilder caseBuilder = new CaseBuilder();
+    /**
+     * CaseBuilder.Cases cases = new CaseBuilder().when(eventParticipateEntity.mberId.eq("test")).then("test"); cases = cases.when(eventEntity.eventEndDt.lt(LocalDateTime.now())).then("종료").when(eventEntity.eventBeginDt.loe(LocalDateTime.now())).then("진행중"); cases = cases.when(eventEntity.eventBeginDt.loe(LocalDateTime.now())).then("진행중"); cases = (Cases) cases.otherwise(500); List<EventEntity> event = queryFactory .select(Projections.fields(EventEntity.class, eventEntity.eventSn, eventEntity.eventNm, eventEntity.eventSeCodeId, eventEntity.eventBeginDt, eventEntity.eventEndDt, eventEntity.registUsrId, eventEntity.registDt, eventEntity.updtUsrId, eventEntity.updtDt, cases.as("progrsSttus"))) .from(eventEntity).where(eventNmLkie(req.getEventNm()), eventSeCodeIdLkie(req.getEventSeCodeId()), progrsSttusSch(req.getProgrsSttus())) .orderBy(eventEntity.registDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+     */
     JPAQuery<Long> countQuery = queryFactory.select(eventEntity.count()).from(eventEntity).where(eventNmLkie(req.getEventNm()));
 
     return PageableExecutionUtils.getPage(event, pageable, countQuery::fetchOne);
@@ -84,7 +87,7 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
   }
 
   @Override
-  public EventEntity getMberDetail(int eventSn) {
+  public EventEntity getEventDetail(int eventSn) {
     // TODO Auto-generated method stub
     return queryFactory
         .select(Projections.fields(EventEntity.class, eventEntity.eventSn, eventEntity.eventNm, eventEntity.eventBeginDt, eventEntity.eventEndDt,
@@ -97,6 +100,18 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
   private BooleanExpression eventNmLkie(String eventNm) {
     return StringUtils.isNotBlank(eventNm) ? eventEntity.eventNm.like(eventNm + "%") : null;
   }
+
+  // private Expression<String> casesdfsdf(String eventNm) {
+  // Expression<String> cases = new CaseBuilder();
+  // if (1 > 10) {
+  // cases.when(c.annualSpending.gt(10000)).then("Premier");
+  // cases.when(c.annualSpending.gt(5000)).then("Gold");
+  // } else {
+  // cases.when(c.annualSpending.gt(2000)).then("Silver");
+  // cases.otherwise("Bronze");
+  // }
+  // return cases;
+  // }
 
   /* 이벤트구분코드 조회 동적쿼리 */
   private BooleanExpression eventSeCodeIdLkie(String eventSeCodeId) {

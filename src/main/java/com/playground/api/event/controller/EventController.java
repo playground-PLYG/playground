@@ -3,9 +3,12 @@ package com.playground.api.event.controller;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.playground.api.event.model.EventRequest;
 import com.playground.api.event.model.EventResponse;
@@ -80,11 +83,19 @@ public class EventController {
   /**
    * 이벤트 결과 목록조회
    */
-  @Operation(summary = "이벤트 추첨", description = "이벤트 추첨")
+  @Operation(summary = "이벤트 결과 목록조회", description = "이벤트 결과 목록조회")
   @PostMapping("/api/event/getEventResultList")
   public List<EventResultResponse> getEventResultList(@RequestBody EventRequest req) {
     return eventService.getEventResultList(req.getEventSerial());
   }
 
+  /**
+   * 이벤트 결과 엑셀다운로드
+   */
+  @Operation(summary = "이벤트 결과 목록조회", description = "이벤트 결과 목록조회")
+  @GetMapping("/public/event/getEventExcelList")
+  public ResponseEntity<byte[]> getEventExcelList(@RequestParam(required = true) Integer eventSn) {
+    return eventService.getEventExcelList(eventSn);
+  }
 
 }

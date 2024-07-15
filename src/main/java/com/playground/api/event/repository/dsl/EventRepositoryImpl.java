@@ -11,8 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import com.playground.api.event.entity.EventEntity;
+import com.playground.api.event.model.EventResultExcelResponse;
 import com.playground.api.event.model.EventResultResponse;
-import com.playground.api.restaurant.model.RstrntFileResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -100,24 +100,27 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
   @Override
   public List<EventResultResponse> getEventResultList(int eventSn) {
     // TODO Auto-generated method stub
-    //List<EventResultResponse> eventResultResponse =
+    // List<EventResultResponse> eventResultResponse =
 
-    return queryFactory.select(Projections.fields(EventResultResponse.class,
-        eventEntity.eventSn.as("eventSerial"),
-        eventEntity.totPointValue.as("totalPointValue"),
-        mberEntity.mberNm.as("memberNm"),
-        mberEntity.mberId.as("memberId"),
-        mberEntity.mberTelno.as("memberTelno"),
-        eventParticipateEntity.przwinPointValue.as("przwinPointVal"),
-        eventParticipateEntity.eventPrzwinAt.as("eventPrzwinAlter"),
-        eventParticipateEntity.eventPartcptnDt.as("eventPartcptnDate")
-        ))
-        .from(eventEntity)
-        .join(eventParticipateEntity).on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn))
-        .join(mberEntity).on(eventParticipateEntity.mberId.eq(mberEntity.mberId))
-        .where(eventEntity.eventSn.eq(eventSn))
-        .orderBy(eventParticipateEntity.przwinPointValue.desc(), eventParticipateEntity.eventPartcptnDt.asc())
-        .fetch();
+    return queryFactory
+        .select(Projections.fields(EventResultResponse.class, eventEntity.eventSn.as("eventSerial"), eventEntity.totPointValue.as("totalPointValue"),
+            mberEntity.mberNm.as("memberNm"), mberEntity.mberId.as("memberId"), mberEntity.mberTelno.as("memberTelno"),
+            eventParticipateEntity.przwinPointValue.as("przwinPointVal"), eventParticipateEntity.eventPrzwinAt.as("eventPrzwinAlter"),
+            eventParticipateEntity.eventPartcptnDt.as("eventPartcptnDate")))
+        .from(eventEntity).join(eventParticipateEntity).on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn)).join(mberEntity)
+        .on(eventParticipateEntity.mberId.eq(mberEntity.mberId)).where(eventEntity.eventSn.eq(eventSn))
+        .orderBy(eventParticipateEntity.przwinPointValue.desc(), eventParticipateEntity.eventPartcptnDt.asc()).fetch();
+  }
+
+  @Override
+  public List<EventResultExcelResponse> getEventExcelList(int eventSn) {
+    return queryFactory
+        .select(Projections.fields(EventResultExcelResponse.class, eventEntity.eventNm.as("eventName"), mberEntity.mberNm.as("memberName"),
+            mberEntity.mberId.as("memberId"), eventParticipateEntity.przwinPointValue.as("przwinPointVal"), mberEntity.mberTelno.as("memberTelno"),
+            eventParticipateEntity.eventPartcptnDt.as("eventPartcptnDate")))
+        .from(eventEntity).join(eventParticipateEntity).on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn)).join(mberEntity)
+        .on(eventParticipateEntity.mberId.eq(mberEntity.mberId)).where(eventEntity.eventSn.eq(eventSn))
+        .orderBy(eventParticipateEntity.przwinPointValue.desc(), eventParticipateEntity.eventPartcptnDt.asc()).fetch();
   }
 
   /* 이벤트명 조회 동적쿼리 */

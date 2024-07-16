@@ -4,12 +4,14 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.playground.api.event.entity.EventEntity;
+import com.playground.api.event.model.EventRequest;
+import com.playground.api.event.model.EventResponse;
 import com.playground.api.event.model.EventResultExcelResponse;
 import com.playground.api.event.model.EventResultResponse;
 
 public interface EventRepositoryCustom {
 
-  Page<EventEntity> getEventList(EventEntity request, Pageable pageable);
+  Page<EventResponse> getEventList(EventRequest request, Pageable pageable);
 
   void modifyEvent(EventEntity request);
 

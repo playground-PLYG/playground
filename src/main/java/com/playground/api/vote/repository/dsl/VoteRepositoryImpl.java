@@ -49,11 +49,15 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   @Override
   public Page<VoteEntity> getVotePageList(VoteSrchRequest reqData, Pageable pageable) {
 
-    List<VoteEntity> content = queryFactory.selectFrom(tbVote).where(buildVoteStatus(reqData.getVoteStatus()), secondCnLike(reqData.getVoteSubject()))
+
+    List<VoteEntity> content = queryFactory.selectFrom(tbVote)
+        .where(buildVoteStatus(reqData.getVoteStatus()), secondCnLike(reqData.getVoteSubject()),
+            (tbVote.voteExpsrAt.eq("Y").or(tbVote.registUsrId.eq(reqData.getAnswerUserId()).and(tbVote.voteExpsrAt.eq("N")))))
         .orderBy(tbVote.registDt.asc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 
     JPAQuery<Long> countQuery =
-        queryFactory.select(tbVote.count()).from(tbVote).where(buildVoteStatus(reqData.getVoteStatus()), secondCnLike(reqData.getVoteSubject()));
+        queryFactory.select(tbVote.count()).from(tbVote).where(buildVoteStatus(reqData.getVoteStatus()), secondCnLike(reqData.getVoteSubject()),
+            (tbVote.voteExpsrAt.eq("Y").or(tbVote.registUsrId.eq(reqData.getAnswerUserId()).and(tbVote.voteExpsrAt.eq("N")))));
 
     return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
   }
@@ -68,23 +72,28 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   }
 
 
+  /*
+   * 투표중 : VTI 준비중 : PRP 투표완료 : VTC
+   */
   private BooleanExpression buildVoteStatus(String voteStatus) {
 
     LocalDateTime currentDate = LocalDateTime.now();
 
     // current_date >= vote_begin_dt AND current_date <= vote_end_dt;
-    if ("투표중".equals(voteStatus)) {
+    if ("VTI".equals(voteStatus)) {
       return tbVote.voteBeginDt.loe(currentDate).and(tbVote.voteEndDt.goe(currentDate));
       // current_date < vote_begin_dt
-    } else if ("준비중".equals(voteStatus)) {
+    } else if ("PRP".equals(voteStatus)) {
       return tbVote.voteBeginDt.gt(currentDate);
       // current_date > vote_end_dt
-    } else if ("투표완료".equals(voteStatus)) {
+    } else if ("VTC".equals(voteStatus)) {
       return tbVote.voteEndDt.lt(currentDate);
     }
 
     return null;
   }
+
+
 
   /////////////////////////////////////////////////////////////////////////////////
   ////////////////////// 이하 메소드 사용하는거는 위로 올릴 것 개발 완료후 삭제 예정/////////////////

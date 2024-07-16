@@ -27,9 +27,9 @@ public class VoteSrchRequest extends BaseDto {
   private String voteSubject;
 
   /**
-   * 투표전송상태
+   * 투표진행상태
    */
-  @Schema(description = "투표전송상태", example = "투표중")
+  @Schema(description = "투표진행상태", example = "VTI")
   private String voteStatus;
 
 }

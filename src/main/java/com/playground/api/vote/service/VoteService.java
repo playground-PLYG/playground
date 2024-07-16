@@ -72,7 +72,7 @@ public class VoteService {
 
   @Value("${CLIENT_URL}")
   private String clientUrl;
-  private static final String DATETIME_1 = "yyyy-MM-dd HH";
+  private static final String DATETIME_1 = "yyyy-MM-dd HH:mm";
 
   @Transactional(readOnly = true)
   public Page<VoteSrchResponse> getVoteList(VoteSrchRequest reqData, Pageable pageable) {
@@ -84,8 +84,7 @@ public class VoteService {
             .voteTransmissionAlternative(voteEntity.getVoteTrnsmisAt()).voteTransmissionCode(voteEntity.getVoteTrnsmisCode())
             .voteExposureAlternative(voteEntity.getVoteExpsrAt())
             .voteBeginDate(voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1)))
-            .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1))).registUserId(voteEntity.getRegistUsrId())
-            .registDate(voteEntity.getRegistDt()).updateUserId(voteEntity.getUpdtUsrId()).updateDate(voteEntity.getUpdtDt()).build())
+            .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1))).build())
         .toList();
 
 

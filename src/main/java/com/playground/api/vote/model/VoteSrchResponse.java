@@ -1,7 +1,6 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
-import java.time.LocalDateTime;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -64,29 +63,5 @@ public class VoteSrchResponse extends BaseDto {
    */
   @Schema(description = "투표전송코드", example = "NOW")
   private String voteTransmissionCode;
-
-  /**
-   * 등록사용자ID
-   */
-  @Schema(description = "등록사용자ID")
-  private String registUserId;
-
-  /**
-   * 등록일시
-   */
-  @Schema(description = "등록일시")
-  private LocalDateTime registDate;
-
-  /**
-   * 수정사용자ID
-   */
-  @Schema(description = "수정사용자ID")
-  private String updateUserId;
-
-  /**
-   * 수정일시
-   */
-  @Schema(description = "수정일시")
-  private LocalDateTime updateDate;
 
 }

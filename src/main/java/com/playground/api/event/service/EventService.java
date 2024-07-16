@@ -71,20 +71,10 @@ public class EventService {
   /** 이벤트 목록 조회 */
   @Transactional(readOnly = true)
   public Page<EventResponse> getEventList(Pageable pageable, EventRequest req) {
-    EventEntity schEntity =
-        EventEntity.builder().eventNm(req.getEventName()).eventSeCodeId(req.getEventSectionCodeId()).progrsSttus(req.getProgrsSttus()).build();
 
-    Page<EventEntity> eventPageList = eventRepository.getEventList(schEntity, pageable);
+    Page<EventResponse> eventPageList = eventRepository.getEventList(req, pageable);
 
-    List<EventResponse> eventList = eventPageList.stream()
-        .map(entity -> EventResponse.builder().eventSerial(entity.getEventSn()).eventName(entity.getEventNm())
-            .eventSectionCodeId(entity.getEventSeCodeId()).progrsSttus(entity.getProgrsSttus()).eventBeginDate(entity.getEventBeginDt())
-            .eventEndDate(entity.getEventEndDt()).registUsrId(entity.getRegistUsrId()).updtUsrId(entity.getUpdtUsrId()).registDt(entity.getRegistDt())
-            .updtDt(entity.getUpdtDt()).build())
-        .toList();
-
-    return new PageImpl<>(eventList, eventPageList.getPageable(), eventPageList.getTotalElements());
-
+    return new PageImpl<EventResponse>(eventPageList.getContent(), eventPageList.getPageable(), eventPageList.getTotalElements());
   }
 
   @Transactional

@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import com.playground.api.event.entity.EventEntity;
+import com.playground.api.event.model.EventRequest;
+import com.playground.api.event.model.EventResponse;
 import com.playground.api.event.model.EventResultExcelResponse;
 import com.playground.api.event.model.EventResultResponse;
 import com.querydsl.core.types.Projections;
@@ -28,16 +30,19 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Page<EventEntity> getEventList(EventEntity req, Pageable pageable) {
-    List<EventEntity> event = queryFactory
-        .select(Projections.fields(EventEntity.class, eventEntity.eventSn, eventEntity.eventNm, eventEntity.eventSeCodeId, eventEntity.eventBeginDt,
-            eventEntity.eventEndDt, eventEntity.registUsrId, eventEntity.registDt, eventEntity.updtUsrId, eventEntity.updtDt,
+  public Page<EventResponse> getEventList(EventRequest req, Pageable pageable) {
+    List<EventResponse> event = queryFactory
+        .select(Projections.fields(EventResponse.class, eventEntity.eventSn.as("eventSerial"), eventEntity.eventNm.as("eventName"),
+            eventEntity.eventSeCodeId.as("eventSectionCodeId"), eventEntity.eventBeginDt.as("eventBeginDate"),
+            eventEntity.eventEndDt.as("eventEndDate"), eventEntity.registUsrId.as("registUsrId"), eventEntity.registDt.as("registDt"),
+            eventEntity.updtUsrId.as("updtUsrId"), eventEntity.updtDt.as("updtDt"),
             new CaseBuilder().when(eventEntity.eventEndDt.lt(LocalDateTime.now())).then("종료").when(eventEntity.eventBeginDt.loe(LocalDateTime.now()))
                 .then("진행중").otherwise("예정").as("progrsSttus")))
-        .from(eventEntity).where(eventNmLkie(req.getEventNm()), eventSeCodeIdLkie(req.getEventSeCodeId()), progrsSttusSch(req.getProgrsSttus()))
+        .from(eventEntity)
+        .where(eventNmLkie(req.getEventName()), eventSeCodeIdLkie(req.getEventSectionCodeId()), progrsSttusSch(req.getProgrsSttus()))
         .orderBy(eventEntity.registDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 
-    JPAQuery<Long> countQuery = queryFactory.select(eventEntity.count()).from(eventEntity).where(eventNmLkie(req.getEventNm()));
+    JPAQuery<Long> countQuery = queryFactory.select(eventEntity.count()).from(eventEntity).where(eventNmLkie(req.getEventName()));
 
     return PageableExecutionUtils.getPage(event, pageable, countQuery::fetchOne);
   }

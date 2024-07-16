@@ -1,4 +1,4 @@
-package com.playground.api.eventUser.controller;
+package com.playground.api.eventuser.controller;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.playground.api.eventUser.model.EventUserDetailRequest;
-import com.playground.api.eventUser.model.EventUserDetailResponse;
-import com.playground.api.eventUser.model.EventUserListRequest;
-import com.playground.api.eventUser.model.EventUserListResponse;
-import com.playground.api.eventUser.service.EventUserService;
+import com.playground.api.eventuser.model.EventUserDetailRequest;
+import com.playground.api.eventuser.model.EventUserDetailResponse;
+import com.playground.api.eventuser.model.EventUserListRequest;
+import com.playground.api.eventuser.model.EventUserListResponse;
+import com.playground.api.eventuser.service.EventUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

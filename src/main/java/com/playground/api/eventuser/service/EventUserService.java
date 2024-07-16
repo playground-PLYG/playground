@@ -1,15 +1,15 @@
-package com.playground.api.eventUser.service;
+package com.playground.api.eventuser.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import com.playground.api.event.entity.PointPaymentEntity;
-import com.playground.api.eventUser.model.EventUserDetailRequest;
-import com.playground.api.eventUser.model.EventUserDetailResponse;
-import com.playground.api.eventUser.model.EventUserListRequest;
-import com.playground.api.eventUser.model.EventUserListResponse;
-import com.playground.api.eventUser.model.PointPaymentResponse;
-import com.playground.api.eventUser.repository.EventUserRepository;
+import com.playground.api.eventuser.model.EventUserDetailRequest;
+import com.playground.api.eventuser.model.EventUserDetailResponse;
+import com.playground.api.eventuser.model.EventUserListRequest;
+import com.playground.api.eventuser.model.EventUserListResponse;
+import com.playground.api.eventuser.model.PointPaymentResponse;
+import com.playground.api.eventuser.repository.EventUserRepository;
 import com.playground.api.member.model.MberInfoResponse;
 import com.playground.api.member.service.MberService;
 import lombok.RequiredArgsConstructor;

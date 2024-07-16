@@ -1,4 +1,4 @@
-package com.playground.api.eventUser.model;
+package com.playground.api.eventuser.model;
 
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,9 +1,9 @@
-package com.playground.api.eventUser.repository.dsl;
+package com.playground.api.eventuser.repository.dsl;
 
 import java.util.List;
 import com.playground.api.event.entity.PointPaymentEntity;
-import com.playground.api.eventUser.model.EventUserDetailResponse;
-import com.playground.api.eventUser.model.EventUserListResponse;
+import com.playground.api.eventuser.model.EventUserDetailResponse;
+import com.playground.api.eventuser.model.EventUserListResponse;
 
 public interface EventUserRepositoryCustom {
 

@@ -2,6 +2,7 @@ package com.playground.api.restaurant.model;
 
 import java.io.Serial;
 import java.math.BigDecimal;
+import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -44,4 +45,6 @@ public class RstrntSrchResponse extends BaseDto {
   @Schema(description = "카카오지도ID")
   private String kakaoMapId;
 
+  @Schema(description = "이미지파일ID 리스트")
+  private List<Integer> imageFileIds;
 }

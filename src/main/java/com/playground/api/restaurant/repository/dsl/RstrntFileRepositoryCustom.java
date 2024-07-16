@@ -6,4 +6,6 @@ import com.playground.api.restaurant.model.RstrntFileResponse;
 public interface RstrntFileRepositoryCustom {
 
   List<RstrntFileResponse> findAllByRstrntSn(Integer rstrntSn);
+
+  long updateRstrntImageFileSnById(Integer rstrntSn, Integer rstrntImageFileSn, Integer oldImageFileId);
 }

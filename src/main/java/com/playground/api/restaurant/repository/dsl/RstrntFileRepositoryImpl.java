@@ -19,4 +19,10 @@ public class RstrntFileRepositoryImpl implements RstrntFileRepositoryCustom {
   }
 
 
+  @Override
+  public long updateRstrntImageFileSnById(Integer rstrntSn, Integer rstrntImageFileSn, Integer oldImageFileId) {
+    return queryFactory.update(tbRstrntFile).set(tbRstrntFile.fileSn, rstrntImageFileSn)
+        .where(tbRstrntFile.rstrntSn.eq(rstrntSn), tbRstrntFile.fileSn.eq(oldImageFileId)).execute();
+  }
+
 }

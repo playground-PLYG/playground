@@ -1,4 +1,4 @@
-package com.playground.api.eventUser.model;
+package com.playground.api.eventuser.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

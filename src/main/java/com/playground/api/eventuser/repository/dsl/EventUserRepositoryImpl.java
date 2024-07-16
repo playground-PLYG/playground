@@ -1,4 +1,4 @@
-package com.playground.api.eventUser.repository.dsl;
+package com.playground.api.eventuser.repository.dsl;
 
 import static com.playground.api.event.entity.QEventEntity.eventEntity;
 import static com.playground.api.event.entity.QEventParticipateEntity.eventParticipateEntity;
@@ -8,8 +8,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import com.playground.api.event.entity.PointPaymentEntity;
-import com.playground.api.eventUser.model.EventUserDetailResponse;
-import com.playground.api.eventUser.model.EventUserListResponse;
+import com.playground.api.eventuser.model.EventUserDetailResponse;
+import com.playground.api.eventuser.model.EventUserListResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;

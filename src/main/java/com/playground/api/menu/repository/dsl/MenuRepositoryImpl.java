@@ -41,8 +41,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 .then("Y").otherwise("N").as("lwprtMenuHoldAt")))
         .distinct().from(mberEntity).rightJoin(mberAuthorEntity).on(mberEntity.mberId.eq(mberAuthorEntity.mberId)).rightJoin(authorMenuEntity)
         .on(mberAuthorEntity.authorId.eq(authorMenuEntity.authorId)).rightJoin(menuEntity).on(authorMenuEntity.menuSn.eq(menuEntity.menuSn))
-        .where(mberIdEq(mberId).or(authorMenuEntity.authorId.eq("ROLE_DEFAULT")), menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull())
-        .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
+        .where(mberIdEq(mberId).or(authorMenuEntity.authorId.eq("ROLE_DEFAULT")), menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull()).fetch();
   }
 
   @Override
@@ -53,7 +52,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         .distinct().from(mberEntity).rightJoin(mberAuthorEntity).on(mberEntity.mberId.eq(mberAuthorEntity.mberId)).rightJoin(authorMenuEntity)
         .on(mberAuthorEntity.authorId.eq(authorMenuEntity.authorId)).rightJoin(menuEntity).on(authorMenuEntity.menuSn.eq(menuEntity.menuSn))
         .where(mberIdEq(mberId).or(authorMenuEntity.authorId.eq("ROLE_DEFAULT")), menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNotNull())
-        .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
+        .fetch();
   }
 
 

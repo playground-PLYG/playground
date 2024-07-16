@@ -18,6 +18,8 @@ import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteResponse;
 import com.playground.api.vote.model.VoteRstrntResponse;
+import com.playground.api.vote.model.VoteSrchRequest;
+import com.playground.api.vote.model.VoteSrchResponse;
 import com.playground.api.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,10 +38,9 @@ public class VoteController {
   /**
    * 투표목록 조회
    */
-  // 투표목록조회 메소드 이전꺼... 새로 개발 하셔야 합니다 (to.서유진연구원님)
   @Operation(summary = "투표목록 조회", description = "투표목록을 검색조건에 의해서 검색하고, 페이징처리를 하여 화면에 노출")
   @PostMapping("/public/vote/getVoteList")
-  public Page<VoteResponse> getVoteList(@RequestBody @Valid VoteRequest reqData, Pageable pageable) {
+  public Page<VoteSrchResponse> getVoteList(@RequestBody @Valid VoteSrchRequest reqData, Pageable pageable) {
     return voteService.getVoteList(reqData, pageable);
   }
 

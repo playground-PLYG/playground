@@ -2,10 +2,13 @@ package com.playground.api.eventUser.repository.dsl;
 
 import static com.playground.api.event.entity.QEventEntity.eventEntity;
 import static com.playground.api.event.entity.QEventParticipateEntity.eventParticipateEntity;
+import static com.playground.api.event.entity.QPointPaymentEntity.pointPaymentEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
+import com.playground.api.event.entity.PointPaymentEntity;
+import com.playground.api.eventUser.model.EventUserDetailResponse;
 import com.playground.api.eventUser.model.EventUserListResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -52,5 +55,31 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
     }
   }
   
+  @Override
+  public EventUserDetailResponse getEventUserDetail(Integer eventSerial, String mberId) {
+
+    return queryFactory
+        .select(Projections.fields(EventUserDetailResponse.class, eventEntity.eventSn.as("eventSerial"), eventEntity.eventNm.as("eventName"),
+            eventEntity.cntntsCn.as("contents"), eventEntity.eventBeginDt.as("eventBeginDate"), eventEntity.eventEndDt.as("eventEndDate"),
+            eventEntity.eventSeCodeId.as("eventSectionCodeId"), eventEntity.drwtMthdCodeId.as("drwtMethodCodeId"),
+            new CaseBuilder().when(eventParticipateEntity.mberId.isNotNull()).then("Y").otherwise("N").as("participationAt")))
+        .from(eventEntity).leftJoin(eventParticipateEntity)
+        .on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn).and(eventParticipateEntity.mberId.eq(mberId)))
+        .where(eventEntity.eventSn.eq(eventSerial)).fetchOne();
+  }
+
+  @Override
+  public List<PointPaymentEntity> getEventPointPaymentList(Integer eventSerial) {
+
+    return queryFactory.selectFrom(pointPaymentEntity).where(eventSerialEq(eventSerial)).fetch();
+  }
+  
+  private BooleanExpression eventSerialEq(Integer eventSerial) {
+    if (eventSerial == null) {
+      return null;
+    }
+    return pointPaymentEntity.eventSn.eq(eventSerial);
+  }
+
 }
 

@@ -46,22 +46,5 @@ public class VoteSrchResponse extends BaseDto {
   @Schema(description = "투표종료일시", example = "yyyy-mm-dd HH")
   private String voteEndDate;
 
-  /**
-   * 투표노출여부
-   */
-  @Schema(description = "투표노출여부", example = "Y")
-  private String voteExposureAlternative;
-
-  /**
-   * 투표전송여부
-   */
-  @Schema(description = "투표전송여부", example = "Y")
-  private String voteTransmissionAlternative;
-
-  /**
-   * 투표전송코드
-   */
-  @Schema(description = "투표전송코드", example = "NOW")
-  private String voteTransmissionCode;
 
 }

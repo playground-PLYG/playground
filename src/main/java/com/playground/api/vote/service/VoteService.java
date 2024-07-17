@@ -81,8 +81,6 @@ public class VoteService {
 
     List<VoteSrchResponse> voteList = votePageList.getContent().stream()
         .map(voteEntity -> VoteSrchResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj())
-            .voteTransmissionAlternative(voteEntity.getVoteTrnsmisAt()).voteTransmissionCode(voteEntity.getVoteTrnsmisCode())
-            .voteExposureAlternative(voteEntity.getVoteExpsrAt())
             .voteBeginDate(voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1)))
             .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1))).build())
         .toList();

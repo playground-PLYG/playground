@@ -43,5 +43,14 @@ public class EventUserController {
       @RequestHeader(value = "Authorization", required = false) String token) {
     return eventUserService.getEventDetail(req, token);
   }
+  
+  /**
+   * 사용자 이벤트 참여
+   */
+  @Operation(summary = "사용자 이벤트 참여", description = "사용자 이벤트 참여")
+  @PostMapping("/public/eventUser/addEventParticipation")
+  public EventUserDetailResponse addEventParticipation(@RequestBody @Valid EventUserDetailRequest req, @RequestHeader(value = "Authorization") String token) {
+    return eventUserService.addEventParticipation(req, token);
+  }
 
 }

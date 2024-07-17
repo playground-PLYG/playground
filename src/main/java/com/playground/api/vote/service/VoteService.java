@@ -43,6 +43,8 @@ import com.playground.api.vote.model.VoteResponse;
 import com.playground.api.vote.model.VoteResultDetailResponse;
 import com.playground.api.vote.model.VoteResultResponse;
 import com.playground.api.vote.model.VoteRstrntResponse;
+import com.playground.api.vote.model.VoteSrchRequest;
+import com.playground.api.vote.model.VoteSrchResponse;
 import com.playground.api.vote.repository.VoteAnswerRepository;
 import com.playground.api.vote.repository.VoteQestnIemRepository;
 import com.playground.api.vote.repository.VoteQestnRepository;
@@ -70,15 +72,20 @@ public class VoteService {
 
   @Value("${CLIENT_URL}")
   private String clientUrl;
-  private static final String DATETIME_1 = "yyyy-MM-dd HH";
+  private static final String DATETIME_1 = "yyyy-MM-dd HH:mm";
 
   @Transactional(readOnly = true)
-  // 투표목록조회 메소드 이전꺼... 새로 개발 하셔야 합니다 (to.서유진연구원님)
-  public Page<VoteResponse> getVoteList(VoteRequest reqData, Pageable pageable) {
+  public Page<VoteSrchResponse> getVoteList(VoteSrchRequest reqData, Pageable pageable) {
+
     Page<VoteEntity> votePageList = voteRepository.getVotePageList(reqData, pageable);
 
-    // 임시조치
-    List<VoteResponse> voteList = new ArrayList<>();
+    List<VoteSrchResponse> voteList = votePageList.getContent().stream()
+        .map(voteEntity -> VoteSrchResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj())
+            .voteBeginDate(voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1)))
+            .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1))).build())
+        .toList();
+
+
     return new PageImpl<>(voteList, votePageList.getPageable(), votePageList.getTotalElements());
   }
 
@@ -222,33 +229,33 @@ public class VoteService {
   }
 
   @Transactional(readOnly = true)
-//(Edited by.PSJ, End date.2024.07.15)
-public VoteResponse getVoteResult(VoteRequest reqData) {
-  if (!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
-    VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
+  // (Edited by.PSJ, End date.2024.07.15)
+  public VoteResponse getVoteResult(VoteRequest reqData) {
+    if (!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
+      VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
 
-    // yyyy-MM-dd HH 형태로 변경
-    String beginDate = voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
-    String endDate = voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
+      // yyyy-MM-dd HH 형태로 변경
+      String beginDate = voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
+      String endDate = voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
 
-    List<VoteResultResponse> voteResultList = voteAnswerRepository.getVoteQestnResult(reqData);
-    Integer voteSsno = reqData.getVoteSsno();
-    if (!ObjectUtils.isEmpty(voteResultList)) {
-      for (VoteResultResponse reRes : voteResultList) {
-        Integer questionSsno = reRes.getQuestionSsno();
-        for (VoteResultDetailResponse detailReRes : reRes.getResultDetailList()) {
-          List<String> userIdList = new ArrayList<>();
-          userIdList = voteAnswerRepository.getAnswerUserIds(voteSsno, questionSsno, detailReRes.getItemSsno());
-          detailReRes.setSelUserIdList(userIdList);
+      List<VoteResultResponse> voteResultList = voteAnswerRepository.getVoteQestnResult(reqData);
+      Integer voteSsno = reqData.getVoteSsno();
+      if (!ObjectUtils.isEmpty(voteResultList)) {
+        for (VoteResultResponse reRes : voteResultList) {
+          Integer questionSsno = reRes.getQuestionSsno();
+          for (VoteResultDetailResponse detailReRes : reRes.getResultDetailList()) {
+            List<String> userIdList = new ArrayList<>();
+            userIdList = voteAnswerRepository.getAnswerUserIds(voteSsno, questionSsno, detailReRes.getItemSsno());
+            detailReRes.setSelUserIdList(userIdList);
+          }
         }
       }
+      return VoteResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate).voteEndDate(endDate)
+          .voteResultList(voteResultList).build();
+    } else {
+      return new VoteResponse();
     }
-    return VoteResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate).voteEndDate(endDate)
-        .voteResultList(voteResultList).build();
-  } else {
-    return new VoteResponse();
   }
-}
 
   /////////////////////////////////////////////////////////////////////////////
   //////////////// 이하 메소드는 개발완료 후 삭제 할 예정 참고 만 하기 ////////////////////////

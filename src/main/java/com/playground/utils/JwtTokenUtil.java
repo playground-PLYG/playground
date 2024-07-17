@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @UtilityClass
 public class JwtTokenUtil {
   private static final String USER_ID = "mberId";
-  
+
   private static final String USER_NM = "mberNm";
 
   private static final String SECRET_KEY = "PlaygroundTestKey256SecreyKeyTestKeyYamlfhQodigka256e39djf"; // 이거 좋은 방법 없나 확인 필요
@@ -38,7 +38,7 @@ public class JwtTokenUtil {
     // API 용도에 맞게 properties로 관리하여 사용하는것을 권장한다.
     payloads.put(USER_ID, userId);
     payloads.put(USER_NM, userNm);
- 
+
     // 토큰 유효 시간 (30분)
     long expiredTime = 1000 * 60 * 30L;
 
@@ -56,7 +56,13 @@ public class JwtTokenUtil {
    * 토큰 만료여부 확인
    */
   public static Boolean isValidToken(String token) {
-    return !isTokenExpired(token);
+    String authorization = token;
+
+    if (StringUtils.hasText(token) && token.startsWith(PlaygroundConstants.TOKEN_PREFIX)) {
+      authorization = authorization.replaceAll(PlaygroundConstants.TOKEN_PREFIX, "");
+    }
+
+    return !isTokenExpired(authorization);
   }
 
   /**
@@ -102,13 +108,13 @@ public class JwtTokenUtil {
   private static boolean isTokenExpired(String token) {
     return getExpirationDate(token).before(new Date());
   }
-  
-  //Request의 Header에서 token 값을 가져옵니다. "authorization" : "token'
+
+  // Request의 Header에서 token 값을 가져옵니다. "authorization" : "token'
   public String resolveToken(HttpServletRequest request) {
-      if(request.getHeader(HttpHeaders.AUTHORIZATION) != null ) {
-        return request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
-      }
-      return null;
+    if (request.getHeader(HttpHeaders.AUTHORIZATION) != null) {
+      return request.getHeader(HttpHeaders.AUTHORIZATION).substring(7);
+    }
+    return null;
   }
 
   public static MberInfoResponse autholriztionCheckUser(String token) {

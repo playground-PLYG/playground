@@ -2,6 +2,7 @@ package com.playground.api.author.service;
 
 import java.util.List;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.author.entity.AuthorEntity;
@@ -33,6 +34,7 @@ public class AuthorService {
     return authorRepository.getAuthorList(req.getAuthorId(), req.getAuthorNm(), req.getDeleteAt());
   }
 
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public AuthorResponse addAuthor(AuthorRequest req) {
     AuthorEntity saveEntity = AuthorEntity.builder().authorId(req.getAuthorId()).authorNm(req.getAuthorNm()).deleteAt(req.getDeleteAt()).build();
@@ -42,6 +44,7 @@ public class AuthorService {
     return AuthorResponse.builder().authorId(result.getAuthorId()).authorNm(result.getAuthorNm()).deleteAt(result.getDeleteAt()).build();
   }
 
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public AuthorResponse modifyAuthor(AuthorRequest req) {
     AuthorEntity updateEntity = AuthorEntity.builder().authorId(req.getAuthorId()).authorNm(req.getAuthorNm()).deleteAt(req.getDeleteAt()).build();
@@ -51,6 +54,7 @@ public class AuthorService {
     return AuthorResponse.builder().authorId(result.getAuthorId()).authorNm(result.getAuthorNm()).build();
   }
 
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public AuthorResponse removeAuthor(AuthorRequest req) {
     AuthorEntity deleteEntity = AuthorEntity.builder().deleteAt(req.getDeleteAt()).build();
@@ -67,6 +71,7 @@ public class AuthorService {
     return resList.stream().map(item -> modelMapper.map(item, MberAuthorResponse.class)).toList();
   }
 
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public MberAuthorResponse addMberAuthor(MberAuthorRequest req) {
     MberAuthorEntity saveEntity = MberAuthorEntity.builder().mberId(req.getMberId()).authorId(req.getAuthorId()).build();
@@ -76,6 +81,7 @@ public class AuthorService {
     return MberAuthorResponse.builder().mberId(result.getMberId()).authorId(result.getAuthorId()).build();
   }
 
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public void removeMberAuthor(List<MberAuthorRequest> req) {
     for (int i = 0; i < req.size(); i++) {
@@ -93,6 +99,7 @@ public class AuthorService {
     return resList.stream().map(item -> modelMapper.map(item, AuthorMenuResponse.class)).toList();
   }
 
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public AuthorMenuResponse addAuthorMenu(AuthorMenuRequest req) {
     AuthorMenuEntity saveEntity = AuthorMenuEntity.builder().authorId(req.getAuthorId()).menuSn(req.getMenuSn()).build();
@@ -102,6 +109,7 @@ public class AuthorService {
     return AuthorMenuResponse.builder().authorId(result.getAuthorId()).menuSn(result.getMenuSn()).build();
   }
 
+  @CacheEvict(cacheNames = {"menus"}, allEntries = true)
   @Transactional
   public void removeAuthorMenu(List<AuthorMenuRequest> req) {
     for (int i = 0; i < req.size(); i++) {

@@ -191,18 +191,9 @@ public class VoteService {
             .voteSn(entity.getVoteSn()).qestnSn(entity.getQestnSn()).iemSn(entity.getIemSn()).build()));
       }
 
-      if (req.getItemSsnoList().size() > 1) {
-        // 다중선택 일때
-        for (Integer iemSsno : req.getItemSsnoList()) {
-          VoteAnswerEntity reqAnswer = VoteAnswerEntity.builder().answerUserId(req.getAnswerUserId()).voteSn(req.getVoteSsno())
-              .qestnSn(req.getQuestionSsno()).iemSn(iemSsno).build();
-          VoteAnswerEntity saveAnswer = voteAnswerRepository.save(reqAnswer);
-          resEntityList.add(saveAnswer);
-        }
-      } else {
-        // 다중선택 아닐 때,
+      for (Integer iemSsno : req.getItemSsnoList()) {
         VoteAnswerEntity reqAnswer = VoteAnswerEntity.builder().answerUserId(req.getAnswerUserId()).voteSn(req.getVoteSsno())
-            .qestnSn(req.getQuestionSsno()).iemSn(req.getItemSsnoList().get(0)).build();
+            .qestnSn(req.getQuestionSsno()).iemSn(iemSsno).build();
         VoteAnswerEntity saveAnswer = voteAnswerRepository.save(reqAnswer);
         resEntityList.add(saveAnswer);
       }

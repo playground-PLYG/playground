@@ -36,7 +36,11 @@ public class MessageService {
 
       String url = code.getCodeName();
 
-      discordComponent.sendDiscord(url, req);
+      if ("NOW".equals(req.getVoteTransmissionCode())) {
+
+        discordComponent.sendDiscord(url, req);
+
+      }
       // RestClient 세팅 1차 버전
       /*
        * 받은 dto json 형식으로 변환 ObjectMapper mapper = new ObjectMapper(); String jsonString = mapper.writeValueAsString(req);

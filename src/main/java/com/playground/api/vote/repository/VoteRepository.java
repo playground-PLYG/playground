@@ -9,4 +9,5 @@ public interface VoteRepository extends JpaRepository<VoteEntity, Integer>, Vote
 
   Optional<VoteEntity> findById(Integer voteSn);
 
+
 }

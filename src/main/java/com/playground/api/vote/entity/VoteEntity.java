@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,14 +23,13 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "tb_vote")
-@SequenceGenerator(name = "vote_sn_seq", sequenceName = "tb_vote_vote_sn_seq", initialValue = 1, allocationSize = 1)
 public class VoteEntity extends BaseEntity {
 
   /**
    * 투표일련번호
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vote_sn_seq")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "vote_sn")
   private Integer voteSn;
 

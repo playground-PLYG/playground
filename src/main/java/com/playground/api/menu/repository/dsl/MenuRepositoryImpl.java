@@ -2,7 +2,6 @@ package com.playground.api.menu.repository.dsl;
 
 import static com.playground.api.author.entity.QAuthorMenuEntity.authorMenuEntity;
 import static com.playground.api.author.entity.QMberAuthorEntity.mberAuthorEntity;
-import static com.playground.api.member.entity.QMberEntity.mberEntity;
 import static com.playground.api.menu.entity.QMenuEntity.menuEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +44,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                     .then("Y").otherwise("N").as("lwprtMenuHoldAt")))
             .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
             .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull(),
-                authorMenuEntity.authorId
-                    .in(JPAExpressions.select(mberAuthorEntity.authorId).from(mberAuthorEntity).where(mberAuthorEntity.mberId.eq(mberId))))
+                authorMenuEntity.authorId.in(JPAExpressions.select(mberAuthorEntity.authorId).from(mberAuthorEntity).where(mberIdEq(mberId))))
             .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
 
     // 메뉴권한이 없을 경우
@@ -59,7 +57,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                     .then("Y").otherwise("N").as("lwprtMenuHoldAt")))
             .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
             .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull(), authorMenuEntity.authorId.eq("ROLE_DEFAULT"),
-                JPAExpressions.selectOne().from(mberAuthorEntity).where(mberAuthorEntity.mberId.eq(mberId)).notExists())
+                JPAExpressions.selectOne().from(mberAuthorEntity).where(mberIdEq(mberId)).notExists())
             .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
 
     List<MenuResponse> finalResult = new ArrayList<>();
@@ -79,8 +77,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
             menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt))
         .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
         .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNotNull(),
-            authorMenuEntity.authorId
-                .in(JPAExpressions.select(mberAuthorEntity.authorId).from(mberAuthorEntity).where(mberAuthorEntity.mberId.eq(mberId))))
+            authorMenuEntity.authorId.in(JPAExpressions.select(mberAuthorEntity.authorId).from(mberAuthorEntity).where(mberIdEq(mberId))))
         .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
 
     // 메뉴권한이 없을 경우
@@ -89,7 +86,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
             menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt))
         .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
         .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNotNull(), authorMenuEntity.authorId.eq("ROLE_DEFAULT"),
-            JPAExpressions.selectOne().from(mberAuthorEntity).where(mberAuthorEntity.mberId.eq(mberId)).notExists())
+            JPAExpressions.selectOne().from(mberAuthorEntity).where(mberIdEq(mberId)).notExists())
         .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
 
     List<MenuResponse> finalResult = new ArrayList<>();
@@ -118,7 +115,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
       return null;
     }
 
-    return mberEntity.mberId.eq(mberId);
+    return mberAuthorEntity.mberId.eq(mberId);
   }
 
 

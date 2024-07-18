@@ -19,5 +19,6 @@ public interface EventUserRepositoryCustom {
   void addFrscParticipation(EventUserDetailRequest req, String mberId);
   
   void addRandParticipation(EventUserDetailRequest req, String mberId);
-
+  
+  void addEventRaffle(EventUserDetailRequest req, String mberId);
 }

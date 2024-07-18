@@ -2,6 +2,8 @@
 
 package com.playground.api.restaurant.repository.dsl;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import com.playground.api.restaurant.entity.QRstrntEntity;
@@ -18,16 +20,16 @@ import lombok.RequiredArgsConstructor;
 public class RstrntRepositoryImpl implements RstrntRepositoryCustom {
   private final JPAQueryFactory queryFactory;
   QRstrntEntity tbRstrnt = QRstrntEntity.rstrntEntity;
-  QRstrntFileEntity tbFile = QRstrntFileEntity.rstrntFileEntity;
+  QRstrntFileEntity tbRstrntFile = QRstrntFileEntity.rstrntFileEntity;
 
   @Override
   public List<RstrntSrchResponse> findAll(RstrntEntity entity) {
-    return queryFactory
-        .select(Projections.fields(RstrntSrchResponse.class, tbRstrnt.rstrntSn.as("restaurantSerialNo"), tbRstrnt.rstrntNm.as("restaurantName"),
-            tbRstrnt.kakaoMapId, tbRstrnt.laLc.as("la"), tbRstrnt.loLc.as("lo"), tbRstrnt.rstrntKndCode.as("restaurantKindCode"),
-            tbRstrnt.rstrntDstnc.as("restaurantDistance")))
-        .where(rstrntNmLike(entity.getRstrntNm()), rstrntKndCodeEq(entity.getRstrntKndCode())).from(tbRstrnt).orderBy(tbRstrnt.rstrntSn.desc())
-        .fetch();
+    return queryFactory.select(tbRstrnt).from(tbRstrnt).leftJoin(tbRstrntFile).on(tbRstrnt.rstrntSn.eq(tbRstrntFile.rstrntSn))
+        .where(rstrntNmLike(entity.getRstrntNm()), rstrntKndCodeEq(entity.getRstrntKndCode())).orderBy(tbRstrnt.rstrntSn.asc())
+        .transform(groupBy(tbRstrnt.rstrntSn)
+            .list(Projections.fields(RstrntSrchResponse.class, tbRstrnt.rstrntSn.as("restaurantSerialNo"), tbRstrnt.rstrntNm.as("restaurantName"),
+                tbRstrnt.kakaoMapId.as("kakaoMapId"), tbRstrnt.laLc.as("la"), tbRstrnt.loLc.as("lo"), tbRstrnt.rstrntKndCode.as("restaurantKindCode"),
+                tbRstrnt.rstrntDstnc.as("restaurantDistance"), list(tbRstrntFile.fileSn).as("imageFileIds"))));
   }
 
   private BooleanExpression rstrntNmLike(String rstrntNm) {

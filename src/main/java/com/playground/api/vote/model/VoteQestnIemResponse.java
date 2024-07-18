@@ -23,9 +23,9 @@ public class VoteQestnIemResponse extends BaseDto {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 항목ID
+   * 항목일련번호
    */
-  @Schema(description = "항목ID", example = "0000123456")
+  @Schema(description = "항목일련번호", example = "0000123456")
   private Integer itemSsno;
 
   /**

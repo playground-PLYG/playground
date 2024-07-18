@@ -28,16 +28,31 @@ public class VoteQestnRequest extends BaseDto {
   private Integer voteSsno;
 
   /**
-   * 질문내용
+   * 투표종류코드
    */
-  @Schema(description = "질문내용", example = "회식 가능한 날짜를 선택해주세요")
-  private String questionContents;
+  @Schema(description = "투표종류코드")
+  private String voteKndCd;
+
 
   /**
    * 복수선택여부
    */
   @Schema(description = "복수선택여부", example = "Y")
   private String compoundNumberChoiceAlternative;
+
+  /**
+   * 익명투표여부
+   */
+  @Schema(description = "익명투표여부")
+  private String anonymityVoteAlternative;
+
+
+  /**
+   * 질문내용
+   */
+  @Schema(description = "질문내용", example = "회식 가능한 날짜를 선택해주세요")
+  private String questionContents;
+
 
   /**
    * 투표항목 객체

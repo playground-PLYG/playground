@@ -37,4 +37,11 @@ public class VoteQestnIemRequest extends BaseDto {
    */
   @Schema(description = "항목명", example = "또성골뱅이")
   private String itemName;
+
+
+  /**
+   * 항목식별ID
+   */
+  @Schema(description = "항목식별ID", example = "또성골뱅이")
+  private String itemIdentificationId;
 }

@@ -32,6 +32,8 @@ public class DiscordRequest implements Serializable {
 
   private String username;
 
+  private String voteTransmissionCode;
+
   @JsonProperty("avatar_url")
   private String avatarUrl;
 

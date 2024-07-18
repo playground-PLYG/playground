@@ -1,13 +1,19 @@
 package com.playground.api.metadata.model;
 
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.List;
 import com.playground.model.BaseDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
@@ -19,52 +25,54 @@ public class MetadataResponse extends BaseDto {
   /**
    * 메타데이터URL
    */
-  private String metdataUrl;
+  private String url;
 
   /**
    * 메타데이터제목
    */
-  private String metdataSj;
+  private String title;
 
   /**
    * 메타데이터설명
    */
-  private String metdataDc;
+  private String description;
 
   /**
    * 메타데이터카테고리
    */
-  private String metdataCategory;
+  private String category;
 
   /**
    * keyword 목록
    */
-  private List<String> keywords;
+  @Default
+  private List<String> keywords = new ArrayList<>();
 
   /**
    * 미리보기이미지제목
    */
-  private String prevewImageSj;
+  private String ogTitle;
 
   /**
    * 미리보기이미지설명
    */
-  private String prevewImageDc;
+  private String ogDescription;
 
   /**
    * 미리보기이미지URL
    */
-  private String prevewImageUrl;
+  private String ogUrl;
 
   /**
    * 미리보기사이트명
    */
-  private String prevewSiteNm;
+  private String ogSiteName;
 
   /**
    * og image 목록
    */
-  private List<String> ogImages;
+  @Default
+  private List<String> ogImages = new ArrayList<>();
 
   /**
    * 메타데이터기본내용
@@ -74,6 +82,6 @@ public class MetadataResponse extends BaseDto {
   /**
    * 메타데이터아이콘명
    */
-  private String metdataIconNm;
+  private String icon;
 
 }

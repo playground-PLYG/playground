@@ -21,8 +21,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
   @Override
   public Page<PostEntity> getPostList(PostEntity request, Pageable pageable) {
-
-
     List<PostEntity> post = queryFactory.selectFrom(postEntity)
         .where(postEntity.noticeEntity.bbsId.eq(request.getNoticeEntity().getBbsId()), nttSjLkie(request.getNttSj())).orderBy(postEntity.nttSn.desc())
         .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();

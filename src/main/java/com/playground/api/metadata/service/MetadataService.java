@@ -2,7 +2,6 @@ package com.playground.api.metadata.service;
 
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +21,17 @@ public class MetadataService {
   private final MetadataRepository metadataRepository;
   private final MetadataOpengraphImageRepository metadataOpengraphImageRepository;
   private final MetadataKeywordRepository metadataKeywordRepository;
-  private final ModelMapper modelMapper;
 
-  @Cacheable(cacheManager = CacheType.TEN_MINUTES, cacheNames = "metadata", key = "#url", unless = "#result == null")
+  @Cacheable(cacheManager = CacheType.ONE_HOUR, cacheNames = "metadata", key = "#url", unless = "#result == null")
   @Transactional(readOnly = true)
   public MetadataResponse getMetadata(String url) {
     MetadataEntity metadata = metadataRepository.findById(url).orElse(null);
 
     if (metadata != null) {
-      MetadataResponse result = modelMapper.map(metadata, MetadataResponse.class);
+      MetadataResponse result = MetadataResponse.builder().url(metadata.getMetdataUrl()).title(metadata.getMetdataSj())
+          .description(metadata.getMetdataDc()).category(metadata.getMetdataCategorynCn()).ogTitle(metadata.getPrevewImageSj())
+          .ogDescription(metadata.getPrevewImageDc()).ogUrl(metadata.getPrevewImageUrl()).ogSiteName(metadata.getPrevewSiteNm())
+          .metdataBassCn(metadata.getMetdataBassCn()).icon(metadata.getMetdataIconNm()).build();
 
       List<MetadataOpengraphImageEntity> ogImageList = metadataOpengraphImageRepository.findByPrevewImageUrl(url);
 

@@ -93,6 +93,11 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
   }
 
   @Override
+  public void modifyDrwtEvent(int eventSn) {
+    queryFactory.update(eventEntity).set(eventEntity.drwtDt, LocalDateTime.now()).where(eventEntity.eventSn.eq(eventSn)).execute();
+  }
+
+  @Override
   public EventEntity getEventDetail(int eventSn) {
     // TODO Auto-generated method stub
     return queryFactory

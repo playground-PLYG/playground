@@ -22,4 +22,6 @@ public interface EventRepositoryCustom {
   List<EventResultResponse> getEventResultList(int eventSn);
 
   List<EventResultExcelResponse> getEventExcelList(int eventSn);
+
+  void modifyDrwtEvent(int eventSn);
 }

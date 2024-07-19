@@ -12,14 +12,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Schema(name = "VoteQestnResponse", description = "질문등록 응답에 필요한 데이터")
+@Schema(name = "VoteQestnAddResponse", description = "질문등록 응답에 필요한 데이터")
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class VoteQestnResponse extends BaseDto {
+public class VoteQestnAddResponse extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
@@ -63,7 +63,9 @@ public class VoteQestnResponse extends BaseDto {
   /**
    * 투표항목 객체
    */
-  @Schema(description = "항목객체", example = "voteQestnIemResponse")
+  @Schema(description = "항목객체", example = "VoteQestnIemAddResponse")
   @Builder.Default
-  private List<VoteQestnIemResponse> voteQestnIemResponseList = new ArrayList<>();
+  private List<VoteQestnIemAddResponse> voteQestnIemResponseList = new ArrayList<>();
+
+
 }

@@ -71,5 +71,5 @@ public class VoteModifyRequest extends BaseDto {
    * 질문들
    */
   @Schema(description = "질문객체", example = "voteQestnRequestList")
-  private List<VoteQestnRequest> voteQestnRequestList;
+  private List<VoteQestnAddRequest> voteQestnRequestList;
 }

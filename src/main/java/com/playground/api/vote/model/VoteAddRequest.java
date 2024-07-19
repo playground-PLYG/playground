@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@Schema(name = "VoteRequest", description = "투표 등록/수정 요청에 필요한 데이터")
+@Schema(name = "VoteAddRequest", description = "투표 등록/수정 요청에 필요한 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
 public class VoteAddRequest extends BaseDto {
@@ -16,18 +16,10 @@ public class VoteAddRequest extends BaseDto {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 투표일련번호
-   */
-  @Schema(description = "투표일련번호", example = "1234567890")
-  private Integer voteSsno;
-
-  /**
    * 사용자ID
    */
   @Schema(description = "사용자ID", example = "sungjong")
   private String answerUserId;
-
-
 
   /**
    * 투표제목
@@ -54,11 +46,6 @@ public class VoteAddRequest extends BaseDto {
   @Schema(description = "투표노출여부", example = "Y")
   private String voteExposureAlternative;
 
-  /**
-   * 투표전송여부
-   */
-  @Schema(description = "투표전송여부", example = "Y")
-  private String voteTransmissionAlternative;
 
   /**
    * 투표전송코드
@@ -71,5 +58,5 @@ public class VoteAddRequest extends BaseDto {
    * 질문들
    */
   @Schema(description = "질문객체", example = "voteQestnRequestList")
-  private List<VoteQestnRequest> voteQestnRequestList;
+  private List<VoteQestnAddRequest> voteQestnRequestList;
 }

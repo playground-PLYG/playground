@@ -70,6 +70,6 @@ public class VoteAddResponse extends BaseDto {
    * 질문객체
    */
   @Schema(description = "질문객체", example = "voteQestnResponse")
-  private List<VoteQestnResponse> voteQestnResponseList;
+  private List<VoteQestnAddResponse> voteQestnResponseList;
 
 }

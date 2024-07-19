@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.eventuser.model.EventParticipationResponse;
 import com.playground.api.eventuser.model.EventPrizeWinnerResponse;
 import com.playground.api.eventuser.model.EventUserDetailRequest;
 import com.playground.api.eventuser.model.EventUserDetailResponse;
@@ -49,8 +50,8 @@ public class EventUserController {
    */
   @Operation(summary = "사용자 이벤트 참여", description = "사용자 이벤트 참여")
   @PostMapping("/api/eventUser/addEventParticipation")
-  public void addEventParticipation(@RequestBody EventUserDetailRequest req) {
-    eventUserService.addEventParticipation(req);
+  public EventParticipationResponse addEventParticipation(@RequestBody EventUserDetailRequest req) {
+    return eventUserService.addEventParticipation(req);
   }
   
   /**

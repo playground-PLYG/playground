@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.event.entity.PointPaymentEntity;
+import com.playground.api.eventuser.model.EventParticipationResponse;
 import com.playground.api.eventuser.model.EventPrizeWinnerResponse;
 import com.playground.api.eventuser.model.EventUserDetailRequest;
 import com.playground.api.eventuser.model.EventUserDetailResponse;
@@ -76,8 +77,10 @@ public class EventUserService {
 
   /** 사용자 이벤트 참여 */
   @Transactional
-  public void addEventParticipation(EventUserDetailRequest req) {
+  public EventParticipationResponse addEventParticipation(EventUserDetailRequest req) {
 
+    EventParticipationResponse result = new EventParticipationResponse();
+    
     String mberId = "";
     Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
 
@@ -93,14 +96,16 @@ public class EventUserService {
     String drwtMthdCode = eventUserRepository.getDrwtMthdCode(req);
 
     if (drwtMthdCode.toUpperCase().equals(FIRST_COME)) { // 순차지급
-      eventUserRepository.addFrscParticipation(req, mberId);
+      result = eventUserRepository.addFrscParticipation(req, mberId);
     } else if (drwtMthdCode.toUpperCase().equals(RANDOM)) { // 랜덤
-      eventUserRepository.addRandParticipation(req, mberId);
+      result = eventUserRepository.addRandParticipation(req, mberId);
     }
+    return result;
 
   }
 
 
+  /** 사용자 이벤트 응모 */
   @Transactional
   public void addEventRaffle(EventUserDetailRequest req) {
 
@@ -118,6 +123,7 @@ public class EventUserService {
   }
 
 
+  /** 응모형 이벤트 당첨자 조회 */
   @Transactional(readOnly = true)
   public EventPrizeWinnerResponse getEntryEventWinner(Integer eventSn) {
     

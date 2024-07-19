@@ -6,11 +6,13 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.event.entity.PointPaymentEntity;
+import com.playground.api.eventuser.model.EventPrizeWinnerResponse;
 import com.playground.api.eventuser.model.EventUserDetailRequest;
 import com.playground.api.eventuser.model.EventUserDetailResponse;
 import com.playground.api.eventuser.model.EventUserListRequest;
 import com.playground.api.eventuser.model.EventUserListResponse;
 import com.playground.api.eventuser.model.PointPaymentResponse;
+import com.playground.api.eventuser.model.PrizeWinnerResponse;
 import com.playground.api.eventuser.repository.EventUserRepository;
 import com.playground.api.member.model.MberInfoResponse;
 import com.playground.constants.MessageCode;
@@ -113,6 +115,32 @@ public class EventUserService {
       throw new BizException(MessageCode.ACESS_DENIED_EMAIL);
     }
     eventUserRepository.addEventRaffle(req, mberId);
+  }
+
+
+  @Transactional(readOnly = true)
+  public EventPrizeWinnerResponse getEntryEventWinner(Integer eventSn) {
+    
+    String mberId = "";
+    Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
+
+    EventPrizeWinnerResponse result = new EventPrizeWinnerResponse();
+    if (mberInfo.isPresent()) {
+      // 로그인 사용자 정보 있는 경우
+      mberId = mberInfo.get().getMberId();
+      
+      // 당첨여부, 지급값
+      result = eventUserRepository.getPrizeAt(eventSn, mberId);
+    } else {
+      result.setEventPrizeAt("N");
+      result.setPrzwinPointValue(0);
+      // 로그인 사용자 정보가 없거나 로그인 하지 않은 경우
+    }
+    
+    //당첨자 리스트
+    List<PrizeWinnerResponse> winnerList = eventUserRepository.getEntryEventWinningList(eventSn, mberId);
+    result.setPrizeWinner(winnerList);
+    return result;
   }
 
 }

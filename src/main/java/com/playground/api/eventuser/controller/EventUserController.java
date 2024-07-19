@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.eventuser.model.EventPrizeWinnerResponse;
 import com.playground.api.eventuser.model.EventUserDetailRequest;
 import com.playground.api.eventuser.model.EventUserDetailResponse;
 import com.playground.api.eventuser.model.EventUserListRequest;
@@ -48,7 +49,7 @@ public class EventUserController {
    */
   @Operation(summary = "사용자 이벤트 참여", description = "사용자 이벤트 참여")
   @PostMapping("/api/eventUser/addEventParticipation")
-  public void addEventParticipation(@RequestBody @Valid EventUserDetailRequest req) {
+  public void addEventParticipation(@RequestBody EventUserDetailRequest req) {
     eventUserService.addEventParticipation(req);
   }
   
@@ -57,8 +58,17 @@ public class EventUserController {
    */
   @Operation(summary = "사용자 이벤트 응모", description = "사용자 이벤트 응모")
   @PostMapping("/api/eventUser/addEventRaffle")
-  public void addEventRaffle(@RequestBody @Valid EventUserDetailRequest req) {
+  public void addEventRaffle(@RequestBody EventUserDetailRequest req) {
     eventUserService.addEventRaffle(req);
+  }
+  
+  /**
+   * 응모형 이벤트 당첨자 조회
+   */
+  @Operation(summary = "응모형 이벤트 당첨자 조회", description = "응모형 이벤트 당첨자 조회")
+  @PostMapping("/public/eventUser/getEntryEventWinner")
+  public EventPrizeWinnerResponse getEntryEventWinner(@RequestBody Integer eventSn) {
+    return eventUserService.getEntryEventWinner(eventSn);
   }
 
 }

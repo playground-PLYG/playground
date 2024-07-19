@@ -112,8 +112,8 @@ public class EventService {
     EventResponse eventResponse = EventResponse.builder().eventSerial(entity.getEventSn()).eventName(entity.getEventNm())
         .eventBeginDate(entity.getEventBeginDt()).eventEndDate(entity.getEventEndDt()).eventThumbFileSn(entity.getEventThumbFileSn())
         .przwnerCount(entity.getPrzwnerCo()).eventSectionCodeId(entity.getEventSeCodeId()).drwtMethodCodeId(entity.getDrwtMthdCodeId())
-        .pointPymntMethodCodeId(entity.getPointPymntMthdCodeId()).totalPointValue(entity.getTotPointValue()).cntntsContents(entity.getCntntsCn())
-        .drwtDate(entity.getDrwtDt()).build();
+        .expsrAt(entity.getExpsrAt()).pointPymntMethodCodeId(entity.getPointPymntMthdCodeId()).totalPointValue(entity.getTotPointValue())
+        .cntntsContents(entity.getCntntsCn()).drwtDate(entity.getDrwtDt()).build();
 
     List<PointPaymentEntity> pointEntityList = pointPaymentRepository.findByEventSn(req.getEventSerial());
 
@@ -155,6 +155,7 @@ public class EventService {
 
       }
     }
+    eventRepository.modifyDrwtEvent(req.getEventSerial());
   }
 
   public List<EventResultResponse> getEventResultList(int eventSn) {

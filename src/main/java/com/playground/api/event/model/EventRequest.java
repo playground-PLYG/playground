@@ -23,11 +23,11 @@ public class EventRequest extends BaseDto {
   private String eventName;
 
   @Schema(description = "이벤트시작일시")
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime eventBeginDate;
 
   @Schema(description = "이벤트종료일시")
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime eventEndDate;
 
   @Schema(description = "진행상태")

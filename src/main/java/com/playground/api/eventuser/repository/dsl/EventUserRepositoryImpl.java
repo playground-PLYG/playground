@@ -4,14 +4,17 @@ import static com.playground.api.event.entity.QEventEntity.eventEntity;
 import static com.playground.api.event.entity.QEventParticipateEntity.eventParticipateEntity;
 import static com.playground.api.event.entity.QPointEntity.pointEntity;
 import static com.playground.api.event.entity.QPointPaymentEntity.pointPaymentEntity;
+import static com.playground.api.member.entity.QMberEntity.mberEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import com.playground.api.event.entity.PointPaymentEntity;
+import com.playground.api.eventuser.model.EventPrizeWinnerResponse;
 import com.playground.api.eventuser.model.EventUserDetailRequest;
 import com.playground.api.eventuser.model.EventUserDetailResponse;
 import com.playground.api.eventuser.model.EventUserListResponse;
+import com.playground.api.eventuser.model.PrizeWinnerResponse;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -35,15 +38,23 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
   @Override
   public List<EventUserListResponse> getEventList(String eventName, String progrsSttus, String mberId) {
     return queryFactory
-        .select(Projections.fields(EventUserListResponse.class, eventEntity.eventSn.as("eventSerial"), eventEntity.eventNm.as("eventName"),
-            eventEntity.eventBeginDt.as("eventBeginDate"), eventEntity.eventEndDt.as("eventEndDate"),
+        .select(Projections.fields(EventUserListResponse.class, 
+            eventEntity.eventSn.as("eventSerial"), 
+            eventEntity.eventNm.as("eventName"),
+            eventEntity.eventBeginDt.as("eventBeginDate"), 
+            eventEntity.eventEndDt.as("eventEndDate"),
             eventEntity.eventThumbFileSn.as("eventThumbFileSn"),
-            new CaseBuilder().when(eventEntity.eventEndDt.lt(LocalDateTime.now())).then("종료").when(eventEntity.eventBeginDt.loe(LocalDateTime.now()))
-                .then("진행중").otherwise("예정").as("progrsSttus"),
-            new CaseBuilder().when(eventParticipateEntity.mberId.isNotNull()).then("참여완료").otherwise("미참여").as("participationAt")))
+            new CaseBuilder()
+              .when(eventEntity.eventEndDt.lt(LocalDateTime.now()))
+              .then("종료").when(eventEntity.eventBeginDt.loe(LocalDateTime.now()))
+              .then("진행중").otherwise("예정").as("progrsSttus"),
+            new CaseBuilder()
+              .when(eventParticipateEntity.mberId.isNotNull())
+              .then("참여완료").otherwise("미참여").as("participationAt")))
         .from(eventEntity).leftJoin(eventParticipateEntity)
         .on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn).and(eventParticipateEntity.mberId.eq(mberId)))
-        .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), eventStatusEq(progrsSttus)).orderBy(eventEntity.eventBeginDt.desc()).fetch();
+        .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), 
+            eventStatusEq(progrsSttus)).orderBy(eventEntity.eventBeginDt.desc()).fetch();
   }
 
   private BooleanExpression eventNameLike(String eventName) {
@@ -70,10 +81,17 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
   public EventUserDetailResponse getEventUserDetail(Integer eventSerial, String mberId) {
 
     return queryFactory
-        .select(Projections.fields(EventUserDetailResponse.class, eventEntity.eventSn.as("eventSerial"), eventEntity.eventNm.as("eventName"),
-            eventEntity.cntntsCn.as("contents"), eventEntity.eventBeginDt.as("eventBeginDate"), eventEntity.eventEndDt.as("eventEndDate"),
-            eventEntity.eventSeCodeId.as("eventSectionCodeId"), eventEntity.drwtMthdCodeId.as("drwtMethodCodeId"),
-            new CaseBuilder().when(eventParticipateEntity.mberId.isNotNull()).then("Y").otherwise("N").as("participationAt")))
+        .select(Projections.fields(EventUserDetailResponse.class, 
+            eventEntity.eventSn.as("eventSerial"), 
+            eventEntity.eventNm.as("eventName"),
+            eventEntity.cntntsCn.as("contents"), 
+            eventEntity.eventBeginDt.as("eventBeginDate"), 
+            eventEntity.eventEndDt.as("eventEndDate"),
+            eventEntity.eventSeCodeId.as("eventSectionCodeId"), 
+            eventEntity.drwtMthdCodeId.as("drwtMethodCodeId"),
+            new CaseBuilder()
+              .when(eventParticipateEntity.mberId.isNotNull())
+              .then("Y").otherwise("N").as("participationAt")))
         .from(eventEntity).leftJoin(eventParticipateEntity)
         .on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn).and(eventParticipateEntity.mberId.eq(mberId)))
         .where(eventEntity.eventSn.eq(eventSerial)).fetchOne();
@@ -109,9 +127,14 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
         .from(eventEntity).where(eventEntity.eventSn.eq(req.getEventSerial())).fetchOne();
 
     // 포인트 지급 단위 값 계산
-    Integer pointPymntUnitValue = queryFactory.select(pointPaymentEntity.pointPymntUnitValue).from(pointPaymentEntity)
-        .where(pointPaymentEntity.eventSn.eq(req.getEventSerial()).and(pointPaymentEntity.pointPymntUnitValue.loe(remainingPoints)))
-        .orderBy(NumberExpression.random().asc()).limit(1).fetchFirst();
+    Integer pointPymntUnitValue = 
+        queryFactory.select(pointPaymentEntity.pointPymntUnitValue)
+        .from(pointPaymentEntity)
+        .where(pointPaymentEntity.eventSn.eq(req.getEventSerial())
+            .and(pointPaymentEntity.pointPymntUnitValue.loe(remainingPoints)))
+        .orderBy(NumberExpression.random().asc())
+        .limit(1)
+        .fetchFirst();
 
     if (pointPymntUnitValue == null) {
       pointPymntUnitValue = 0;
@@ -122,16 +145,42 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
 
     // 참여 insert
     queryFactory.insert(eventParticipateEntity)
-        .columns(eventParticipateEntity.eventSn, eventParticipateEntity.mberId, eventParticipateEntity.przwinPointValue,
-            eventParticipateEntity.eventPrzwinAt, eventEntity.registUsrId, eventEntity.updtUsrId)
-        .values(req.getEventSerial(), mberId, pointPymntUnitValue, eventPrzwinAt, mberId, mberId).execute();
+        .columns(
+            eventParticipateEntity.eventSn, 
+            eventParticipateEntity.mberId, 
+            eventParticipateEntity.przwinPointValue,
+            eventParticipateEntity.eventPrzwinAt, 
+            eventEntity.registUsrId, 
+            eventEntity.updtUsrId)
+        .values(
+            req.getEventSerial(), 
+            mberId, 
+            pointPymntUnitValue, 
+            eventPrzwinAt, 
+            mberId, 
+            mberId)
+        .execute();
 
     // 당첨 시 point 적립
     if (eventPrzwinAt.equals("Y")) {
       queryFactory.insert(pointEntity)
-          .columns(pointEntity.mberId, pointEntity.pointValue, pointEntity.validDt, pointEntity.refrnId, pointEntity.refrnSeCodeId,
-              pointEntity.registUsrId, pointEntity.updtUsrId)
-          .values(mberId, pointPymntUnitValue, LocalDateTime.now().plusYears(1), req.getEventSerial(), "EVNT", mberId, mberId).execute();
+          .columns(
+              pointEntity.mberId, 
+              pointEntity.pointValue, 
+              pointEntity.validDt, 
+              pointEntity.refrnId, 
+              pointEntity.refrnSeCodeId,
+              pointEntity.registUsrId, 
+              pointEntity.updtUsrId)
+          .values(
+              mberId, 
+              pointPymntUnitValue, 
+              LocalDateTime.now().plusYears(1), 
+              req.getEventSerial(), 
+              EVENT_CODE, 
+              mberId, 
+              mberId)
+          .execute();
     }
 
   }
@@ -141,24 +190,33 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
   public void addFrscParticipation(EventUserDetailRequest req, String mberId) {
 
     // 사용자 순위
-    Long rank = queryFactory.select(eventParticipateEntity.count().add(1)).from(eventParticipateEntity)
-        .where(eventParticipateEntity.eventSn.eq(req.getEventSerial())).fetchOne();
-    
+    Long rank = 
+        queryFactory.select(eventParticipateEntity.count().add(1))
+        .from(eventParticipateEntity)
+        .where(eventParticipateEntity.eventSn.eq(req.getEventSerial()))
+        .fetchOne();
+
     // 이벤트 지급정보
     List<Tuple> results = queryFactory
-        .select(pointPaymentEntity.pointPymntSn, pointPaymentEntity.fixingPointPayrCo, pointPaymentEntity.fixingPointValue)
-        .from(pointPaymentEntity).where(pointPaymentEntity.eventSn.eq(req.getEventSerial())).orderBy(pointPaymentEntity.pointPymntSn.asc()).fetch();
+        .select(
+            pointPaymentEntity.pointPymntSn, 
+            pointPaymentEntity.fixingPointPayrCo, 
+            pointPaymentEntity.fixingPointValue)
+        .from(pointPaymentEntity)
+        .where(pointPaymentEntity.eventSn.eq(req.getEventSerial()))
+        .orderBy(pointPaymentEntity.pointPymntSn.asc())
+        .fetch();
 
     Tuple validResult = null;
     int participants = 0; // 누적 참여자 수
     for (Tuple result : results) {
-      Integer fixingPointPayrCo = result.get(pointPaymentEntity.fixingPointPayrCo); // 참여자 수 
+      Integer fixingPointPayrCo = result.get(pointPaymentEntity.fixingPointPayrCo); // 참여자 수
 
       participants += fixingPointPayrCo;
 
       if (participants >= rank) {
         validResult = result;
-        break; 
+        break;
       }
     }
 
@@ -167,21 +225,60 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
 
       // 참여(당첨) insert
       queryFactory.insert(eventParticipateEntity)
-          .columns(eventParticipateEntity.eventSn, eventParticipateEntity.mberId, eventParticipateEntity.przwinPointValue,
-              eventParticipateEntity.eventPrzwinAt, eventEntity.registUsrId, eventEntity.updtUsrId)
-          .values(req.getEventSerial(), mberId, fixingPointValue, "Y", mberId, mberId).execute();
+          .columns(
+              eventParticipateEntity.eventSn, 
+              eventParticipateEntity.mberId, 
+              eventParticipateEntity.przwinPointValue,
+              eventParticipateEntity.eventPrzwinAt, 
+              eventEntity.registUsrId, 
+              eventEntity.updtUsrId)
+          .values(
+              req.getEventSerial(), 
+              mberId, 
+              fixingPointValue, 
+              "Y", 
+              mberId, 
+              mberId)
+          .execute();
 
       // 포인트 지급
       queryFactory.insert(pointEntity)
-          .columns(pointEntity.mberId, pointEntity.pointValue, pointEntity.validDt, pointEntity.refrnId, pointEntity.refrnSeCodeId,
-              pointEntity.registUsrId, pointEntity.updtUsrId)
-          .values(mberId, fixingPointValue, LocalDateTime.now().plusYears(1), req.getEventSerial(), "EVNT", mberId, mberId).execute();
+          .columns(
+              pointEntity.mberId, 
+              pointEntity.pointValue, 
+              pointEntity.validDt, 
+              pointEntity.refrnId, 
+              pointEntity.refrnSeCodeId,
+              pointEntity.registUsrId, 
+              pointEntity.updtUsrId)
+          .values(
+              mberId, 
+              fixingPointValue, 
+              LocalDateTime.now().plusYears(1), 
+              req.getEventSerial(), 
+              EVENT_CODE, 
+              mberId, 
+              mberId)
+          .execute();
+      
     } else {
       // 참여(당첨X) insert
       queryFactory.insert(eventParticipateEntity)
-          .columns(eventParticipateEntity.eventSn, eventParticipateEntity.mberId, eventParticipateEntity.przwinPointValue,
-              eventParticipateEntity.eventPrzwinAt, eventEntity.registUsrId, eventEntity.updtUsrId)
-          .values(req.getEventSerial(), mberId, 0, "N", mberId, mberId).execute();
+          .columns(
+              eventParticipateEntity.eventSn, 
+              eventParticipateEntity.mberId, 
+              eventParticipateEntity.przwinPointValue,
+              eventParticipateEntity.eventPrzwinAt,
+              eventEntity.registUsrId, 
+              eventEntity.updtUsrId)
+          .values(
+              req.getEventSerial(), 
+              mberId, 
+              0, 
+              "N", 
+              mberId, 
+              mberId)
+          .execute();
     }
   }
 
@@ -189,9 +286,47 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
   @Override
   public void addEventRaffle(EventUserDetailRequest req, String mberId) {
     queryFactory.insert(eventParticipateEntity)
-        .columns(eventParticipateEntity.eventSn, eventParticipateEntity.mberId, eventEntity.registUsrId, eventEntity.updtUsrId)
-        .values(req.getEventSerial(), mberId, mberId, mberId).execute();
+        .columns(
+            eventParticipateEntity.eventSn, 
+            eventParticipateEntity.mberId, 
+            eventEntity.registUsrId, 
+            eventEntity.updtUsrId)
+        .values(
+            req.getEventSerial(), 
+            mberId, 
+            mberId, 
+            mberId)
+        .execute();
   }
 
+  /* 응모형 이벤트 당첨자 조회 */
+  @Override
+  public List<PrizeWinnerResponse> getEntryEventWinningList(Integer eventSn, String mberId) {
+    return queryFactory
+        .select(Projections.fields(PrizeWinnerResponse.class, 
+            mberEntity.mberNm.as("memberName"), 
+            eventParticipateEntity.mberId.as("memberId"),
+            eventParticipateEntity.przwinPointValue.as("pointPaymentUnitValue")))
+        .from(eventParticipateEntity).join(eventEntity).on(eventParticipateEntity.eventSn.eq(eventEntity.eventSn)).join(mberEntity)
+        .on(eventParticipateEntity.mberId.eq(mberEntity.mberId))
+        .where(eventParticipateEntity.eventPrzwinAt.eq("Y").and(eventEntity.eventSn.eq(eventSn)))
+        .orderBy(eventParticipateEntity.przwinPointValue.desc(), eventParticipateEntity.eventPartcptnDt.asc())
+        .fetch();
+  }
+
+  /* 응모형 이벤트 사용자 당첨여부 */
+  @Override
+  public EventPrizeWinnerResponse getPrizeAt(Integer eventSn, String mberId) {
+
+    return queryFactory
+        .select(Projections.fields(EventPrizeWinnerResponse.class,
+            eventParticipateEntity.eventPrzwinAt.as("eventPrizeAt"),
+            eventParticipateEntity.przwinPointValue.as("przwinPointValue")
+        ))
+        .from(eventParticipateEntity)
+        .where(eventParticipateEntity.eventSn.eq(eventSn)
+            .and(eventParticipateEntity.mberId.eq(mberId)))
+        .fetchOne();
+  }
 }
 

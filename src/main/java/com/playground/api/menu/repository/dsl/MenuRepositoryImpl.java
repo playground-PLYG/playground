@@ -2,8 +2,8 @@ package com.playground.api.menu.repository.dsl;
 
 import static com.playground.api.author.entity.QAuthorMenuEntity.authorMenuEntity;
 import static com.playground.api.author.entity.QMberAuthorEntity.mberAuthorEntity;
-import static com.playground.api.member.entity.QMberEntity.mberEntity;
 import static com.playground.api.menu.entity.QMenuEntity.menuEntity;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,30 +32,69 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 
   @Override
   public List<MenuResponse> getUpperMenuList(String mberId) {
+
     QMenuEntity menuEntity2 = new QMenuEntity("menuEntity2");
-    return queryFactory
-        .select(Projections.fields(MenuResponse.class, menuEntity.menuSn, menuEntity.menuNm, menuEntity.menuUrl, menuEntity.menuDepth,
-            menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt,
-            new CaseBuilder()
-                .when(JPAExpressions.select(menuEntity2.count()).from(menuEntity2).where(menuEntity.menuSn.eq(menuEntity2.upperMenuSn)).gt((long) 0))
-                .then("Y").otherwise("N").as("lwprtMenuHoldAt")))
-        .distinct().from(mberEntity).rightJoin(mberAuthorEntity).on(mberEntity.mberId.eq(mberAuthorEntity.mberId)).rightJoin(authorMenuEntity)
-        .on(mberAuthorEntity.authorId.eq(authorMenuEntity.authorId)).rightJoin(menuEntity).on(authorMenuEntity.menuSn.eq(menuEntity.menuSn))
-        .where(mberIdEq(mberId).or(authorMenuEntity.authorId.eq("ROLE_DEFAULT")), menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull())
-        .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
+    // 메뉴권한이 있을 경우
+    List<MenuResponse> result1 =
+        queryFactory
+            .select(Projections.fields(MenuResponse.class, menuEntity.menuSn, menuEntity.menuNm, menuEntity.menuUrl, menuEntity.menuDepth,
+                menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt,
+                new CaseBuilder().when(
+                    JPAExpressions.select(menuEntity2.count()).from(menuEntity2).where(menuEntity.menuSn.eq(menuEntity2.upperMenuSn)).gt((long) 0))
+                    .then("Y").otherwise("N").as("lwprtMenuHoldAt")))
+            .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
+            .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull(),
+                authorMenuEntity.authorId.in(JPAExpressions.select(mberAuthorEntity.authorId).from(mberAuthorEntity).where(mberIdEq(mberId))))
+            .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
+
+    // 메뉴권한이 없을 경우
+    List<MenuResponse> result2 =
+        queryFactory
+            .select(Projections.fields(MenuResponse.class, menuEntity.menuSn, menuEntity.menuNm, menuEntity.menuUrl, menuEntity.menuDepth,
+                menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt,
+                new CaseBuilder().when(
+                    JPAExpressions.select(menuEntity2.count()).from(menuEntity2).where(menuEntity.menuSn.eq(menuEntity2.upperMenuSn)).gt((long) 0))
+                    .then("Y").otherwise("N").as("lwprtMenuHoldAt")))
+            .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
+            .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull(), authorMenuEntity.authorId.eq("ROLE_DEFAULT"),
+                JPAExpressions.selectOne().from(mberAuthorEntity).where(mberIdEq(mberId)).notExists())
+            .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
+
+    List<MenuResponse> finalResult = new ArrayList<>();
+    finalResult.addAll(result1);
+    finalResult.addAll(result2);
+
+    return finalResult;
   }
+
 
   @Override
   public List<MenuResponse> getLowerMenuList(String mberId) {
-    return queryFactory
+
+    // 메뉴권한이 있을 경우
+    List<MenuResponse> result1 = queryFactory
         .select(Projections.fields(MenuResponse.class, menuEntity.menuSn, menuEntity.menuNm, menuEntity.menuUrl, menuEntity.menuDepth,
             menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt))
-        .distinct().from(mberEntity).rightJoin(mberAuthorEntity).on(mberEntity.mberId.eq(mberAuthorEntity.mberId)).rightJoin(authorMenuEntity)
-        .on(mberAuthorEntity.authorId.eq(authorMenuEntity.authorId)).rightJoin(menuEntity).on(authorMenuEntity.menuSn.eq(menuEntity.menuSn))
-        .where(mberIdEq(mberId).or(authorMenuEntity.authorId.eq("ROLE_DEFAULT")), menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNotNull())
+        .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
+        .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNotNull(),
+            authorMenuEntity.authorId.in(JPAExpressions.select(mberAuthorEntity.authorId).from(mberAuthorEntity).where(mberIdEq(mberId))))
         .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
-  }
 
+    // 메뉴권한이 없을 경우
+    List<MenuResponse> result2 = queryFactory
+        .select(Projections.fields(MenuResponse.class, menuEntity.menuSn, menuEntity.menuNm, menuEntity.menuUrl, menuEntity.menuDepth,
+            menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt))
+        .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
+        .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNotNull(), authorMenuEntity.authorId.eq("ROLE_DEFAULT"),
+            JPAExpressions.selectOne().from(mberAuthorEntity).where(mberIdEq(mberId)).notExists())
+        .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
+
+    List<MenuResponse> finalResult = new ArrayList<>();
+    finalResult.addAll(result1);
+    finalResult.addAll(result2);
+
+    return finalResult;
+  }
 
   @Override
   public Page<MenuEntity> getMenuPageList(String menuNm, String menuUrl, String useAt, Pageable pageable) {
@@ -76,7 +115,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
       return null;
     }
 
-    return mberEntity.mberId.eq(mberId);
+    return mberAuthorEntity.mberId.eq(mberId);
   }
 
 

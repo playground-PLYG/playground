@@ -2,6 +2,7 @@ package com.playground.api.eventuser.repository.dsl;
 
 import java.util.List;
 import com.playground.api.event.entity.PointPaymentEntity;
+import com.playground.api.eventuser.model.EventParticipationResponse;
 import com.playground.api.eventuser.model.EventPrizeWinnerResponse;
 import com.playground.api.eventuser.model.EventUserDetailRequest;
 import com.playground.api.eventuser.model.EventUserDetailResponse;
@@ -18,9 +19,9 @@ public interface EventUserRepositoryCustom {
   
   String getDrwtMthdCode(EventUserDetailRequest req);
   
-  void addFrscParticipation(EventUserDetailRequest req, String mberId);
+  EventParticipationResponse addFrscParticipation(EventUserDetailRequest req, String mberId);
   
-  void addRandParticipation(EventUserDetailRequest req, String mberId);
+  EventParticipationResponse addRandParticipation(EventUserDetailRequest req, String mberId);
   
   void addEventRaffle(EventUserDetailRequest req, String mberId);
   

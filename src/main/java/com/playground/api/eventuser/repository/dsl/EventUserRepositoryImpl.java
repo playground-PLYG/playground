@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import com.playground.api.event.entity.PointPaymentEntity;
+import com.playground.api.eventuser.model.EventParticipationResponse;
 import com.playground.api.eventuser.model.EventPrizeWinnerResponse;
 import com.playground.api.eventuser.model.EventUserDetailRequest;
 import com.playground.api.eventuser.model.EventUserDetailResponse;
@@ -118,8 +119,10 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
 
   /* 참여형 랜덤 이벤트 참여 */
   @Override
-  public void addRandParticipation(EventUserDetailRequest req, String mberId) {
+  public EventParticipationResponse addRandParticipation(EventUserDetailRequest req, String mberId) {
 
+    EventParticipationResponse response = new EventParticipationResponse();
+    
     // 잔여 포인트 계산
     Integer remainingPoints = queryFactory
         .select(eventEntity.totPointValue.subtract(JPAExpressions.select(eventParticipateEntity.przwinPointValue.sum().coalesce(0))
@@ -142,7 +145,7 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
 
     // 당첨여부
     String eventPrzwinAt = (pointPymntUnitValue == 0) ? "N" : "Y";
-
+    
     // 참여 insert
     queryFactory.insert(eventParticipateEntity)
         .columns(
@@ -182,13 +185,20 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
               mberId)
           .execute();
     }
+    
+    response.setEventPrizeAt(eventPrzwinAt);
+    response.setPrzwinPointValue(pointPymntUnitValue);
+    
+    return response;
 
   }
 
   /* 참여형 순차지급 이벤트 참여 */
   @Override
-  public void addFrscParticipation(EventUserDetailRequest req, String mberId) {
+  public EventParticipationResponse addFrscParticipation(EventUserDetailRequest req, String mberId) {
 
+    EventParticipationResponse response = new EventParticipationResponse();
+    
     // 사용자 순위
     Long rank = 
         queryFactory.select(eventParticipateEntity.count().add(1))
@@ -261,6 +271,8 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
               mberId)
           .execute();
       
+      response.setEventPrizeAt("Y");
+      response.setPrzwinPointValue(fixingPointValue);
     } else {
       // 참여(당첨X) insert
       queryFactory.insert(eventParticipateEntity)
@@ -279,7 +291,12 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
               mberId, 
               mberId)
           .execute();
+      
+      response.setEventPrizeAt("N");
+      response.setPrzwinPointValue(0);
     }
+    
+    return response;
   }
 
   /* 이벤트 응모 */

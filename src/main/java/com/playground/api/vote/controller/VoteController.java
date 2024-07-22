@@ -17,6 +17,7 @@ import com.playground.api.vote.model.VoteQestnRequest;
 import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteResponse;
+import com.playground.api.vote.model.VoteResultResponse;
 import com.playground.api.vote.model.VoteRstrntResponse;
 import com.playground.api.vote.model.VoteSrchRequest;
 import com.playground.api.vote.model.VoteSrchResponse;
@@ -86,7 +87,7 @@ public class VoteController {
    */
   @Operation(summary = "결과상세보기", description = "투표한 결과를 상세하게 조회")
   @PostMapping("/api/vote/getVoteResult")
-  public VoteResponse getVoteResult(@RequestBody @Valid VoteRequest reqData) {
+  public VoteResultResponse getVoteResult(@RequestBody @Valid VoteRequest reqData) {
     return voteService.getVoteResult(reqData);
   }
 

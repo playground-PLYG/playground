@@ -95,10 +95,4 @@ public class VoteResponse extends BaseDto {
    */
   @Schema(description = "질문객체", example = "voteQestnResponse")
   private List<VoteQestnResponse> voteQestnResponseList;
-
-  /**
-   * 투표결과 시 사용하는 객체
-   */
-  @Schema(description = "투표결과객체", example = "voteResultList")
-  private List<VoteResultResponse> voteResultList;
 }

@@ -1,7 +1,6 @@
 package com.playground.api.vote.model;
 
 import java.io.Serial;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import com.playground.model.BaseDto;
@@ -13,7 +12,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Schema(name = "QestnResponse", description = "질문목록조회 및 등록,수정 응답에 필요한 데이터")
+@Schema(name = "VoteQestnResponse", description = "질문등록 응답에 필요한 데이터")
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -60,18 +59,6 @@ public class VoteQestnResponse extends BaseDto {
    */
   @Schema(description = "질문내용", example = "회식 가능한 날짜를 선택해주세요")
   private String questionContents;
-
-  @Schema(description = "등록사용자ID")
-  private String registUserId;
-
-  @Schema(description = "등록일시")
-  private LocalDateTime registDate;
-
-  @Schema(description = "수정사용자ID")
-  private String updateUserId;
-
-  @Schema(description = "수정일시")
-  private LocalDateTime updateDate;
 
   /**
    * 투표항목 객체

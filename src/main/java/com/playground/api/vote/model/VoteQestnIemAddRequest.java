@@ -6,19 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@Schema(name = "VoteIemRequest", description = "투표항목조회 및 등록,수정 요청에 필요한 데이터")
+@Schema(name = "VoteIemRequest", description = "투표항목 등록 요청에 필요한 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public class VoteQestnIemRequest extends BaseDto {
+public class VoteQestnIemAddRequest extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  /**
-   * 항목ID
-   */
-  @Schema(description = "항목ID", example = "0000123456")
-  private Integer itemSsno;
 
   /**
    * 투표일련번호
@@ -42,6 +36,6 @@ public class VoteQestnIemRequest extends BaseDto {
   /**
    * 항목식별ID
    */
-  @Schema(description = "항목식별ID", example = "또성골뱅이")
+  @Schema(description = "항목식별ID", example = "37")
   private String itemIdentificationId;
 }

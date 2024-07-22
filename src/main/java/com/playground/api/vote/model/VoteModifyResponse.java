@@ -4,13 +4,21 @@ import java.io.Serial;
 import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Schema(name = "VoteRequest", description = "투표목록조회 및 등록수정 요청에 필요한 데이터")
+@Schema(name = "VoteModifyResponse", description = "투표수정 응답에 필요한 데이터")
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public class VoteRequest extends BaseDto {
+@Setter
+public class VoteModifyResponse extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
@@ -18,21 +26,8 @@ public class VoteRequest extends BaseDto {
   /**
    * 투표일련번호
    */
-  @Schema(description = "투표일련번호", example = "1234567890")
+  @Schema(description = "투표일련번호", example = "12345890")
   private Integer voteSsno;
-
-  /**
-   * 사용자ID
-   */
-  @Schema(description = "사용자ID", example = "sungjong")
-  private String answerUserId;
-
-  /**
-   * 질문일련번호
-   */
-  @Schema(description = "질문일련번호", example = "12347890")
-  private Integer questionSsno;
-
 
   /**
    * 투표제목
@@ -51,11 +46,6 @@ public class VoteRequest extends BaseDto {
    */
   @Schema(description = "투표종료일시", example = "yyyy-mm-dd HH")
   private String voteEndDate;
-
-
-  //////////////////////////////////////////
-  // 사용하는 변수는 위로 올리기 -> 추후 사용안하면 삭제 예정
-  //////////////////////////////////////////
 
   /**
    * 투표노출여부
@@ -77,16 +67,9 @@ public class VoteRequest extends BaseDto {
 
 
   /**
-   * 투표전송상태
+   * 질문객체
    */
-  @Schema(description = "투표전송상태", example = "투표중")
-  private String voteStatus;
+  @Schema(description = "질문객체", example = "voteQestnResponse")
+  private List<VoteQestnAddResponse> voteQestnResponseList;
 
-
-
-  /**
-   * 질문들
-   */
-  @Schema(description = "질문객체", example = "voteQestnRequestList")
-  private List<VoteQestnRequest> voteQestnRequestList;
 }

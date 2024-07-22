@@ -3,6 +3,8 @@ package com.playground.api.eventuser.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.playground.api.event.entity.PointPaymentEntity;
@@ -19,6 +21,7 @@ import com.playground.api.member.model.MberInfoResponse;
 import com.playground.constants.MessageCode;
 import com.playground.exception.BizException;
 import com.playground.utils.MberUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -47,6 +50,19 @@ public class EventUserService {
     return result;
   }
 
+  /** 사용자 이벤트 목록 페이징 조회 */
+  public Page<EventUserListResponse> getEventPageList(Pageable pageable, @Valid EventUserListRequest req) {
+  String mberId = "";
+  Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
+
+  if (mberInfo.isPresent()) {
+    mberId = mberInfo.get().getMberId();
+  }
+
+  Page<EventUserListResponse> result = eventUserRepository.getEventPageList(req.getEventName(), req.getProgrsSttus(), mberId, pageable);
+
+  return result;
+}
 
   /** 사용자 이벤트 상세 조회 */
   @Transactional(readOnly = true)

@@ -1,6 +1,8 @@
 package com.playground.api.eventuser.controller;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +36,15 @@ public class EventUserController {
   @PostMapping("/public/eventUser/getEventList")
   public List<EventUserListResponse> getEventList(@RequestBody @Valid EventUserListRequest req) {
     return eventUserService.getEventList(req);
+  }
+  
+  /**
+   * 사용자 이벤트 목록 조회
+   */
+  @Operation(summary = "사용자 이벤트 목록 조회", description = "사용자 이벤트 목록 조회")
+  @PostMapping("/public/eventUser/getEventPageList")
+  public Page<EventUserListResponse> getEventPageList(Pageable pageable, @RequestBody EventUserListRequest req) {
+    return eventUserService.getEventPageList(pageable, req);
   }
 
   /**

@@ -8,6 +8,9 @@ import static com.playground.api.member.entity.QMberEntity.mberEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import com.playground.api.event.entity.PointPaymentEntity;
 import com.playground.api.eventuser.model.EventParticipationResponse;
@@ -22,6 +25,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -75,6 +79,33 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
       default:
         return null;
     }
+  }
+  
+  /* 이벤트 목록 페이징 조회 */
+  @Override
+  public Page<EventUserListResponse> getEventPageList(String eventName, String progrsSttus, String mberId, Pageable pageable) {
+    List<EventUserListResponse> result =  queryFactory
+        .select(Projections.fields(EventUserListResponse.class, 
+            eventEntity.eventSn.as("eventSerial"), 
+            eventEntity.eventNm.as("eventName"),
+            eventEntity.eventBeginDt.as("eventBeginDate"), 
+            eventEntity.eventEndDt.as("eventEndDate"),
+            eventEntity.eventThumbFileSn.as("eventThumbFileSn"),
+            new CaseBuilder()
+              .when(eventEntity.eventEndDt.lt(LocalDateTime.now()))
+              .then("종료").when(eventEntity.eventBeginDt.loe(LocalDateTime.now()))
+              .then("진행중").otherwise("예정").as("progrsSttus"),
+            new CaseBuilder()
+              .when(eventParticipateEntity.mberId.isNotNull())
+              .then("참여완료").otherwise("미참여").as("participationAt")))
+        .from(eventEntity).leftJoin(eventParticipateEntity)
+        .on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn).and(eventParticipateEntity.mberId.eq(mberId)))
+        .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), 
+            eventStatusEq(progrsSttus))
+        .orderBy(eventEntity.eventBeginDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+    
+    JPAQuery<Long> countQuery = queryFactory.select(eventEntity.count()).from(eventEntity).where(eventNameLike(eventName));
+    return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
   }
 
   /* 이벤트 상세 조회 */

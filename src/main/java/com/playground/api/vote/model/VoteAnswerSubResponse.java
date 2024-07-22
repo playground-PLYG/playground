@@ -32,6 +32,6 @@ public class VoteAnswerSubResponse extends BaseDto {
    * 사용자가 선택한 답변들
    */
   @Schema(description = "사용자가 선택한 답변들", example = "Object")
-  private List<VoteAnswerSubDetailResponse> voteAnswerSubDetailList;
+  private List<Integer> voteAnswerList;
 
 }

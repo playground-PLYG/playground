@@ -44,6 +44,7 @@ import com.playground.api.vote.model.VoteQestnRequest;
 import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteResponse;
+import com.playground.api.vote.model.VoteResultDetailDetailResponse;
 import com.playground.api.vote.model.VoteResultDetailResponse;
 import com.playground.api.vote.model.VoteResultResponse;
 import com.playground.api.vote.model.VoteRstrntResponse;
@@ -319,7 +320,7 @@ public class VoteService {
 
   @Transactional(readOnly = true)
   // (Edited by.PSJ, End date.2024.07.15)
-  public VoteResponse getVoteResult(VoteRequest reqData) {
+  public VoteResultResponse getVoteResult(VoteRequest reqData) {
     if (!ObjectUtils.isEmpty(reqData.getVoteSsno())) {
       VoteEntity voteEntity = voteRepository.findById(reqData.getVoteSsno()).orElse(VoteEntity.builder().build());
 
@@ -327,22 +328,22 @@ public class VoteService {
       String beginDate = voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
       String endDate = voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
 
-      List<VoteResultResponse> voteResultList = voteAnswerRepository.getVoteQestnResult(reqData);
+      List<VoteResultDetailResponse> voteResultList = voteAnswerRepository.getVoteQestnResult(reqData);
       Integer voteSsno = reqData.getVoteSsno();
       if (!ObjectUtils.isEmpty(voteResultList)) {
-        for (VoteResultResponse reRes : voteResultList) {
+        for (VoteResultDetailResponse reRes : voteResultList) {
           Integer questionSsno = reRes.getQuestionSsno();
-          for (VoteResultDetailResponse detailReRes : reRes.getResultDetailList()) {
+          for (VoteResultDetailDetailResponse detailReRes : reRes.getResultDetailList()) {
             List<String> userIdList = new ArrayList<>();
             userIdList = voteAnswerRepository.getAnswerUserIds(voteSsno, questionSsno, detailReRes.getItemSsno());
             detailReRes.setSelUserIdList(userIdList);
           }
         }
       }
-      return VoteResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate).voteEndDate(endDate)
+      return VoteResultResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate).voteEndDate(endDate)
           .voteResultList(voteResultList).build();
     } else {
-      return new VoteResponse();
+      return new VoteResultResponse();
     }
   }
 

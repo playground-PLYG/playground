@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Schema(name = "VoteResultDetailResponse", description = "사용자 답변들을 통계 내기 위한 Detail Detail response")
+@Schema(name = "VoteResultDetailResponse", description = "사용자 답변들을 통계 내기 위한 Detail response")
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -24,33 +24,35 @@ public class VoteResultDetailResponse extends BaseDto {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 항목ID
+   * 질문일련번호
    */
-  @Schema(description = "항목ID", example = "00001456")
-  private Integer itemSsno;
+  @Schema(description = "질문일련번호", example = "1234567890")
+  private Integer questionSsno;
 
   /**
-   * 항목이름
+   * 질문내용
    */
-  @Schema(description = "항목이름", example = "김찌")
-  private String itemName;
+  @Schema(description = "질문내용", example = "질문내용")
+  private String questionContents;
+
 
   /**
-   * 해당 항목 득표수
+   * 투표노출여부
    */
-  @Schema(description = "특표수", example = "14")
-  private Long itemCount;
+  @Schema(description = "중복투표여부", example = "Y")
+  private String compoundNumberChoiceAlternative;
 
   /**
-   * 항목식별ID
+   * 투표전송여부
    */
-  @Schema(description = "항목식별ID", example = "1234567890")
-  private String itemIdentificationId;
+  @Schema(description = "익명투표여부", example = "Y")
+  private String anonymityVoteAlternative;
+
 
   /**
-   * 해당 항목 투표한 유저
+   * detailDetail
    */
-  @Schema(description = "투표한 유저들", example = "[test1, test2, test3]")
-  private List<String> selUserIdList;
+  @Schema(description = "투표결과 항목별", example = "count, ssno, name, etc...")
+  private List<VoteResultDetailDetailResponse> resultDetailList;
 
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -23,6 +24,7 @@ import com.playground.api.message.service.MessageService;
 import com.playground.api.restaurant.model.RstrntSrchRequest;
 import com.playground.api.restaurant.model.RstrntSrchResponse;
 import com.playground.api.restaurant.service.RstrntService;
+import com.playground.api.sample.model.WebSocketDto;
 import com.playground.api.vote.entity.VoteAnswerEntity;
 import com.playground.api.vote.entity.VoteAnswerPK;
 import com.playground.api.vote.entity.VoteEntity;
@@ -55,6 +57,9 @@ import com.playground.api.vote.repository.VoteQestnIemRepository;
 import com.playground.api.vote.repository.VoteQestnRepository;
 import com.playground.api.vote.repository.VoteRepository;
 import com.playground.api.vote.repository.dsl.VoteRstrntRepositoryCustom;
+import com.playground.constants.RedisSubscibeChannel;
+import com.playground.constants.WebSocketMessageType;
+import com.playground.constants.WebSocketTargetType;
 import com.playground.exception.BizException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +77,7 @@ public class VoteService {
   private final RstrntService rstrntService;
   private final CodeService codeService;
   private final MberService mberService;
+  private final RedisTemplate<String, Object> redisTemplate;
 
   @Value("${CLIENT_URL}")
   private String clientUrl;
@@ -170,7 +176,14 @@ public class VoteService {
       voteEntity.setVoteTrnsmisAt("Y");
       voteRepository.save(voteEntity);
 
+      String message = reqData.getVoteSubject() + " 투표가 생성됐습니다.  &nbsp;<a href='/vote-user?ssno=" + voteEntity.getVoteSn() + "'>[투표하기]</a>";
+      WebSocketDto webSocketDto = WebSocketDto.builder().targetType(WebSocketTargetType.ALL).sendDate(LocalDateTime.now()).message(message)
+          .messageType(WebSocketMessageType.HTML).message(message).senderId(reqData.getAnswerUserId()).build();
+
+      redisTemplate.convertAndSend(RedisSubscibeChannel.WEBSOCKET_TOPIC.name(), webSocketDto);
+
     }
+
     voteResponse.setVoteTransmissionAlternative(voteEntity.getVoteTrnsmisAt());
 
     return voteResponse;
@@ -340,8 +353,8 @@ public class VoteService {
           }
         }
       }
-      return VoteResultResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate).voteEndDate(endDate)
-          .voteResultList(voteResultList).build();
+      return VoteResultResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate)
+          .voteEndDate(endDate).voteResultList(voteResultList).build();
     } else {
       return new VoteResultResponse();
     }
@@ -448,7 +461,6 @@ public class VoteService {
     dto.addEmbed(embed);
 
     messageService.sendDiscordWebhook(dto);
-
   }
 
   @Transactional

@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum WebSocketMessageType {
-  TYPE_01, TYPE_02
+  TYPE_01, TYPE_02, HTML
 }

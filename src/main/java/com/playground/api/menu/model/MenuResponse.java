@@ -59,4 +59,10 @@ public class MenuResponse extends BaseDto {
   @Schema(description = "하위메뉴보유여부")
   private String lwprtMenuHoldAt;
 
+  @Schema(description = "메타데이터설명")
+  private String metdataSj;
+
+  @Schema(description = "미리보기이미지URL")
+  private String prevewImageUrl;
+
 }

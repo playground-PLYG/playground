@@ -45,7 +45,7 @@ public class VoteAnswerRepositoryImpl implements VoteAnswerRepositoryCustom {
             groupBy(tbVoteAnswer.qestnSn)
                 .list(Projections.fields(VoteAnswerSubResponse.class, 
                     tbVoteAnswer.qestnSn.as("questionSsno"),
-                    list(tbVoteAnswer.iemSn).as("voteAnswerSubList")
+                    list(tbVoteAnswer.iemSn).as("voteAnswerList")
                         )
                     )
                 );

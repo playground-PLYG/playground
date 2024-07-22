@@ -37,33 +37,61 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
   public List<MenuResponse> getUpperMenuList(String mberId) {
 
     QMenuEntity menuEntity2 = new QMenuEntity("menuEntity2");
+    
+    String lwprtMenuHoldAt = "lwprtMenuHoldAt";
     // 메뉴권한이 있을 경우
     List<MenuResponse> result1 =
         queryFactory
-            .select(Projections.fields(MenuResponse.class, menuEntity.menuSn, menuEntity.menuNm, menuEntity.menuUrl, menuEntity.menuDepth,
-                menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt,
-                new CaseBuilder().when(
-                    JPAExpressions.select(menuEntity2.count()).from(menuEntity2).where(menuEntity.menuSn.eq(menuEntity2.upperMenuSn)).gt((long) 0))
-                    .then("Y").otherwise("N").as("lwprtMenuHoldAt"),
-                metadataEntity.metdataSj, metadataEntity.prevewImageUrl))
-            .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn)).leftJoin(metadataEntity)
-            .on(menuEntity.menuUrl.eq(metadataEntity.metdataUrl))
-            .where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull(),
-                authorMenuEntity.authorId.in(JPAExpressions.select(mberAuthorEntity.authorId).from(mberAuthorEntity).where(mberIdEq(mberId))))
+            .select(Projections.fields(MenuResponse.class, 
+                    menuEntity.menuSn, 
+                    menuEntity.menuNm, 
+                    menuEntity.menuUrl, 
+                    menuEntity.menuDepth,
+                    menuEntity.menuSortOrdr, 
+                    menuEntity.upperMenuSn, 
+                    menuEntity.useAt,
+                    new CaseBuilder().when(
+                        JPAExpressions.select(menuEntity2.count())
+                                      .from(menuEntity2)
+                                      .where(menuEntity.menuSn.eq(menuEntity2.upperMenuSn)).gt((long) 0))
+                        .then("Y").otherwise("N").as(lwprtMenuHoldAt),
+                    metadataEntity.metdataSj,
+                    metadataEntity.prevewImageUrl))
+            .distinct()
+            .from(menuEntity)
+              .leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
+              .leftJoin(metadataEntity).on(menuEntity.menuUrl.eq(metadataEntity.metdataUrl))            
+            .where(menuEntity.useAt.eq("Y"), 
+                   menuEntity.upperMenuSn.isNull(),
+                   authorMenuEntity.authorId.in(JPAExpressions.select(mberAuthorEntity.authorId).from(mberAuthorEntity).where(mberIdEq(mberId))))
             .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
 
     // 메뉴권한이 없을 경우
     List<MenuResponse> result2 =
         queryFactory
-            .select(Projections.fields(MenuResponse.class, menuEntity.menuSn, menuEntity.menuNm, menuEntity.menuUrl, menuEntity.menuDepth,
-                menuEntity.menuSortOrdr, menuEntity.upperMenuSn, menuEntity.useAt,
-                new CaseBuilder().when(
-                    JPAExpressions.select(menuEntity2.count()).from(menuEntity2).where(menuEntity.menuSn.eq(menuEntity2.upperMenuSn)).gt((long) 0))
-                    .then("Y").otherwise("N").as("lwprtMenuHoldAt"),
-                metadataEntity.metdataSj, metadataEntity.prevewImageUrl))
-            .distinct().from(menuEntity).leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn)).leftJoin(metadataEntity)
-            .on(menuEntity.menuUrl.eq(metadataEntity.metdataUrl)).where(menuEntity.useAt.eq("Y"), menuEntity.upperMenuSn.isNull(),
-                authorMenuEntity.authorId.eq("ROLE_DEFAULT"), JPAExpressions.selectOne().from(mberAuthorEntity).where(mberIdEq(mberId)).notExists())
+            .select(Projections.fields(MenuResponse.class, 
+                    menuEntity.menuSn, 
+                    menuEntity.menuNm, 
+                    menuEntity.menuUrl, 
+                    menuEntity.menuDepth,
+                    menuEntity.menuSortOrdr, 
+                    menuEntity.upperMenuSn, 
+                    menuEntity.useAt,
+                    new CaseBuilder().when(
+                        JPAExpressions.select(menuEntity2.count())
+                                      .from(menuEntity2)
+                                      .where(menuEntity.menuSn.eq(menuEntity2.upperMenuSn)).gt((long) 0))
+                        .then("Y").otherwise("N").as(lwprtMenuHoldAt),
+                    metadataEntity.metdataSj,
+                    metadataEntity.prevewImageUrl))
+            .distinct()
+            .from(menuEntity)
+            .leftJoin(authorMenuEntity).on(menuEntity.menuSn.eq(authorMenuEntity.menuSn))
+            .leftJoin(metadataEntity).on(menuEntity.menuUrl.eq(metadataEntity.metdataUrl))
+            .where(menuEntity.useAt.eq("Y"), 
+                   menuEntity.upperMenuSn.isNull(), 
+                   authorMenuEntity.authorId.eq("ROLE_DEFAULT"),
+                   JPAExpressions.selectOne().from(mberAuthorEntity).where(mberIdEq(mberId)).notExists())
             .orderBy(menuEntity.menuSortOrdr.asc()).fetch();
 
     List<MenuResponse> finalResult = new ArrayList<>();
@@ -77,6 +105,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
   @Override
   public List<MenuResponse> getLowerMenuList(String mberId) {
 
+    String lwprtMenuHoldAt = "lwprtMenuHoldAt";
     // 메뉴권한이 있을 경우
     List<MenuResponse> result1 = queryFactory
         .select(Projections.fields(MenuResponse.class, 
@@ -87,7 +116,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 menuEntity.menuSortOrdr, 
                 menuEntity.upperMenuSn, 
                 menuEntity.useAt,
-                ExpressionUtils.as(Expressions.constant("N"), "lwprtMenuHoldAt"),                
+                ExpressionUtils.as(Expressions.constant("N"), lwprtMenuHoldAt),                
                 metadataEntity.metdataSj,
                 metadataEntity.prevewImageUrl))
         .distinct()
@@ -109,7 +138,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 menuEntity.menuSortOrdr, 
                 menuEntity.upperMenuSn, 
                 menuEntity.useAt,
-                ExpressionUtils.as(Expressions.constant("N"), "lwprtMenuHoldAt"),                
+                ExpressionUtils.as(Expressions.constant("N"), lwprtMenuHoldAt),                
                 metadataEntity.metdataSj,
                 metadataEntity.prevewImageUrl))
         .distinct()

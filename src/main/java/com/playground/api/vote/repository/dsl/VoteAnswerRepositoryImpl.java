@@ -8,11 +8,10 @@ import com.playground.api.vote.entity.QVoteAnswerEntity;
 import com.playground.api.vote.entity.QVoteQestnEntity;
 import com.playground.api.vote.entity.QVoteQestnIemEntity;
 import com.playground.api.vote.entity.VoteAnswerEntity;
-import com.playground.api.vote.model.VoteAnswerSubDetailResponse;
 import com.playground.api.vote.model.VoteAnswerSubResponse;
 import com.playground.api.vote.model.VoteRequest;
+import com.playground.api.vote.model.VoteResultDetailDetailResponse;
 import com.playground.api.vote.model.VoteResultDetailResponse;
-import com.playground.api.vote.model.VoteResultResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -46,17 +45,14 @@ public class VoteAnswerRepositoryImpl implements VoteAnswerRepositoryCustom {
             groupBy(tbVoteAnswer.qestnSn)
                 .list(Projections.fields(VoteAnswerSubResponse.class, 
                     tbVoteAnswer.qestnSn.as("questionSsno"),
-                    list(
-                        Projections.fields(VoteAnswerSubDetailResponse.class, 
-                            tbVoteAnswer.iemSn.as("choiceItemSsno")))
-                        .as("voteAnswerSubDetailList")
+                    list(tbVoteAnswer.iemSn).as("voteAnswerSubList")
                         )
                     )
                 );
   }
 
   @Override
-  public List<VoteResultResponse> getVoteQestnResult(VoteRequest reqData) {
+  public List<VoteResultDetailResponse> getVoteQestnResult(VoteRequest reqData) {
     return queryFactory.select(tbVoteAnswer).from(tbVoteAnswer)
         .leftJoin(tbQVoteQestnIem)
         .on(tbVoteAnswer.voteSn.eq(tbQVoteQestnIem.voteSn)
@@ -73,13 +69,13 @@ public class VoteAnswerRepositoryImpl implements VoteAnswerRepositoryCustom {
         .transform(
             groupBy(tbVoteAnswer.qestnSn)
             .list(
-                Projections.fields(VoteResultResponse.class, 
+                Projections.fields(VoteResultDetailResponse.class, 
                     tbVoteAnswer.qestnSn.as("questionSsno"), 
                     tbVoteQestn.qestnCn.as("questionContents"),
                 tbVoteQestn.compnoChoiseAt.as("compoundNumberChoiceAlternative"), 
                 tbVoteQestn.annymtyVoteAt.as("anonymityVoteAlternative"),
                 list(
-                    Projections.fields(VoteResultDetailResponse.class, 
+                    Projections.fields(VoteResultDetailDetailResponse.class, 
                         tbVoteAnswer.iemSn.as("itemSsno"), 
                         tbQVoteQestnIem.iemNm.as("itemName"),
                         Wildcard.count.as("itemCount"), 

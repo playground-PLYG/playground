@@ -4,7 +4,7 @@ import java.util.List;
 import com.playground.api.vote.entity.VoteAnswerEntity;
 import com.playground.api.vote.model.VoteAnswerSubResponse;
 import com.playground.api.vote.model.VoteRequest;
-import com.playground.api.vote.model.VoteResultResponse;
+import com.playground.api.vote.model.VoteResultDetailResponse;
 
 public interface VoteAnswerRepositoryCustom {
 
@@ -21,7 +21,7 @@ public interface VoteAnswerRepositoryCustom {
   /**
    * 투표결과를 질문에 따라서 가져오는 Query
    */
-  List<VoteResultResponse> getVoteQestnResult(VoteRequest reqData);
+  List<VoteResultDetailResponse> getVoteQestnResult(VoteRequest reqData);
 
   /**
    * 투표결과를 가져 올 때 투표한 유저들의 ID를 List로 가져오기

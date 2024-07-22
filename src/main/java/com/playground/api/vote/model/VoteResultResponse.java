@@ -22,37 +22,34 @@ public class VoteResultResponse extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
+  /**
+   * 투표일련번호
+   */
+  @Schema(description = "투표일련번호", example = "12345890")
+  private Integer voteSsno;
 
   /**
-   * 질문일련번호
+   * 투표제목
    */
-  @Schema(description = "질문일련번호", example = "1234567890")
-  private Integer questionSsno;
+  @Schema(description = "투표제목", example = "오점뭐")
+  private String voteSubject;
 
   /**
-   * 질문내용
+   * 투표시작일시
    */
-  @Schema(description = "질문내용", example = "질문내용")
-  private String questionContents;
-
+  @Schema(description = "투표시작일시", example = "yyyy-mm-dd HH")
+  private String voteBeginDate;
 
   /**
-   * 투표노출여부
+   * 투표종료일시
    */
-  @Schema(description = "중복투표여부", example = "Y")
-  private String compoundNumberChoiceAlternative;
+  @Schema(description = "투표종료일시", example = "yyyy-mm-dd HH")
+  private String voteEndDate;
 
   /**
-   * 투표전송여부
+   * 투표결과 시 사용하는 객체
    */
-  @Schema(description = "익명투표여부", example = "Y")
-  private String anonymityVoteAlternative;
-
-
-  /**
-   * detailDetail
-   */
-  @Schema(description = "투표결과 항목별", example = "count, ssno, name, etc...")
-  private List<VoteResultDetailResponse> resultDetailList;
+  @Schema(description = "투표결과객체", example = "voteResultList")
+  private List<VoteResultDetailResponse> voteResultList;
 
 }

@@ -47,4 +47,12 @@ public class VoteSrchResponse extends BaseDto {
   private String voteEndDate;
 
 
+  /**
+   * 투표여부
+   */
+  @Schema(description = "투표참여여부")
+  private String votePartcptnAt;
+
+
+
 }

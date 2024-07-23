@@ -37,5 +37,8 @@ public class EventUserListResponse extends BaseDto {
 
   @Schema(description = "참여여부")
   private String participationAt;
+  
+  @Schema(description = "진행상태")
+  private String progrsSttus;
 
 }

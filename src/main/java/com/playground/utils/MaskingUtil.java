@@ -50,7 +50,7 @@ public final class MaskingUtil {
     if (StringUtils.length(str) > 2) {
       return withoutFirstAndLast(str);
     } else {
-      return str.replaceAll("(?<=.{1}).", str);
+      return str.replaceAll("(?<=.{1}).", "*");
     }
   }
 }

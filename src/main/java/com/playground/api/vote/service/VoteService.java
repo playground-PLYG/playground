@@ -86,16 +86,9 @@ public class VoteService {
   @Transactional(readOnly = true)
   public Page<VoteSrchResponse> getVoteList(VoteSrchRequest reqData, Pageable pageable) {
 
-    Page<VoteEntity> votePageList = voteRepository.getVotePageList(reqData, pageable);
+    Page<VoteSrchResponse> votePageList = voteRepository.getVotePageList(reqData, pageable);
 
-    List<VoteSrchResponse> voteList = votePageList.getContent().stream()
-        .map(voteEntity -> VoteSrchResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj())
-            .voteBeginDate(voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1)))
-            .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1))).build())
-        .toList();
-
-
-    return new PageImpl<>(voteList, votePageList.getPageable(), votePageList.getTotalElements());
+    return new PageImpl<VoteSrchResponse>(votePageList.getContent(), votePageList.getPageable(), votePageList.getTotalElements());
   }
 
   @Transactional
@@ -160,10 +153,10 @@ public class VoteService {
     // discord 메시지 전송
     DiscordRequest dto = new DiscordRequest();
     dto.setApiNm("vote"); // vote 채널의 API_KEY
-    dto.setUsername(reqData.getAnswerUserId());
+    dto.setUsername(reqData.getUserId());
 
     embed.setTitle(reqData.getVoteSubject());
-    embed.setAuthor(reqData.getAnswerUserId(), "", "");
+    embed.setAuthor(reqData.getUserId(), "", "");
     embed.setDescription("[투표하기](" + clientUrl + "/vote-user?ssno=" + voteEntity.getVoteSn() + ")");
 
     dto.addEmbed(embed);
@@ -178,7 +171,7 @@ public class VoteService {
 
       String message = reqData.getVoteSubject() + " 투표가 생성됐습니다.  &nbsp;<a href='/vote-user?ssno=" + voteEntity.getVoteSn() + "'>[투표하기]</a>";
       WebSocketDto webSocketDto = WebSocketDto.builder().targetType(WebSocketTargetType.ALL).sendDate(LocalDateTime.now()).message(message)
-          .messageType(WebSocketMessageType.HTML).message(message).senderId(reqData.getAnswerUserId()).build();
+          .messageType(WebSocketMessageType.HTML).message(message).senderId(reqData.getUserId()).build();
 
       redisTemplate.convertAndSend(RedisSubscibeChannel.WEBSOCKET_TOPIC.name(), webSocketDto);
 
@@ -461,6 +454,7 @@ public class VoteService {
     dto.addEmbed(embed);
 
     messageService.sendDiscordWebhook(dto);
+
   }
 
   @Transactional

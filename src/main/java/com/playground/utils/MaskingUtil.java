@@ -34,4 +34,23 @@ public final class MaskingUtil {
 
     return str.replaceAll("(?<=.).(?=.)", "*");
   }
+
+
+  /**
+   * 이름 마스킹
+   *
+   * @param str - 마스킹 처리 할 문자열
+   * @return String - 마스킹 처리된 문자열
+   */
+  public static String name(String str) {
+    if (StringUtils.isBlank(str)) {
+      return "";
+    }
+
+    if (StringUtils.length(str) > 2) {
+      return withoutFirstAndLast(str);
+    } else {
+      return str.replaceAll("(?<=.{1}).", str);
+    }
+  }
 }

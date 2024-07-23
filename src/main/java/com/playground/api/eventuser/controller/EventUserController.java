@@ -18,7 +18,6 @@ import com.playground.api.eventuser.model.EventUserListResponse;
 import com.playground.api.eventuser.service.EventUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "eventUser", description = "이벤트유저")
@@ -34,14 +33,14 @@ public class EventUserController {
    */
   @Operation(summary = "사용자 이벤트 목록 조회", description = "사용자 이벤트 목록 조회")
   @PostMapping("/public/eventUser/getEventList")
-  public List<EventUserListResponse> getEventList(@RequestBody @Valid EventUserListRequest req) {
+  public List<EventUserListResponse> getEventList(@RequestBody EventUserListRequest req) {
     return eventUserService.getEventList(req);
   }
   
   /**
    * 사용자 이벤트 목록 조회
    */
-  @Operation(summary = "사용자 이벤트 목록 조회", description = "사용자 이벤트 목록 조회")
+  @Operation(summary = "사용자 이벤트 목록 페이징 조회", description = "사용자 이벤트 목록 페이징 조회")
   @PostMapping("/public/eventUser/getEventPageList")
   public Page<EventUserListResponse> getEventPageList(Pageable pageable, @RequestBody EventUserListRequest req) {
     return eventUserService.getEventPageList(pageable, req);

@@ -42,24 +42,36 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
   /* 이벤트 목록 조회 */
   @Override
   public List<EventUserListResponse> getEventList(String eventName, String progrsSttus, String mberId) {
+    LocalDateTime now = LocalDateTime.now();
+    NumberExpression<Integer> eventStatusOrder = new CaseBuilder()
+        .when(eventEntity.eventEndDt.lt(now)).then(1) // '종료' 상태의 이벤트는 맨 앞
+        .when(eventEntity.eventBeginDt.loe(now)).then(1) // '진행중' 상태의 이벤트는 맨 앞
+        .otherwise(2);
+    
     return queryFactory
-        .select(Projections.fields(EventUserListResponse.class, 
-            eventEntity.eventSn.as("eventSerial"), 
+        .select(Projections.fields(EventUserListResponse.class,
+            eventEntity.eventSn.as("eventSerial"),
             eventEntity.eventNm.as("eventName"),
-            eventEntity.eventBeginDt.as("eventBeginDate"), 
+            eventEntity.eventBeginDt.as("eventBeginDate"),
             eventEntity.eventEndDt.as("eventEndDate"),
             eventEntity.eventThumbFileSn.as("eventThumbFileSn"),
             new CaseBuilder()
-              .when(eventEntity.eventEndDt.lt(LocalDateTime.now()))
-              .then("종료").when(eventEntity.eventBeginDt.loe(LocalDateTime.now()))
-              .then("진행중").otherwise("예정").as("progrsSttus"),
+                .when(eventEntity.eventEndDt.lt(now))
+                .then("종료")
+                .when(eventEntity.eventBeginDt.loe(now))
+                .then("진행중")
+                .otherwise("예정").as("progrsSttus"),
             new CaseBuilder()
-              .when(eventParticipateEntity.mberId.isNotNull())
-              .then("참여완료").otherwise("미참여").as("participationAt")))
-        .from(eventEntity).leftJoin(eventParticipateEntity)
+                .when(eventParticipateEntity.mberId.isNotNull())
+                .then("참여완료")
+                .otherwise("미참여").as("participationAt")
+        ))
+        .from(eventEntity)
+        .leftJoin(eventParticipateEntity)
         .on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn).and(eventParticipateEntity.mberId.eq(mberId)))
-        .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), 
-            eventStatusEq(progrsSttus)).orderBy(eventEntity.eventBeginDt.desc()).fetch();
+        .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), eventStatusEq(progrsSttus))
+        .orderBy(eventStatusOrder.asc(), eventEntity.eventBeginDt.desc())
+        .fetch();
   }
 
   private BooleanExpression eventNameLike(String eventName) {
@@ -84,27 +96,42 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
   /* 이벤트 목록 페이징 조회 */
   @Override
   public Page<EventUserListResponse> getEventPageList(String eventName, String progrsSttus, String mberId, Pageable pageable) {
-    List<EventUserListResponse> result =  queryFactory
-        .select(Projections.fields(EventUserListResponse.class, 
-            eventEntity.eventSn.as("eventSerial"), 
+    LocalDateTime now = LocalDateTime.now();
+    NumberExpression<Integer> eventStatusOrder = new CaseBuilder()
+        .when(eventEntity.eventBeginDt.loe(now)).then(1) 
+        .when(eventEntity.eventEndDt.lt(now)).then(1) 
+        .otherwise(2);
+    
+    List<EventUserListResponse> result =   queryFactory
+        .select(Projections.fields(EventUserListResponse.class,
+            eventEntity.eventSn.as("eventSerial"),
             eventEntity.eventNm.as("eventName"),
-            eventEntity.eventBeginDt.as("eventBeginDate"), 
+            eventEntity.eventBeginDt.as("eventBeginDate"),
             eventEntity.eventEndDt.as("eventEndDate"),
             eventEntity.eventThumbFileSn.as("eventThumbFileSn"),
             new CaseBuilder()
-              .when(eventEntity.eventEndDt.lt(LocalDateTime.now()))
-              .then("종료").when(eventEntity.eventBeginDt.loe(LocalDateTime.now()))
-              .then("진행중").otherwise("예정").as("progrsSttus"),
+                .when(eventEntity.eventEndDt.lt(now))
+                .then("종료")
+                .when(eventEntity.eventBeginDt.loe(now))
+                .then("진행중")
+                .otherwise("예정").as("progrsSttus"),
             new CaseBuilder()
-              .when(eventParticipateEntity.mberId.isNotNull())
-              .then("참여완료").otherwise("미참여").as("participationAt")))
-        .from(eventEntity).leftJoin(eventParticipateEntity)
+                .when(eventParticipateEntity.mberId.isNotNull())
+                .then("참여완료")
+                .otherwise("미참여").as("participationAt")
+        ))
+        .from(eventEntity)
+        .leftJoin(eventParticipateEntity)
         .on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn).and(eventParticipateEntity.mberId.eq(mberId)))
-        .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), 
-            eventStatusEq(progrsSttus))
-        .orderBy(eventEntity.eventBeginDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+        .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), eventStatusEq(progrsSttus))
+        .orderBy(eventStatusOrder.asc(), eventEntity.eventBeginDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize())
+        .fetch();
     
-    JPAQuery<Long> countQuery = queryFactory.select(eventEntity.count()).from(eventEntity).where(eventNameLike(eventName));
+    JPAQuery<Long> countQuery = queryFactory.select(eventEntity.count()).from(eventEntity).from(eventEntity)
+        .leftJoin(eventParticipateEntity)
+        .on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn).and(eventParticipateEntity.mberId.eq(mberId)))
+        .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), eventStatusEq(progrsSttus));
+    
     return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
   }
 

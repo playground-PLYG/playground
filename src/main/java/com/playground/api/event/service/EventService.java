@@ -1,7 +1,6 @@
 package com.playground.api.event.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -27,6 +26,7 @@ import com.playground.api.event.repository.PointPaymentRepository;
 import com.playground.api.event.repository.PointRepository;
 import com.playground.api.sample.repository.ExcelDownRepository;
 import com.playground.utils.ExcelDownUtil;
+import com.playground.utils.MaskingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -168,18 +168,17 @@ public class EventService {
 
     for (PointPaymentEntity point : pointList) {
       totalPointSum += point.getFixingPointPayrCo() * point.getFixingPointValue();
-
     }
 
     EventResultResponse response = EventResultResponse.builder().build();
-    List<EventResultResponse> res = new ArrayList<>();
-
 
     for (EventResultResponse result : resultList) {
       if ("Y".equals(result.getEventPrzwinAlter())) {
+        result.setMemberNm(MaskingUtil.name(result.getMemberNm()));
         response.getWinnerEvent().add(result);
         provisionPointSum += result.getPrzwinPointVal();
       } else if ("N".equals(result.getEventPrzwinAlter())) {
+        result.setMemberNm(MaskingUtil.name(result.getMemberNm()));
         response.getLoserEvent().add(result);
       }
     }

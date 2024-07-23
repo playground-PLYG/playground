@@ -17,7 +17,7 @@ public class VoteSrchRequest extends BaseDto {
   /**
    * 사용자ID
    */
-  @Schema(description = "사용자ID", example = "sungjong")
+  @Schema(description = "사용자ID", example = "sungjong1111")
   private String userId;
 
   /**

@@ -58,12 +58,13 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
         .select(Projections.fields(VoteSrchResponse.class, tbVote.voteSn.as("voteSsno"), tbVote.voteSj.as("voteSubject"),
             // 날짜 String 타입으로 변환
             Expressions.stringTemplate("to_char({0}, 'YYYY-MM-DD HH24:MI')", tbVote.voteBeginDt).as("voteBeginDate"),
-            Expressions.stringTemplate("to_char({0}, 'YYYY-MM-DD HH24:MI')", tbVote.voteEndDt).as("voteEndDate"),
+            Expressions.stringTemplate("to_char({0}, 'YYYY-MM-DD HH24:MI')", tbVote.voteEndDt).as("voteEndDate"), tbVote.voteBeginDt,
             new CaseBuilder().when(tbVoteAnswer.qestnSn.isNotNull()).then("Y").otherwise("N").as("votePartcptnAt")))
-        .from(tbVote).leftJoin(tbVoteAnswer).on(tbVote.voteSn.eq(tbVoteAnswer.voteSn).and(tbVoteAnswer.answerUserId.eq(reqData.getUserId())))
+        .distinct().from(tbVote).leftJoin(tbVoteAnswer)
+        .on(tbVote.voteSn.eq(tbVoteAnswer.voteSn).and(tbVoteAnswer.answerUserId.eq(reqData.getUserId())))
         .where(buildVoteStatus(reqData.getVoteStatus()), secondCnLike(reqData.getVoteSubject()),
             (tbVote.voteExpsrAt.eq("Y").or(tbVote.registUsrId.eq(reqData.getUserId()).and(tbVote.voteExpsrAt.eq("N")))))
-        .orderBy(tbVote.registDt.asc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+        .orderBy(tbVote.voteBeginDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 
     JPAQuery<Long> countQuery = queryFactory.select(tbVote.count()).from(tbVote).leftJoin(tbVoteAnswer)
         .on(tbVote.voteSn.eq(tbVoteAnswer.voteSn).and(tbVoteAnswer.answerUserId.eq(reqData.getUserId())))

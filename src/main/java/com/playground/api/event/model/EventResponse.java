@@ -3,6 +3,7 @@ package com.playground.api.event.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -29,9 +30,11 @@ public class EventResponse extends BaseDto {
   private String eventName;
 
   @Schema(description = "이벤트시작일시")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime eventBeginDate;
 
   @Schema(description = "이벤트종료일시")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime eventEndDate;
 
   @Schema(description = "진행상태")

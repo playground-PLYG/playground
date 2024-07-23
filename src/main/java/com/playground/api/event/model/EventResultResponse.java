@@ -1,6 +1,8 @@
 package com.playground.api.event.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -26,7 +28,10 @@ public class EventResultResponse extends BaseDto {
   @Schema(description = "총포인트 값")
   private Integer totalPointValue;
 
-  @Schema(description = "당첨포인트값")
+  @Schema(description = "총포인트 값")
+  private Integer provisionPointValue;
+
+  @Schema(description = "멤버이름")
   private String memberNm;
 
   @Schema(description = "맴버ID")
@@ -44,4 +49,9 @@ public class EventResultResponse extends BaseDto {
   @Schema(description = "이벤트참여여부")
   private String eventPrzwinAlter;
 
+  @Builder.Default
+  private List<EventResultResponse> winnerEvent = new ArrayList<>();
+
+  @Builder.Default
+  private List<EventResultResponse> loserEvent = new ArrayList<>();
 }

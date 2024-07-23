@@ -29,7 +29,7 @@ public class EventUserDetailResponse extends BaseDto {
   private String eventName;
 
   @Schema(description = "컨테츠내용")
-  private String cntntsContents;
+  private String contents;
 
   @Schema(description = "이벤트시작일시")
   private LocalDateTime eventBeginDate;

@@ -9,17 +9,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
+import com.playground.api.vote.entity.QVoteAnswerEntity;
 import com.playground.api.vote.entity.QVoteEntity;
 import com.playground.api.vote.entity.QVoteQestnEntity;
 import com.playground.api.vote.entity.QVoteQestnIemEntity;
-import com.playground.api.vote.entity.VoteEntity;
 import com.playground.api.vote.entity.VoteQestnEntity;
 import com.playground.api.vote.model.VoteQestnIemResponse;
 import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteSrchRequest;
+import com.playground.api.vote.model.VoteSrchResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +35,7 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   QVoteEntity tbVote = QVoteEntity.voteEntity;
   QVoteQestnEntity tbQestn = QVoteQestnEntity.voteQestnEntity;
   QVoteQestnIemEntity tbIem = QVoteQestnIemEntity.voteQestnIemEntity;
+  QVoteAnswerEntity tbVoteAnswer = QVoteAnswerEntity.voteAnswerEntity;
 
   @Override
   public List<VoteQestnResponse> getVoteQestnDetail(Integer voteSsno) {
@@ -47,17 +51,25 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
   }
 
   @Override
-  public Page<VoteEntity> getVotePageList(VoteSrchRequest reqData, Pageable pageable) {
+  public Page<VoteSrchResponse> getVotePageList(VoteSrchRequest reqData, Pageable pageable) {
 
 
-    List<VoteEntity> content = queryFactory.selectFrom(tbVote)
+    List<VoteSrchResponse> content = queryFactory
+        .select(Projections.fields(VoteSrchResponse.class, tbVote.voteSn.as("voteSsno"), tbVote.voteSj.as("voteSubject"),
+            // 날짜 String 타입으로 변환
+            Expressions.stringTemplate("to_char({0}, 'YYYY-MM-DD HH24:MI')", tbVote.voteBeginDt).as("voteBeginDate"),
+            Expressions.stringTemplate("to_char({0}, 'YYYY-MM-DD HH24:MI')", tbVote.voteEndDt).as("voteEndDate"), tbVote.voteBeginDt,
+            new CaseBuilder().when(tbVoteAnswer.qestnSn.isNotNull()).then("Y").otherwise("N").as("votePartcptnAt")))
+        .distinct().from(tbVote).leftJoin(tbVoteAnswer)
+        .on(tbVote.voteSn.eq(tbVoteAnswer.voteSn).and(tbVoteAnswer.answerUserId.eq(reqData.getUserId())))
         .where(buildVoteStatus(reqData.getVoteStatus()), secondCnLike(reqData.getVoteSubject()),
-            (tbVote.voteExpsrAt.eq("Y").or(tbVote.registUsrId.eq(reqData.getAnswerUserId()).and(tbVote.voteExpsrAt.eq("N")))))
-        .orderBy(tbVote.registDt.asc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+            (tbVote.voteExpsrAt.eq("Y").or(tbVote.registUsrId.eq(reqData.getUserId()).and(tbVote.voteExpsrAt.eq("N")))))
+        .orderBy(tbVote.voteBeginDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 
-    JPAQuery<Long> countQuery =
-        queryFactory.select(tbVote.count()).from(tbVote).where(buildVoteStatus(reqData.getVoteStatus()), secondCnLike(reqData.getVoteSubject()),
-            (tbVote.voteExpsrAt.eq("Y").or(tbVote.registUsrId.eq(reqData.getAnswerUserId()).and(tbVote.voteExpsrAt.eq("N")))));
+    JPAQuery<Long> countQuery = queryFactory.select(tbVote.count()).from(tbVote).leftJoin(tbVoteAnswer)
+        .on(tbVote.voteSn.eq(tbVoteAnswer.voteSn).and(tbVoteAnswer.answerUserId.eq(reqData.getUserId())))
+        .where(buildVoteStatus(reqData.getVoteStatus()), secondCnLike(reqData.getVoteSubject()),
+            tbVote.voteExpsrAt.eq("Y").or(tbVote.registUsrId.eq(reqData.getUserId()).and(tbVote.voteExpsrAt.eq("N"))));
 
     return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
   }

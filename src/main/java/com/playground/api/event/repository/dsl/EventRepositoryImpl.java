@@ -36,8 +36,8 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
             eventEntity.eventSeCodeId.as("eventSectionCodeId"), eventEntity.eventBeginDt.as("eventBeginDate"),
             eventEntity.eventEndDt.as("eventEndDate"), eventEntity.registUsrId.as("registUsrId"), eventEntity.registDt.as("registDt"),
             eventEntity.updtUsrId.as("updtUsrId"), eventEntity.updtDt.as("updtDt"),
-            new CaseBuilder().when(eventEntity.eventEndDt.lt(LocalDateTime.now())).then("종료").when(eventEntity.eventBeginDt.loe(LocalDateTime.now()))
-                .then("진행중").otherwise("예정").as("progrsSttus")))
+            new CaseBuilder().when(eventEntity.eventEndDt.lt(LocalDateTime.now())).then("END").when(eventEntity.eventBeginDt.loe(LocalDateTime.now()))
+                .then("ING").otherwise("PRE").as("progrsSttus")))
         .from(eventEntity)
         .where(eventNmLkie(req.getEventName()), eventSeCodeIdLkie(req.getEventSectionCodeId()), progrsSttusSch(req.getProgrsSttus()))
         .orderBy(eventEntity.registDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
@@ -146,11 +146,11 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
   /* 진행상태 조회 동적쿼리 */
   private BooleanExpression progrsSttusSch(String progrsSttus) {
     if (StringUtils.isNotBlank(progrsSttus)) {
-      if (progrsSttus.equals("종료")) {
+      if (progrsSttus.equals("END")) {
         return eventEntity.eventEndDt.lt(LocalDateTime.now());
-      } else if (progrsSttus.equals("진행중")) {
+      } else if (progrsSttus.equals("ING")) {
         return eventEntity.eventBeginDt.loe(LocalDateTime.now()).and(eventEntity.eventEndDt.goe(LocalDateTime.now()));
-      } else if (progrsSttus.equals("예정")) {
+      } else if (progrsSttus.equals("PRE")) {
         return eventEntity.eventBeginDt.gt(LocalDateTime.now());
       }
     }

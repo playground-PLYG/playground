@@ -1,6 +1,7 @@
 package com.playground.api.event.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -158,8 +159,24 @@ public class EventService {
     eventRepository.modifyDrwtEvent(req.getEventSerial());
   }
 
-  public List<EventResultResponse> getEventResultList(int eventSn) {
-    return eventRepository.getEventResultList(eventSn);
+  public EventResultResponse getEventResultList(int eventSn) {
+    List<EventResultResponse> resultList = eventRepository.getEventResultList(eventSn);
+
+    EventResultResponse response = EventResultResponse.builder().build();
+    List<EventResultResponse> res = new ArrayList<>();
+    int provisionPointSum = 0;
+
+    for (EventResultResponse result : resultList) {
+      if ("Y".equals(result.getEventPrzwinAlter())) {
+        response.getWinnerEvent().add(result);
+        provisionPointSum += result.getPrzwinPointVal();
+      } else if ("N".equals(result.getEventPrzwinAlter())) {
+        response.getLoserEvent().add(result);
+      }
+    }
+    response.setTotalPointValue(resultList.get(0).getTotalPointValue());
+    response.setProvisionPointValue(provisionPointSum);
+    return response;
   }
 
   public ResponseEntity<byte[]> getEventExcelList(Integer eventSn) {

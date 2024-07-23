@@ -1,6 +1,5 @@
 package com.playground.api.event.controller;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -85,7 +84,7 @@ public class EventController {
    */
   @Operation(summary = "이벤트 결과 목록조회", description = "이벤트 결과 목록조회")
   @PostMapping("/api/event/getEventResultList")
-  public List<EventResultResponse> getEventResultList(@RequestBody EventRequest req) {
+  public EventResultResponse getEventResultList(@RequestBody EventRequest req) {
     return eventService.getEventResultList(req.getEventSerial());
   }
 

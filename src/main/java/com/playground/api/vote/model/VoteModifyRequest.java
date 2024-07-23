@@ -7,10 +7,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-@Schema(name = "VoteRequest", description = "투표목록조회 및 등록수정 요청에 필요한 데이터")
+@Schema(name = "VoteRequest", description = "투표 등록/수정 요청에 필요한 데이터")
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public class VoteRequest extends BaseDto {
+public class VoteModifyRequest extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
@@ -27,11 +27,6 @@ public class VoteRequest extends BaseDto {
   @Schema(description = "사용자ID", example = "sungjong")
   private String answerUserId;
 
-  /**
-   * 질문일련번호
-   */
-  @Schema(description = "질문일련번호", example = "12347890")
-  private Integer questionSsno;
 
 
   /**
@@ -43,19 +38,15 @@ public class VoteRequest extends BaseDto {
   /**
    * 투표시작일시
    */
-  @Schema(description = "투표시작일시", example = "yyyy-mm-dd HH")
+  @Schema(description = "투표시작일시", example = "yyyy-MM-dd HH:mm")
   private String voteBeginDate;
 
   /**
    * 투표종료일시
    */
-  @Schema(description = "투표종료일시", example = "yyyy-mm-dd HH")
+  @Schema(description = "투표종료일시", example = "yyyy-MM-dd HH:mm")
   private String voteEndDate;
 
-
-  //////////////////////////////////////////
-  // 사용하는 변수는 위로 올리기 -> 추후 사용안하면 삭제 예정
-  //////////////////////////////////////////
 
   /**
    * 투표노출여부
@@ -77,16 +68,8 @@ public class VoteRequest extends BaseDto {
 
 
   /**
-   * 투표전송상태
-   */
-  @Schema(description = "투표전송상태", example = "투표중")
-  private String voteStatus;
-
-
-
-  /**
    * 질문들
    */
   @Schema(description = "질문객체", example = "voteQestnRequestList")
-  private List<VoteQestnRequest> voteQestnRequestList;
+  private List<VoteQestnAddRequest> voteQestnRequestList;
 }

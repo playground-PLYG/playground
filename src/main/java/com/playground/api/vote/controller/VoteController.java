@@ -9,14 +9,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.playground.api.vote.model.VoteAddRequest;
+import com.playground.api.vote.model.VoteAddResponse;
 import com.playground.api.vote.model.VoteAnswerRequest;
 import com.playground.api.vote.model.VoteAnswerResponse;
+import com.playground.api.vote.model.VoteModifyRequest;
+import com.playground.api.vote.model.VoteModifyResponse;
 import com.playground.api.vote.model.VoteQestnIemRequest;
 import com.playground.api.vote.model.VoteQestnIemResponse;
 import com.playground.api.vote.model.VoteQestnRequest;
 import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteResponse;
+import com.playground.api.vote.model.VoteResultResponse;
 import com.playground.api.vote.model.VoteRstrntResponse;
 import com.playground.api.vote.model.VoteSrchRequest;
 import com.playground.api.vote.model.VoteSrchResponse;
@@ -47,12 +52,21 @@ public class VoteController {
   /**
    * 투표등록
    */
-  // 투표등록 메소드 이전꺼... 새로 개발 하셔야 합니다 (to.서유진연구원님)
   @Operation(summary = "투표등록", description = "관리자가 투표를 등록")
   @PostMapping("/api/vote/addVote")
-  public VoteResponse addVote(@RequestBody @Valid VoteRequest reqData) {
+  public VoteAddResponse addVote(@RequestBody @Valid VoteAddRequest reqData) {
     return voteService.addVote(reqData);
   }
+
+  /**
+   * 투표수정
+   */
+  @Operation(summary = "투표수정", description = "관리자가 투표를 수정")
+  @PutMapping("/api/vote/modifyVote")
+  public VoteModifyResponse modifyVote(@RequestBody @Valid VoteModifyRequest reqData) {
+    return voteService.modifyVote(reqData);
+  }
+
 
   /**
    * 투표내용 상세조회 (Edited by.PSJ, End date.2024.07.08)
@@ -86,7 +100,7 @@ public class VoteController {
    */
   @Operation(summary = "결과상세보기", description = "투표한 결과를 상세하게 조회")
   @PostMapping("/api/vote/getVoteResult")
-  public VoteResponse getVoteResult(@RequestBody @Valid VoteRequest reqData) {
+  public VoteResultResponse getVoteResult(@RequestBody @Valid VoteRequest reqData) {
     return voteService.getVoteResult(reqData);
   }
 
@@ -94,15 +108,6 @@ public class VoteController {
   //////////////// 이하 메소드는 개발완료 후 삭제 할 예정 참고 만 하기 ////////////////////////
   /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * 투표수정
-   */
-  @Operation(summary = "투표수정", description = "관리자가 투표를 수정")
-  @PutMapping("/api/vote/modifyVote")
-  public VoteResponse modifyVote(@RequestBody @Valid VoteRequest reqData) {
-    log.debug("##### ##### modifyVote reqData : {}", reqData);
-    return voteService.modifyVote(reqData);
-  }
 
   /**
    * 투표삭제

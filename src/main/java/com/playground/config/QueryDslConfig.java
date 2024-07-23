@@ -1,16 +1,19 @@
 package com.playground.config;
 
+import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.sql.Configuration;
 import com.querydsl.sql.PostgreSQLTemplates;
+import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
+import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-@Configuration
+@org.springframework.context.annotation.Configuration
 public class QueryDslConfig {
   @PersistenceContext
   private EntityManager entityManager;
@@ -22,12 +25,20 @@ public class QueryDslConfig {
   }
 
   @Bean
-  com.querydsl.sql.Configuration querydslConfiguration() {
+  Configuration querydslConfiguration() {
     SQLTemplates templates = PostgreSQLTemplates.builder().build();
-    // change to your Templates
-    com.querydsl.sql.Configuration configuration = new com.querydsl.sql.Configuration(templates);
+    Configuration configuration = new Configuration(templates);
     SpringExceptionTranslator springExceptionTranslator = new SpringExceptionTranslator();
+
     configuration.setExceptionTranslator(springExceptionTranslator);
+
     return configuration;
+  }
+
+  @Bean
+  SQLQueryFactory queryFactory(DataSource dataSource) {
+    SpringConnectionProvider provider = new SpringConnectionProvider(dataSource);
+
+    return new SQLQueryFactory(querydslConfiguration(), provider);
   }
 }

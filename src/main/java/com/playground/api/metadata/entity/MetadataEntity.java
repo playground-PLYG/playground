@@ -41,8 +41,8 @@ public class MetadataEntity extends BaseEntity {
   /**
    * 메타데이터카테고리
    */
-  @Column(name = "metdata_category")
-  private String metdataCategory;
+  @Column(name = "metdata_category_cn")
+  private String metdataCategorynCn;
 
   /**
    * 미리보기이미지제목

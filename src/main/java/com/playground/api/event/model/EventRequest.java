@@ -6,11 +6,15 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.playground.model.BaseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Schema(name = "EventRequest", description = "게시판 CRUD")
+@Builder
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 public class EventRequest extends BaseDto {

@@ -36,7 +36,7 @@ public class RedisConfig {
   private String redisPassword;
 
   @Bean
-  public RedisConnectionFactory redisConnectionFactory() {
+  RedisConnectionFactory redisConnectionFactory() {
     RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 
     redisStandaloneConfiguration.setHostName(redisHost);
@@ -47,7 +47,7 @@ public class RedisConfig {
   }
 
   @Bean
-  public RedisTemplate<String, Object> redisTemplate() {
+  RedisTemplate<String, Object> redisTemplate() {
     RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
     StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
     GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper());
@@ -62,7 +62,7 @@ public class RedisConfig {
   }
 
   @Bean
-  public RedisMessageListenerContainer redisContainer(RedisWebSocketMessageSubscribeListener redisWebSocketMessageSubscribeListener,
+  RedisMessageListenerContainer redisContainer(RedisWebSocketMessageSubscribeListener redisWebSocketMessageSubscribeListener,
       RedisSeverSentEventsMessageSubscribeListener redisSeverSentEventsMessageSubscribeListener) {
     RedisMessageListenerContainer container = new RedisMessageListenerContainer();
     container.setConnectionFactory(redisConnectionFactory());

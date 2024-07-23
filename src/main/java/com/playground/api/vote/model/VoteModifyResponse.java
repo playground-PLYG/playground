@@ -11,17 +11,18 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Schema(name = "VoteResultResponse", description = "사용자 답변들을 통계 내기 위한 Detail response")
+@Schema(name = "VoteModifyResponse", description = "투표수정 응답에 필요한 데이터")
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class VoteResultResponse extends BaseDto {
+public class VoteModifyResponse extends BaseDto {
 
   @Serial
   private static final long serialVersionUID = 1L;
+
   /**
    * 투표일련번호
    */
@@ -47,9 +48,28 @@ public class VoteResultResponse extends BaseDto {
   private String voteEndDate;
 
   /**
-   * 투표결과 시 사용하는 객체
+   * 투표노출여부
    */
-  @Schema(description = "투표결과객체", example = "voteResultList")
-  private List<VoteResultDetailResponse> voteResultList;
+  @Schema(description = "투표노출여부", example = "Y")
+  private String voteExposureAlternative;
+
+  /**
+   * 투표전송여부
+   */
+  @Schema(description = "투표전송여부", example = "Y")
+  private String voteTransmissionAlternative;
+
+  /**
+   * 투표전송코드
+   */
+  @Schema(description = "투표전송코드", example = "NOW")
+  private String voteTransmissionCode;
+
+
+  /**
+   * 질문객체
+   */
+  @Schema(description = "질문객체", example = "voteQestnResponse")
+  private List<VoteQestnAddResponse> voteQestnResponseList;
 
 }

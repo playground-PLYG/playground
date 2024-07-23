@@ -127,7 +127,7 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
         .orderBy(eventStatusOrder.asc(), eventEntity.eventBeginDt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize())
         .fetch();
     
-    JPAQuery<Long> countQuery = queryFactory.select(eventEntity.count()).from(eventEntity).from(eventEntity)
+    JPAQuery<Long> countQuery = queryFactory.select(eventEntity.count()).from(eventEntity)
         .leftJoin(eventParticipateEntity)
         .on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn).and(eventParticipateEntity.mberId.eq(mberId)))
         .where(eventEntity.expsrAt.eq("Y"), eventNameLike(eventName), eventStatusEq(progrsSttus));

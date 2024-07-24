@@ -3,7 +3,6 @@ package com.playground.api.vote.controller;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,14 +14,9 @@ import com.playground.api.vote.model.VoteAnswerRequest;
 import com.playground.api.vote.model.VoteAnswerResponse;
 import com.playground.api.vote.model.VoteModifyRequest;
 import com.playground.api.vote.model.VoteModifyResponse;
-import com.playground.api.vote.model.VoteQestnIemRequest;
-import com.playground.api.vote.model.VoteQestnIemResponse;
-import com.playground.api.vote.model.VoteQestnRequest;
-import com.playground.api.vote.model.VoteQestnResponse;
 import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteResponse;
 import com.playground.api.vote.model.VoteResultResponse;
-import com.playground.api.vote.model.VoteRstrntResponse;
 import com.playground.api.vote.model.VoteSrchRequest;
 import com.playground.api.vote.model.VoteSrchResponse;
 import com.playground.api.vote.service.VoteService;
@@ -103,111 +97,4 @@ public class VoteController {
   public VoteResultResponse getVoteResult(@RequestBody @Valid VoteRequest reqData) {
     return voteService.getVoteResult(reqData);
   }
-
-  /////////////////////////////////////////////////////////////////////////////
-  //////////////// 이하 메소드는 개발완료 후 삭제 할 예정 참고 만 하기 ////////////////////////
-  /////////////////////////////////////////////////////////////////////////////
-
-
-  /**
-   * 투표삭제
-   */
-  @Operation(summary = "투표삭제", description = "관리자가 투표를 삭제")
-  @DeleteMapping("/api/vote/removeVote")
-  public VoteResponse removeVote(@RequestBody @Valid VoteRequest reqData) {
-    return voteService.removeVote(reqData);
-  }
-
-  /**
-   * 질문등록
-   */
-  @Operation(summary = "질문등록", description = "관리자가 질문을 등록")
-  @PostMapping("/api/qestn/addQestn")
-  public List<VoteQestnResponse> addQestn(@RequestBody @Valid List<VoteQestnRequest> qestnReqList) {
-    return voteService.addQestn(qestnReqList);
-  }
-
-  /**
-   * 질문수정
-   */
-  @Operation(summary = "질문수정", description = "관리자가 질문을 수정")
-  @PutMapping("/api/qestn/modifyQestn")
-  public List<VoteQestnResponse> modifyQestn(@RequestBody @Valid List<VoteQestnRequest> qestnReqList) {
-    return voteService.modifyQestn(qestnReqList);
-  }
-
-  /**
-   * 질문삭제
-   */
-  @Operation(summary = "질문삭제", description = "관리자가 질문을 삭제")
-  @DeleteMapping("/api/qestn/removeQestn")
-  public Long removeQestn(@RequestBody @Valid VoteQestnRequest qestnRequest) {
-    return voteService.removeQestn(qestnRequest);
-  }
-
-  /**
-   * 투표항목등록
-   */
-  @Operation(summary = "투표항목등록", description = "관리자가 투표항목을 등록")
-  @PostMapping("/api/voteIem/addVoteIem")
-  public List<VoteQestnIemResponse> addVoteIem(@RequestBody @Valid List<VoteQestnIemRequest> voteIemReqList) {
-    return voteService.addVoteIem(voteIemReqList);
-  }
-
-  /**
-   * 투표항목수정
-   */
-  @Operation(summary = "투표항목수정", description = "관리자가 투표항목을 수정")
-  @PutMapping("/api/voteIem/modifyVoteIem")
-  public List<VoteQestnIemResponse> modifyVoteIem(@RequestBody @Valid List<VoteQestnIemRequest> voteIemReqList) {
-    return voteService.modifyVoteIem(voteIemReqList);
-  }
-
-  /**
-   * 투표항목삭제
-   */
-  @Operation(summary = "투표항목삭제", description = "관리자가 투표항목을 삭제")
-  @DeleteMapping("/api/voteIem/removeVoteIem")
-  public Long removeVoteIem(@RequestBody @Valid VoteQestnIemRequest voteIemRequest) {
-    return voteService.removeVoteIem(voteIemRequest);
-  }
-
-  /**
-   * 투표 내용 조회하기
-   */
-  @Operation(summary = "투표조회", description = "투표내용을 조회")
-  @PostMapping("/public/voteAnswer/getVoteDetail")
-  public VoteResponse getVoteDetailOnAnswer(@RequestBody @Valid VoteRequest reqData) {
-    return voteService.getVoteDetailOnAnswer(reqData);
-  }
-
-  /**
-   * 답변 조회 하기
-   */
-  @Operation(summary = "답변조회", description = "답변정보를 조회")
-  @PostMapping("/public/voteAnswer/getAnswer")
-  public List<VoteAnswerResponse> getAnswer(@RequestBody @Valid VoteAnswerRequest reqData) {
-    log.debug("############## request ::: {}", reqData);
-    return voteService.getAnswer(reqData);
-  }
-
-
-  /**
-   * 당일 점심투표 등록
-   */
-  @Operation(summary = "당일 점심투표 등록", description = "하루한번 자동으로 점심투표를 생성할 API")
-  @PostMapping("/api/voteRstrnt/addTodayLunchVote")
-  public void addTodayLunchVote() {
-    voteService.addTodayLunchVote();
-  }
-
-  /**
-   * 당일 점심투표 조회
-   */
-  @Operation(summary = "당일 점심투표 조회", description = "금일 점심투표할 리스트 조회")
-  @PostMapping("/api/voteRstrnt/getVoteRstrntList")
-  public List<VoteRstrntResponse> getVoteRstrntList() {
-    return voteService.getVoteRstrntList();
-  }
-
 }

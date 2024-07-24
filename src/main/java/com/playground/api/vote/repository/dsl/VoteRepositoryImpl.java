@@ -13,10 +13,8 @@ import com.playground.api.vote.entity.QVoteAnswerEntity;
 import com.playground.api.vote.entity.QVoteEntity;
 import com.playground.api.vote.entity.QVoteQestnEntity;
 import com.playground.api.vote.entity.QVoteQestnIemEntity;
-import com.playground.api.vote.entity.VoteQestnEntity;
 import com.playground.api.vote.model.VoteQestnIemResponse;
 import com.playground.api.vote.model.VoteQestnResponse;
-import com.playground.api.vote.model.VoteRequest;
 import com.playground.api.vote.model.VoteSrchRequest;
 import com.playground.api.vote.model.VoteSrchResponse;
 import com.querydsl.core.types.Projections;
@@ -104,43 +102,4 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom {
 
     return null;
   }
-
-
-
-  /////////////////////////////////////////////////////////////////////////////////
-  ////////////////////// 이하 메소드 사용하는거는 위로 올릴 것 개발 완료후 삭제 예정/////////////////
-
-
-  @Override
-  public Long updateByIdForVote(VoteRequest reqData) {
-    LocalDateTime nowDateTime = LocalDateTime.now();
-    return queryFactory.update(tbVote)// .set(voteEntity.voteDeleteAt, reqData.getVoteDeleteAlternative())
-        .set(tbVote.updtDt, nowDateTime).where(tbVote.voteSn.eq(reqData.getVoteSsno())).execute();
-  }
-
-  @Override
-  public Long deleteByVoteSnForQestn(Integer voteSsno) {
-    return queryFactory.delete(tbQestn).where(tbQestn.voteSn.eq(voteSsno)).execute();
-  }
-
-  @Override
-  public Long deleteByVoteSnForVoteIem(Integer voteSsno) {
-    return queryFactory.delete(tbIem).where(tbIem.voteSn.eq(voteSsno)).execute();
-  }
-
-  @Override
-  public Long deleteBySsnoForVoteIem(Integer voteSsno, Integer questionSsno) {
-    return queryFactory.delete(tbIem).where(tbIem.voteSn.eq(voteSsno).and(tbIem.qestnSn.eq(questionSsno))).execute();
-  }
-
-  @Override
-  public List<VoteQestnEntity> getQestnList(Integer voteSsno) {
-    return queryFactory.selectFrom(tbQestn).where(tbQestn.voteSn.eq(voteSsno)).fetch();
-  }
-
-  @Override
-  public Long deleteBySsnoForQestn(Integer voteSsno, Integer questionSsno) {
-    return queryFactory.delete(tbQestn).where(tbQestn.voteSn.eq(voteSsno).and(tbQestn.qestnSn.eq(questionSsno))).execute();
-  }
-
 }

@@ -23,6 +23,7 @@ import com.playground.exception.BizException;
 import com.playground.utils.MberUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import com.playground.utils.MaskingUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -52,17 +53,17 @@ public class EventUserService {
 
   /** 사용자 이벤트 목록 페이징 조회 */
   public Page<EventUserListResponse> getEventPageList(Pageable pageable, @Valid EventUserListRequest req) {
-  String mberId = "";
-  Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
+    String mberId = "";
+    Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
 
-  if (mberInfo.isPresent()) {
-    mberId = mberInfo.get().getMberId();
+    if (mberInfo.isPresent()) {
+      mberId = mberInfo.get().getMberId();
+    }
+
+    Page<EventUserListResponse> result = eventUserRepository.getEventPageList(req.getEventName(), req.getProgrsSttus(), mberId, pageable);
+
+    return result;
   }
-
-  Page<EventUserListResponse> result = eventUserRepository.getEventPageList(req.getEventName(), req.getProgrsSttus(), mberId, pageable);
-
-  return result;
-}
 
   /** 사용자 이벤트 상세 조회 */
   @Transactional(readOnly = true)
@@ -96,7 +97,7 @@ public class EventUserService {
   public EventParticipationResponse addEventParticipation(EventUserDetailRequest req) {
 
     EventParticipationResponse result = new EventParticipationResponse();
-    
+
     String mberId = "";
     Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
 
@@ -142,7 +143,7 @@ public class EventUserService {
   /** 응모형 이벤트 당첨자 조회 */
   @Transactional(readOnly = true)
   public EventPrizeWinnerResponse getEntryEventWinner(Integer eventSn) {
-    
+
     String mberId = "";
     Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
 
@@ -150,18 +151,23 @@ public class EventUserService {
     if (mberInfo.isPresent()) {
       // 로그인 사용자 정보 있는 경우
       mberId = mberInfo.get().getMberId();
-      
+
       // 당첨여부, 지급값
       result = eventUserRepository.getPrizeAt(eventSn, mberId);
+      result.setMemberName(MaskingUtil.name(result.getMemberName()));
     } else {
       result.setEventPrizeAt("N");
       result.setPrzwinPointValue(0);
       // 로그인 사용자 정보가 없거나 로그인 하지 않은 경우
     }
-    
-    //당첨자 리스트
+
     List<PrizeWinnerResponse> winnerList = eventUserRepository.getEntryEventWinningList(eventSn, mberId);
+
+    for (PrizeWinnerResponse winner : winnerList) {
+      winner.setMemberName(MaskingUtil.name(winner.getMemberName()));
+    }
     result.setPrizeWinner(winnerList);
+
     return result;
   }
 

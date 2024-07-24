@@ -396,9 +396,12 @@ public class EventUserRepositoryImpl implements EventUserRepositoryCustom {
     return queryFactory
         .select(Projections.fields(EventPrizeWinnerResponse.class,
             eventParticipateEntity.eventPrzwinAt.as("eventPrizeAt"),
-            eventParticipateEntity.przwinPointValue.as("przwinPointValue")
+            eventParticipateEntity.przwinPointValue.as("przwinPointValue"),
+            mberEntity.mberNm.as("memberName") 
         ))
         .from(eventParticipateEntity)
+        .leftJoin(mberEntity) 
+        .on(eventParticipateEntity.mberId.eq(mberEntity.mberId))
         .where(eventParticipateEntity.eventSn.eq(eventSn)
             .and(eventParticipateEntity.mberId.eq(mberId)))
         .fetchOne();

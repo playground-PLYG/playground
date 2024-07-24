@@ -27,6 +27,9 @@ public class EventPrizeWinnerResponse extends BaseDto {
   @Schema(description = "당첨포인트값")
   private Integer przwinPointValue;
   
+  @Schema(description = "회원명")
+  private String memberName;
+  
   @Builder.Default
   private List<PrizeWinnerResponse> prizeWinner = new ArrayList<>();
 

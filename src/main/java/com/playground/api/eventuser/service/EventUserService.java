@@ -1,5 +1,6 @@
 package com.playground.api.eventuser.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -144,31 +145,46 @@ public class EventUserService {
   @Transactional(readOnly = true)
   public EventPrizeWinnerResponse getEntryEventWinner(Integer eventSn) {
 
-    String mberId = "";
-    Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
+      String mberId = "";
+      Optional<MberInfoResponse> mberInfo = mberUtil.getMber();
 
-    EventPrizeWinnerResponse result = new EventPrizeWinnerResponse();
-    if (mberInfo.isPresent()) {
-      // 로그인 사용자 정보 있는 경우
-      mberId = mberInfo.get().getMberId();
+      EventPrizeWinnerResponse result = new EventPrizeWinnerResponse();
+      if (mberInfo.isPresent()) {
+          // 로그인 사용자 정보 있는 경우
+          mberId = mberInfo.get().getMberId();
 
-      // 당첨여부, 지급값
-      result = eventUserRepository.getPrizeAt(eventSn, mberId);
-      result.setMemberName(MaskingUtil.name(result.getMemberName()));
-    } else {
-      result.setEventPrizeAt("N");
-      result.setPrzwinPointValue(0);
-      // 로그인 사용자 정보가 없거나 로그인 하지 않은 경우
-    }
+          // 당첨여부, 지급값
+          result = eventUserRepository.getPrizeAt(eventSn, mberId);
+          
+          if (result == null) {
+              result = new EventPrizeWinnerResponse();
+              result.setEventPrizeAt("N");
+              result.setPrzwinPointValue(0);
+          } else {
+              result.setMemberName(MaskingUtil.name(result.getMemberName()));
+          }
+      } else {
+          result.setEventPrizeAt("N");
+          result.setPrzwinPointValue(0);
+          // 로그인 사용자 정보가 없거나 로그인 하지 않은 경우
+      }
 
-    List<PrizeWinnerResponse> winnerList = eventUserRepository.getEntryEventWinningList(eventSn, mberId);
+      //당첨자리스트
+      List<PrizeWinnerResponse> winnerList = eventUserRepository.getEntryEventWinningList(eventSn, mberId);
 
-    for (PrizeWinnerResponse winner : winnerList) {
-      winner.setMemberName(MaskingUtil.name(winner.getMemberName()));
-    }
-    result.setPrizeWinner(winnerList);
+      if (winnerList == null || winnerList.isEmpty()) {
+          winnerList = Collections.emptyList();
+      } else {
+          for (PrizeWinnerResponse winner : winnerList) {
+              winner.setMemberName(MaskingUtil.name(winner.getMemberName()));
+          }
+      }
 
-    return result;
+      result.setPrizeWinner(winnerList);
+
+      return result;
   }
+
+
 
 }

@@ -55,6 +55,13 @@ public class VoteAddRequest extends BaseDto {
 
 
   /**
+   * 투표전송여부
+   */
+  @Schema(description = "투표전송여부", example = "Y")
+  private String voteTransmissionAlternative;
+
+
+  /**
    * 질문들
    */
   @Schema(description = "질문객체", example = "voteQestnRequestList")

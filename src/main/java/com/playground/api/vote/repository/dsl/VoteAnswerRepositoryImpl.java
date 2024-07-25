@@ -53,37 +53,39 @@ public class VoteAnswerRepositoryImpl implements VoteAnswerRepositoryCustom {
 
   @Override
   public List<VoteResultDetailResponse> getVoteQestnResult(VoteRequest reqData) {
-    return queryFactory.select(tbVoteAnswer).from(tbVoteAnswer)
-        .leftJoin(tbQVoteQestnIem)
-        .on(tbVoteAnswer.voteSn.eq(tbQVoteQestnIem.voteSn)
-            .and(tbVoteAnswer.qestnSn.eq(tbQVoteQestnIem.qestnSn))
-            .and(tbVoteAnswer.iemSn.eq(tbQVoteQestnIem.iemSn)))
-        .leftJoin(tbVoteQestn)
-        .on(tbVoteAnswer.voteSn.eq(tbVoteQestn.voteSn)
-            .and(tbVoteAnswer.qestnSn.eq(tbVoteQestn.qestnSn)))
-        .where(tbVoteAnswer.voteSn.eq(reqData.getVoteSsno()))
-        .groupBy(tbVoteAnswer.qestnSn, tbVoteAnswer.iemSn, 
-            tbQVoteQestnIem.iemNm, tbVoteQestn.qestnCn, 
-            tbVoteQestn.compnoChoiseAt, tbVoteQestn.annymtyVoteAt, tbQVoteQestnIem.iemIdntfcId)
-        .orderBy(tbVoteAnswer.qestnSn.asc(), tbVoteAnswer.iemSn.asc())
-        .transform(
-            groupBy(tbVoteAnswer.qestnSn)
-            .list(
-                Projections.fields(VoteResultDetailResponse.class, 
-                    tbVoteAnswer.qestnSn.as("questionSsno"), 
-                    tbVoteQestn.qestnCn.as("questionContents"),
-                tbVoteQestn.compnoChoiseAt.as("compoundNumberChoiceAlternative"), 
-                tbVoteQestn.annymtyVoteAt.as("anonymityVoteAlternative"),
-                list(
-                    Projections.fields(VoteResultDetailDetailResponse.class, 
-                        tbVoteAnswer.iemSn.as("itemSsno"), 
-                        tbQVoteQestnIem.iemNm.as("itemName"),
-                        Wildcard.count.as("itemCount"), 
-                        tbQVoteQestnIem.iemIdntfcId.as("itemIdentificationId"))
-                    ).as("resultDetailList")
-                )
-                )
-            );
+   return queryFactory
+    .select(tbVoteQestn)
+    .from(tbVoteQestn)
+    .join(tbQVoteQestnIem)
+    .on(tbVoteQestn.voteSn.eq(tbQVoteQestnIem.voteSn)
+        .and(tbVoteQestn.qestnSn.eq(tbQVoteQestnIem.qestnSn)))
+    .join(tbVoteAnswer)
+    .on(tbVoteQestn.voteSn.eq(tbVoteAnswer.voteSn)
+        .and(tbVoteQestn.qestnSn.eq(tbVoteAnswer.qestnSn))
+        .and(tbQVoteQestnIem.iemSn.eq(tbVoteAnswer.iemSn)))
+    .where(tbVoteAnswer.voteSn.eq(reqData.getVoteSsno()))
+    .groupBy(tbVoteAnswer.qestnSn, tbVoteAnswer.iemSn, 
+        tbQVoteQestnIem.iemNm, tbVoteQestn.qestnCn, 
+        tbVoteQestn.compnoChoiseAt, tbVoteQestn.annymtyVoteAt, tbQVoteQestnIem.iemIdntfcId)
+    .orderBy(tbVoteAnswer.qestnSn.asc(), tbVoteAnswer.iemSn.asc())
+    .transform(
+        groupBy(tbVoteAnswer.qestnSn)
+        .list(
+            Projections.fields(VoteResultDetailResponse.class, 
+                tbVoteAnswer.qestnSn.as("questionSsno"), 
+                tbVoteQestn.qestnCn.as("questionContents"),
+            tbVoteQestn.compnoChoiseAt.as("compoundNumberChoiceAlternative"), 
+            tbVoteQestn.annymtyVoteAt.as("anonymityVoteAlternative"),
+            list(
+                Projections.fields(VoteResultDetailDetailResponse.class, 
+                    tbVoteAnswer.iemSn.as("itemSsno"), 
+                    tbQVoteQestnIem.iemNm.as("itemName"),
+                    Wildcard.count.as("itemCount"), 
+                    tbQVoteQestnIem.iemIdntfcId.as("itemIdentificationId"))
+                ).as("resultDetailList")
+            )
+            )
+        );
   }
 
   @Override

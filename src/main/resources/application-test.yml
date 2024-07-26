@@ -1,0 +1,90 @@
+server:
+ port: 8080
+   
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  api-docs:
+    groups:
+      enabled: true
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    disable-swagger-default-url: true
+    doc-expansion: list
+    filter: true
+
+spring:
+ data:
+   redis:
+     port: 16379
+     host: localhost
+     password: ${sm://db-pwd}
+ datasource:
+  master:
+   hikari:
+    driver-class-name: org.postgresql.Driver
+    jdbc-url: jdbc:postgresql://localhost:5432/playground
+    username: app_user
+    password: ${sm://db-pwd}
+    read-only: false
+  slave: # DB replication 적용 후 replica DB로 정보 수정
+   hikari:
+    driver-class-name: org.postgresql.Driver
+    jdbc-url: jdbc:postgresql://localhost:5432/playground
+    username: app_user
+    password: ${sm://db-pwd}
+    read-only: true
+ jpa:
+  database: postgresql
+  database-platform: org.hibernate.dialect.PostgreSQLDialect
+  defer-datasource-initialization: true
+ mvc:
+  pathmatch:
+   matching-strategy: ANT_PATH_MATCHER
+ web:
+  resources:
+   add-mappings: false
+ ai:
+  openai:
+   api-key: ${sm://openai-key}
+   embedding:
+    options:
+     model: text-embedding-3-small
+ devtools:
+  add-properties: false
+
+logging:
+  pattern:
+    file: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} [${LOG_LEVEL_PATTERN:%5p}] [%10.10X{userId}] [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  level:
+    root: info
+    org:
+      springframework: info
+    com:
+     playground: debug
+
+decorator:
+  datasource:
+    exclude-beans: dataSource
+    p6spy:
+      enable-logging: false
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+  health:
+    defaults:
+      enabled: false
+    diskspace:
+      enabled: false
+    db:
+      enabled: false
+
+CRYPTO_PWD: ${sm://crypto-pwd}
+CRYPTO_SALT: ${sm://crypto-pwd}
+
+CLIENT_URL: https://playground-nuxt.vercel.app

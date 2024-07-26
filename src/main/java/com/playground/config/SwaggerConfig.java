@@ -27,17 +27,17 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class SwaggerConfig {
   @Bean
-  public GroupedOpenApi publicApi() {
+  GroupedOpenApi publicApi() {
     return GroupedOpenApi.builder().group("playground").pathsToMatch("/playground/**").build();
   }
 
   @Bean
-  public GroupedOpenApi sampleApi() {
+  GroupedOpenApi sampleApi() {
     return GroupedOpenApi.builder().group("sample").displayName("샘플 API").pathsToMatch("/playground/**/sample/**").build();
   }
 
   @Bean
-  public OpenAPI openAPI(ServerProperties serverProperties, ProfileUtil profileUtil) {
+  OpenAPI openAPI(ServerProperties serverProperties, ProfileUtil profileUtil) {
 
     Info info = new Info().version("v1.0.0").title("Playground API").description("playground 프로젝트 API 명세서");
 
@@ -58,7 +58,7 @@ public class SwaggerConfig {
             hostname += ":" + port;
           }
         } else {
-          hostname = "https://" + System.getenv("GOOGLE_CLOUD_PROJECT") + ".uw.r.appspot.com";
+          hostname = "https://playground-api.duckdns.org";
         }
 
         server.setUrl(hostname);

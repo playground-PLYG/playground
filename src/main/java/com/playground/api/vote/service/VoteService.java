@@ -83,14 +83,25 @@ public class VoteService {
 
 
     VoteEntity voteEntity =
-        voteRepository.save(VoteEntity.builder().voteSj(reqData.getVoteSubject()).voteBeginDt(voteBeginDateTime).voteEndDt(voteEndDateTime)
-            .voteExpsrAt(reqData.getVoteExposureAlternative()).voteTrnsmisCode(reqData.getVoteTransmissionCode()).voteTrnsmisAt("N").build());
+        voteRepository.save(VoteEntity.builder()
+            .voteSj(reqData.getVoteSubject())
+            .voteBeginDt(voteBeginDateTime)
+            .voteEndDt(voteEndDateTime)
+            .voteExpsrAt(reqData.getVoteExposureAlternative())
+            .voteTrnsmisCode(reqData.getVoteTransmissionCode())
+            .voteTrnsmisAt(reqData.getVoteTransmissionAlternative())
+            .build());
 
 
-    VoteAddResponse voteResponse = VoteAddResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj())
+    VoteAddResponse voteResponse = VoteAddResponse.builder()
+        .voteSsno(voteEntity.getVoteSn())
+        .voteSubject(voteEntity.getVoteSj())
         .voteBeginDate(voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1)))
-        .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1))).voteExposureAlternative(voteEntity.getVoteExpsrAt())
-        .voteTransmissionCode(voteEntity.getVoteTrnsmisCode()).build();
+        .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1)))
+        .voteExposureAlternative(voteEntity.getVoteExpsrAt())
+        .voteTransmissionCode(voteEntity.getVoteTrnsmisCode())
+        .voteTransmissionAlternative(voteEntity.getVoteTrnsmisAt())
+        .build();
 
 
     // 질문리스트 저장
@@ -99,32 +110,48 @@ public class VoteService {
       List<VoteQestnAddRequest> qestnReList = reqData.getVoteQestnRequestList();
       qestnReList.forEach(qestn -> {
         VoteQestnEntity qestnRes = voteQestnRepository
-            .save(VoteQestnEntity.builder().voteSn(voteEntity.getVoteSn()).qestnCn(qestn.getQuestionContents()).voteKndCode(qestn.getVoteKndCd())
-                .compnoChoiseAt(qestn.getCompoundNumberChoiceAlternative()).annymtyVoteAt(qestn.getAnonymityVoteAlternative()).build());
+            .save(VoteQestnEntity.builder()
+                .voteSn(voteEntity.getVoteSn())
+                .qestnCn(qestn.getQuestionContents())
+                .voteKndCode(qestn.getVoteKndCd())
+                .compnoChoiseAt(qestn.getCompoundNumberChoiceAlternative())
+                .annymtyVoteAt(qestn.getAnonymityVoteAlternative())
+                .build());
 
-        embed.addField("" + qestn.getQuestionContents() + " : [익명투표여부]", "N".equals(qestn.getAnonymityVoteAlternative()) ? "회원투표" : "익명투표", true);
-        embed.addField("" + qestn.getQuestionContents() + " : [복수선택여부]", "N".equals(qestn.getCompoundNumberChoiceAlternative()) ? "단일투표" : "복수투표",
-            true);
 
-        VoteQestnAddResponse setQestn = VoteQestnAddResponse.builder().questionSsno(qestnRes.getQestnSn()).voteSsno(qestnRes.getVoteSn())
-            .voteKindCode(qestnRes.getVoteKndCode()).questionContents(qestnRes.getQestnCn())
-            .compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt()).anonymityVoteAlternative(qestnRes.getAnnymtyVoteAt()).build();
+        VoteQestnAddResponse setQestn = VoteQestnAddResponse.builder()
+            .questionSsno(qestnRes.getQestnSn())
+            .voteSsno(qestnRes.getVoteSn())
+            .voteKindCode(qestnRes.getVoteKndCode())
+            .questionContents(qestnRes.getQestnCn())
+            .compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt())
+            .anonymityVoteAlternative(qestnRes.getAnnymtyVoteAt())
+            .build();
 
 
         // 항목리스트 저장
         if (!ObjectUtils.isEmpty(qestn.getVoteIemRequestList())) {
           List<VoteQestnIemEntity> iemEntities = new ArrayList<>();
           qestn.getVoteIemRequestList().forEach(voteIem -> {
-            iemEntities.add(VoteQestnIemEntity.builder().voteSn(qestnRes.getVoteSn()).qestnSn(qestnRes.getQestnSn()).iemNm(voteIem.getItemName())
-                .iemIdntfcId(voteIem.getItemIdentificationId()).build());
+            iemEntities.add(VoteQestnIemEntity.builder()
+                .voteSn(qestnRes.getVoteSn())
+                .qestnSn(qestnRes.getQestnSn())
+                .iemNm(voteIem.getItemName())
+                .iemIdntfcId(voteIem.getItemIdentificationId())
+                .build());
           });
 
           List<VoteQestnIemEntity> saveAllIemEntities = voteQestnIemRepository.saveAll(iemEntities);
           setQestn
               .setVoteQestnIemResponseList(
                   saveAllIemEntities.stream()
-                      .map(entity -> VoteQestnIemAddResponse.builder().itemSsno(entity.getIemSn()).itemName(entity.getIemNm())
-                          .voteSno(entity.getVoteSn()).questionSno(entity.getQestnSn()).itemIdentificationId(entity.getIemIdntfcId()).build())
+                      .map(entity -> VoteQestnIemAddResponse.builder()
+                          .itemSsno(entity.getIemSn())
+                          .itemName(entity.getIemNm())
+                          .voteSno(entity.getVoteSn())
+                          .questionSno(entity.getQestnSn())
+                          .itemIdentificationId(entity.getIemIdntfcId())
+                          .build())
                       .toList());
         }
         setQestnList.add(setQestn);
@@ -146,20 +173,18 @@ public class VoteService {
     if ("NOW".equals(reqData.getVoteTransmissionCode())) {
       messageService.sendDiscordWebhook(dto);
 
-
-      // 메세지 전송 시 voteTrnsmisAt을 'Y'로 설정
-      voteEntity.setVoteTrnsmisAt("Y");
-      voteRepository.save(voteEntity);
-
       String message = reqData.getVoteSubject() + " 투표가 생성됐습니다.  &nbsp;<a href='/vote-user?ssno=" + voteEntity.getVoteSn() + "'>[투표하기]</a>";
-      WebSocketDto webSocketDto = WebSocketDto.builder().targetType(WebSocketTargetType.ALL).sendDate(LocalDateTime.now()).message(message)
-          .messageType(WebSocketMessageType.HTML).message(message).senderId(reqData.getUserId()).build();
+      WebSocketDto webSocketDto = WebSocketDto.builder()
+          .targetType(WebSocketTargetType.ALL)
+          .sendDate(LocalDateTime.now()).message(message)
+          .messageType(WebSocketMessageType.HTML)
+          .message(message)
+          .senderId(reqData.getUserId())
+          .build();
 
       redisTemplate.convertAndSend(RedisSubscibeChannel.WEBSOCKET_TOPIC.name(), webSocketDto);
 
     }
-
-    voteResponse.setVoteTransmissionAlternative(voteEntity.getVoteTrnsmisAt());
 
     return voteResponse;
   }
@@ -175,14 +200,25 @@ public class VoteService {
     LocalDateTime voteEndDateTime = LocalDateTime.parse(reqData.getVoteEndDate(), DateTimeFormatter.ofPattern(DATETIME_1));
 
 
-    VoteEntity voteEntity = voteRepository.save(VoteEntity.builder().voteSn(reqData.getVoteSsno()).voteSj(reqData.getVoteSubject())
-        .voteBeginDt(voteBeginDateTime).voteEndDt(voteEndDateTime).voteExpsrAt(reqData.getVoteExposureAlternative())
-        .voteTrnsmisAt(reqData.getVoteTransmissionAlternative()).voteTrnsmisCode(reqData.getVoteTransmissionCode()).build());
+    VoteEntity voteEntity = voteRepository.save(VoteEntity.builder()
+        .voteSn(reqData.getVoteSsno())
+        .voteSj(reqData.getVoteSubject())
+        .voteBeginDt(voteBeginDateTime)
+        .voteEndDt(voteEndDateTime)
+        .voteExpsrAt(reqData.getVoteExposureAlternative())
+        .voteTrnsmisAt(reqData.getVoteTransmissionAlternative())
+        .voteTrnsmisCode(reqData.getVoteTransmissionCode())
+        .build());
 
-    VoteModifyResponse voteResponse = VoteModifyResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj())
+    VoteModifyResponse voteResponse = VoteModifyResponse.builder()
+        .voteSsno(voteEntity.getVoteSn())
+        .voteSubject(voteEntity.getVoteSj())
         .voteBeginDate(voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1)))
-        .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1))).voteExposureAlternative(voteEntity.getVoteExpsrAt())
-        .voteTransmissionAlternative(voteEntity.getVoteTrnsmisAt()).voteTransmissionCode(voteEntity.getVoteTrnsmisCode()).build();
+        .voteEndDate(voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1)))
+        .voteExposureAlternative(voteEntity.getVoteExpsrAt())
+        .voteTransmissionAlternative(voteEntity.getVoteTrnsmisAt())
+        .voteTransmissionCode(voteEntity.getVoteTrnsmisCode())
+        .build();
 
 
     if (!ObjectUtils.isEmpty(reqData.getVoteQestnRequestList())) {
@@ -209,28 +245,47 @@ public class VoteService {
       // 질문 등록
       qestnReList.forEach(qestn -> {
         VoteQestnEntity qestnRes = voteQestnRepository
-            .save(VoteQestnEntity.builder().voteSn(voteEntity.getVoteSn()).qestnCn(qestn.getQuestionContents()).voteKndCode(qestn.getVoteKndCd())
-                .compnoChoiseAt(qestn.getCompoundNumberChoiceAlternative()).annymtyVoteAt(qestn.getAnonymityVoteAlternative()).build());
+            .save(VoteQestnEntity.builder()
+                .voteSn(voteEntity.getVoteSn())
+                .qestnCn(qestn.getQuestionContents())
+                .voteKndCode(qestn.getVoteKndCd())
+                .compnoChoiseAt(qestn.getCompoundNumberChoiceAlternative())
+                .annymtyVoteAt(qestn.getAnonymityVoteAlternative())
+                .build());
 
-        VoteQestnAddResponse setQestn = VoteQestnAddResponse.builder().questionSsno(qestnRes.getQestnSn()).voteSsno(qestnRes.getVoteSn())
-            .voteKindCode(qestnRes.getVoteKndCode()).questionContents(qestnRes.getQestnCn())
-            .compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt()).anonymityVoteAlternative(qestnRes.getAnnymtyVoteAt()).build();
+        VoteQestnAddResponse setQestn = VoteQestnAddResponse.builder()
+            .questionSsno(qestnRes.getQestnSn())
+            .voteSsno(qestnRes.getVoteSn())
+            .voteKindCode(qestnRes.getVoteKndCode())
+            .questionContents(qestnRes.getQestnCn())
+            .compoundNumberChoiceAlternative(qestnRes.getCompnoChoiseAt())
+            .anonymityVoteAlternative(qestnRes.getAnnymtyVoteAt())
+            .build();
 
 
         // 항목리스트 저장
         if (!ObjectUtils.isEmpty(qestn.getVoteIemRequestList())) {
           List<VoteQestnIemEntity> iemEntities = new ArrayList<>();
           qestn.getVoteIemRequestList().forEach(voteIem -> {
-            iemEntities.add(VoteQestnIemEntity.builder().voteSn(qestnRes.getVoteSn()).qestnSn(qestnRes.getQestnSn()).iemNm(voteIem.getItemName())
-                .iemIdntfcId(voteIem.getItemIdentificationId()).build());
+            iemEntities.add(VoteQestnIemEntity.builder()
+                .voteSn(qestnRes.getVoteSn())
+                .qestnSn(qestnRes.getQestnSn())
+                .iemNm(voteIem.getItemName())
+                .iemIdntfcId(voteIem.getItemIdentificationId())
+                .build());
           });
 
           List<VoteQestnIemEntity> saveAllIemEntities = voteQestnIemRepository.saveAll(iemEntities);
           setQestn
               .setVoteQestnIemResponseList(
                   saveAllIemEntities.stream()
-                      .map(entity -> VoteQestnIemAddResponse.builder().itemSsno(entity.getIemSn()).itemName(entity.getIemNm())
-                          .voteSno(entity.getVoteSn()).questionSno(entity.getQestnSn()).itemIdentificationId(entity.getIemIdntfcId()).build())
+                      .map(entity -> VoteQestnIemAddResponse.builder()
+                          .itemSsno(entity.getIemSn())
+                          .itemName(entity.getIemNm())
+                          .voteSno(entity.getVoteSn())
+                          .questionSno(entity.getQestnSn())
+                          .itemIdentificationId(entity.getIemIdntfcId())
+                          .build())
                       .toList());
         }
         setQestnList.add(setQestn);
@@ -250,10 +305,15 @@ public class VoteService {
       String beginDate = voteEntity.getVoteBeginDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
       String endDate = voteEntity.getVoteEndDt().format(DateTimeFormatter.ofPattern(DATETIME_1));
 
-      VoteResponse voteResponse = VoteResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate)
-          .voteEndDate(endDate).voteExposureAlternative(voteEntity.getVoteExpsrAt()).voteTransmissionAlternative(voteEntity.getVoteTrnsmisAt())
-          .voteTransmissionCode(voteEntity.getVoteTrnsmisCode()).registUserId(voteEntity.getRegistUsrId()).registDate(voteEntity.getRegistDt())
-          .updateUserId(voteEntity.getUpdtUsrId()).updateDate(voteEntity.getUpdtDt()).build();
+      VoteResponse voteResponse = VoteResponse.builder()
+          .voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj())
+          .voteBeginDate(beginDate)
+          .voteEndDate(endDate).voteExposureAlternative(voteEntity.getVoteExpsrAt())
+          .voteTransmissionAlternative(voteEntity.getVoteTrnsmisAt())
+          .voteTransmissionCode(voteEntity.getVoteTrnsmisCode()).registUserId(voteEntity.getRegistUsrId())
+          .registDate(voteEntity.getRegistDt())
+          .updateUserId(voteEntity.getUpdtUsrId())
+          .updateDate(voteEntity.getUpdtDt()).build();
 
       List<VoteQestnResponse> voteQestnResponseList = voteRepository.getVoteQestnDetail(reqData.getVoteSsno());
       if (!ObjectUtils.isEmpty(voteQestnResponseList)) {
@@ -272,22 +332,38 @@ public class VoteService {
     List<VoteAnswerEntity> resEntityList = new ArrayList<>();
     reqDataList.forEach(req -> {
       List<VoteAnswerEntity> alreadyEntityList = voteAnswerRepository.getVoteAnswerEntityList(
-          VoteAnswerEntity.builder().answerUserId(req.getAnswerUserId()).voteSn(req.getVoteSsno()).qestnSn(req.getQuestionSsno()).build());
+          VoteAnswerEntity.builder()
+          .answerUserId(req.getAnswerUserId())
+          .voteSn(req.getVoteSsno())
+          .qestnSn(req.getQuestionSsno())
+          .build());
       if (!ObjectUtils.isEmpty(alreadyEntityList)) {
-        alreadyEntityList.forEach(entity -> voteAnswerRepository.deleteById(VoteAnswerPK.builder().answerUserId(entity.getAnswerUserId())
-            .voteSn(entity.getVoteSn()).qestnSn(entity.getQestnSn()).iemSn(entity.getIemSn()).build()));
+        alreadyEntityList.forEach(entity -> voteAnswerRepository.deleteById(VoteAnswerPK.builder()
+            .answerUserId(entity.getAnswerUserId())
+            .voteSn(entity.getVoteSn())
+            .qestnSn(entity.getQestnSn())
+            .iemSn(entity.getIemSn())
+            .build()));
       }
 
       for (Integer iemSsno : req.getItemSsnoList()) {
-        VoteAnswerEntity reqAnswer = VoteAnswerEntity.builder().answerUserId(req.getAnswerUserId()).voteSn(req.getVoteSsno())
-            .qestnSn(req.getQuestionSsno()).iemSn(iemSsno).build();
+        VoteAnswerEntity reqAnswer = VoteAnswerEntity.builder()
+            .answerUserId(req.getAnswerUserId())
+            .voteSn(req.getVoteSsno())
+            .qestnSn(req.getQuestionSsno())
+            .iemSn(iemSsno).build();
         VoteAnswerEntity saveAnswer = voteAnswerRepository.save(reqAnswer);
         resEntityList.add(saveAnswer);
       }
     });
 
-    return resEntityList.stream().map(entity -> VoteAnswerResponse.builder().answerUserId(entity.getAnswerUserId()).voteSsno(entity.getVoteSn())
-        .questionSsno(entity.getQestnSn()).itemSsno(entity.getIemSn()).build()).toList();
+    return resEntityList.stream().map(entity -> VoteAnswerResponse.builder()
+        .answerUserId(entity.getAnswerUserId())
+        .voteSsno(entity.getVoteSn())
+        .questionSsno(entity.getQestnSn())
+        .itemSsno(entity.getIemSn())
+        .build())
+        .toList();
   }
 
   @Transactional(readOnly = true)
@@ -298,8 +374,12 @@ public class VoteService {
     } else {
       List<VoteAnswerSubResponse> resEntityList = voteAnswerRepository.getMyVoteAnswerList(reqData);
       if (!ObjectUtils.isEmpty(resEntityList)) {
-        return VoteAnswerResponse.builder().answerUserId(reqData.getAnswerUserId()).voteSsno(reqData.getVoteSsno()).isCheckAnswer(true)
-            .voteAnswerSubList(resEntityList).build();
+        return VoteAnswerResponse.builder()
+            .answerUserId(reqData.getAnswerUserId())
+            .voteSsno(reqData.getVoteSsno())
+            .isCheckAnswer(true)
+            .voteAnswerSubList(resEntityList)
+            .build();
       } else {
         return VoteAnswerResponse.builder().isCheckAnswer(false).build();
       }
@@ -328,8 +408,13 @@ public class VoteService {
           }
         }
       }
-      return VoteResultResponse.builder().voteSsno(voteEntity.getVoteSn()).voteSubject(voteEntity.getVoteSj()).voteBeginDate(beginDate)
-          .voteEndDate(endDate).voteResultList(voteResultList).build();
+      return VoteResultResponse.builder()
+          .voteSsno(voteEntity.getVoteSn())
+          .voteSubject(voteEntity.getVoteSj())
+          .voteBeginDate(beginDate)
+          .voteEndDate(endDate)
+          .voteResultList(voteResultList)
+          .build();
     } else {
       return new VoteResultResponse();
     }

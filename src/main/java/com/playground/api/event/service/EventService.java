@@ -151,7 +151,7 @@ public class EventService {
         eventParticipateRepository.prizeUpdate(member);
 
         PointEntity pointEntity = PointEntity.builder().mberId(member.getMberId()).pointValue(pointList.get(i).getFixingPointValue())
-            .validDt(expiration).refrnId(Integer.toString(member.getEventSn())).refrnSeCodeId("e").build();
+            .validDt(expiration).refrnId(Integer.toString(member.getEventSn())).refrnSeCodeId("EVNT").build();
         pointRepository.save(pointEntity);
 
       }

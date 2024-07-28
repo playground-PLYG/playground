@@ -4,6 +4,7 @@ import static com.playground.api.event.entity.QEventEntity.eventEntity;
 import static com.playground.api.event.entity.QEventParticipateEntity.eventParticipateEntity;
 import static com.playground.api.member.entity.QMberEntity.mberEntity;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -124,14 +125,19 @@ public class EventRepositoryImpl implements EventRepositoryCustom {
 
   @Override
   public List<EventResultExcelResponse> getEventExcelList(int eventSn) {
-    return queryFactory
+    List<EventResultExcelResponse> results = queryFactory
         .select(Projections.fields(EventResultExcelResponse.class, eventEntity.eventNm.as("eventName"), mberEntity.mberNm.as("memberName"),
             mberEntity.mberId.as("memberId"), eventParticipateEntity.przwinPointValue.as("przwinPointVal"), mberEntity.mberTelno.as("memberTelno"),
             eventParticipateEntity.eventPartcptnDt.as("eventPartcptnDate")))
         .from(eventEntity).join(eventParticipateEntity).on(eventEntity.eventSn.eq(eventParticipateEntity.eventSn)).join(mberEntity)
         .on(eventParticipateEntity.mberId.eq(mberEntity.mberId)).where(eventEntity.eventSn.eq(eventSn))
-        .orderBy(eventParticipateEntity.przwinPointValue.desc(), eventParticipateEntity.eventPartcptnDt.asc()).fetch();
+        .orderBy(eventParticipateEntity.przwinPointValue.desc().nullsLast(), eventParticipateEntity.eventPartcptnDt.asc()).fetch();
+    for (EventResultExcelResponse result : results) {
+      result.setFormatEventPartcptnDate(result.getEventPartcptnDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    }
+    return results;
   }
+
 
   /* 이벤트명 조회 동적쿼리 */
   private BooleanExpression eventNmLkie(String eventNm) {

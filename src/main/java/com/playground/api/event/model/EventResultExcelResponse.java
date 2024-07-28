@@ -45,7 +45,8 @@ public class EventResultExcelResponse extends BaseDto {
 
   @Schema(description = "참여일시")
   @ExcelDown(headerName = "참여일시", order = 5)
-  private LocalDateTime eventPartcptnDate;
+  private String formatEventPartcptnDate;
 
+  private LocalDateTime eventPartcptnDate;
 
 }

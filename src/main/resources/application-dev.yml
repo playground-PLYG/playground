@@ -15,6 +15,8 @@ springdoc:
     filter: true
 
 spring:
+ application:
+   name: Playground
  data:
    redis:
      port: 16379
@@ -74,8 +76,7 @@ management:
   endpoints:
     web:
       exposure:
-        include:
-        - health,prometheus
+        include: health,prometheus
   health:
     defaults:
       enabled: false
@@ -83,6 +84,13 @@ management:
       enabled: false
     db:
       enabled: false
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}

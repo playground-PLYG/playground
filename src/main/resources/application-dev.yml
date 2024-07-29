@@ -73,6 +73,8 @@ decorator:
       enable-logging: false
       
 management:
+  server:
+    port: 8880
   endpoints:
     web:
       exposure:

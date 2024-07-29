@@ -78,21 +78,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,prometheus
-  health:
-    defaults:
-      enabled: false
-    diskspace:
-      enabled: false
-    db:
-      enabled: false
+        include: "*"
   metrics:
     tags:
       application: ${spring.application.name}
-  prometheus:
-    metrics:
-      export:
-        enabled: true
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}

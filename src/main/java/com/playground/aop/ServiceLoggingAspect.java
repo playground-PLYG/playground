@@ -42,11 +42,11 @@ public class ServiceLoggingAspect {
         Object arg = args[i];
 
         if (arg == null) {
-          log.debug("  Parameter Type[{}]  : null");
-          log.debug("  Parameter Value[{}] : null");
+          log.debug("  Parameter Type  : null");
+          log.debug("  Parameter Value : null");
         } else {
-          log.debug("  Parameter Type[{}]  : {}", i, arg.getClass().getName());
-          log.debug("  Parameter Value[{}] : {}", i, arg);
+          log.debug("  Parameter Type  : [{}] {}", i, arg.getClass().getName());
+          log.debug("  Parameter Value : [{}] {}", i, arg);
         }
       }
     }
@@ -75,11 +75,11 @@ public class ServiceLoggingAspect {
         Object arg = args[i];
 
         if (arg == null) {
-          log.debug("  Parameter Type[{}]  : null");
-          log.debug("  Parameter Value[{}] : null");
+          log.debug("  Parameter Type  : null");
+          log.debug("  Parameter Value : null");
         } else {
-          log.debug("  Parameter Type[{}]  : {}", i, arg.getClass().getName());
-          log.debug("  Parameter Value[{}] : {}", i, arg);
+          log.debug("  Parameter Type  : [{}] {}", i, arg.getClass().getName());
+          log.debug("  Parameter Value : [{}] {}", i, arg);
         }
       }
     }
@@ -106,6 +106,7 @@ public class ServiceLoggingAspect {
     if (e instanceof BizException bizException) {
       log.debug(">>> AfterThrowing: {} exception: [{} : {}] - {}", joinPoint.getSignature().getName(), bizException.getErrCode(),
           bizException.getErrCode().getCode(), e.getMessage());
+      System.getenv("asd");
     } else {
       log.debug(">>> AfterThrowing: {} exception: {}", joinPoint.getSignature().getName(), e.getMessage());
     }

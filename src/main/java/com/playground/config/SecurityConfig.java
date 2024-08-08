@@ -19,8 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf(AbstractHttpConfigurer::disable).headers(headers -> {
       headers.xssProtection(Customizer.withDefaults());
       headers.frameOptions(FrameOptionsConfig::sameOrigin);

@@ -1,8 +1,8 @@
 server:
- port: 8080
- servlet:
-  encoding:
-   charset: UTF-8
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
    
 springdoc:
   default-consumes-media-type: application/json
@@ -18,28 +18,30 @@ springdoc:
     doc-expansion: list # tag, operation 펼치는 방식
 
 spring:
- profiles:
-  active: local
- config.import: sm://
- sql:
-  init:
-   mode: EMBEDDED
- mvc:
-  pathmatch:
-   matching-strategy: ANT_PATH_MATCHER
- web:
+  application:
+    name: playground-api
+  profiles:
+    active: local
+  config.import: sm://
+  sql:
+    init:
+      mode: EMBEDDED
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  web:
     resources:
       add-mappings: false
- jpa:
-   open-in-view: false
- cloud:
-   gcp:
-     storage:
-       bucket: playground-plyg
- servlet:
-   multipart:
-     max-file-size: 8MB
-     max-request-size: 8MB
+  jpa:
+    open-in-view: false
+  cloud:
+    gcp:
+      storage:
+        bucket: playground-plyg
+  servlet:
+    multipart:
+      max-file-size: 8MB
+      max-request-size: 8MB
 
 logging:
   pattern.console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{mberId}]){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"

@@ -1,5 +1,5 @@
 server:
- port: 8080
+  port: 8080
    
 springdoc:
   default-consumes-media-type: application/json
@@ -15,46 +15,69 @@ springdoc:
     filter: true
 
 spring:
- data:
-   redis:
-     port: 16379
-     host: ${sm://db-host}
-     password: ${sm://db-pwd}
- datasource:
-  master:
-   hikari:
-    driver-class-name: org.postgresql.Driver
-    jdbc-url: jdbc:postgresql://${sm://db-host}:5432/playground
-    username: app_user
-    password: ${sm://db-pwd}
-    read-only: false
-  slave: # DB replication 적용 후 replica DB로 정보 수정
-   hikari:
-    driver-class-name: org.postgresql.Driver
-    jdbc-url: jdbc:postgresql://${sm://db-host}:5432/playground
-    username: app_user
-    password: ${sm://db-pwd}
-    read-only: true
- jpa:
-  database: postgresql
-  database-platform: org.hibernate.dialect.PostgreSQLDialect
-  defer-datasource-initialization: true
- mvc:
-  pathmatch:
-   matching-strategy: ANT_PATH_MATCHER
- web:
+  data:
+    redis:
+      port: 16379
+      host: ${sm://db-host}
+      password: ${sm://db-pwd}
+  datasource:
+    master:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://${sm://db-host}:5432/playground
+        username: app_user
+        password: ${sm://db-pwd}
+        read-only: false
+    slave: # DB replication 적용 후 replica DB로 정보 수정
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://${sm://db-host}:5432/playground
+        username: app_user
+        password: ${sm://db-pwd}
+        read-only: true
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  web:
     resources:
       add-mappings: false
- ai:
+  ai:
     openai:
       api-key: ${sm://openai-key}
       embedding:
         options:
           model: text-embedding-3-small
+  boot:
+    admin:
+      client:
+        url: http://localhost:8889/boot-admin
+        username: ${BOOT_ADMIN_SERVER_USERNAME:local}
+        password: ${BOOT_ADMIN_SERVER_PASSWORD:local}
+        instance:
+          service-url: http://localhost:8080/
+          metadata:
+            user:
+              name: ${BOOT_ADMIN_SERVER_USERNAME:local}
+              password: ${BOOT_ADMIN_SERVER_PASSWORD:local}
 
 logging:
   pattern:
-    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%t]){faint} %clr(%logger){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}" #console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    file: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%t]){faint} %clr(%logger){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}" #console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    dateformat: Asia/seoul
+  file:
+    path: /logs/playground-api
+  logback:
+    rollingpolicy:
+      clean-history-on-start: false
+      file-name-pattern: playground-api_%d{yyyy-MM-dd}_%i.log
+      max-file-size: 10MB
+      max-history: 30
+      total-size-cap: 1GB
   level:
     root: info
     com:
@@ -64,12 +87,41 @@ logging:
         messaging: debug
         core:
           LocalVariableTableParameterNameDiscoverer: error
+        web:
+          client:
+            RestTemplate: warn
+          HttpLogging: warn
+          servlet:
+            mvc:
+              method:
+                annotation:
+                  RequestResponseBodyMethodProcessor: warn
+                  HttpEntityMethodProcessor: warn
 
 decorator:
   datasource:
     exclude-beans: dataSource
     p6spy:
       enable-logging: true
+
+management:
+  server:
+    port: 8880
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    enabled-by-default: true
+  endpoint:
+    configprops:
+      show-values: always
+    env:
+      show-values: always
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}

@@ -10,7 +10,10 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import com.playground.exception.BizException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Aspect
@@ -29,7 +32,24 @@ public class ControllerLoggingAspect {
    */
   @Before("cut()")
   public void logBefore(JoinPoint joinPoint) {
+    HttpServletRequest request;
+
+    try {
+      request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    } catch (Exception e) {
+      request = null;
+    }
+
+    String requestUrl = "";
+    String requestMethod = "";
+
+    if (request != null) {
+      requestUrl = request.getRequestURI();
+      requestMethod = request.getMethod();
+    }
+
     log.debug("==================== Controller - Before ===================");
+    log.debug("  URL             : [{}] {}", requestMethod, requestUrl);
     log.debug("  Method          : {}", joinPoint.getSignature().toString());
 
     Object[] args = joinPoint.getArgs();
@@ -42,11 +62,11 @@ public class ControllerLoggingAspect {
         Object arg = args[i];
 
         if (arg == null) {
-          log.debug("  Parameter Type[{}]  : null");
-          log.debug("  Parameter Value[{}] : null");
+          log.debug("  Parameter Type  : null");
+          log.debug("  Parameter Value : null");
         } else {
-          log.debug("  Parameter Type[{}]  : {}", i, arg.getClass().getName());
-          log.debug("  Parameter Value[{}] : {}", i, arg);
+          log.debug("  Parameter Type  : [{}] {}", i, arg.getClass().getName());
+          log.debug("  Parameter Value : [{}] {}", i, arg);
         }
       }
     }
@@ -75,11 +95,11 @@ public class ControllerLoggingAspect {
         Object arg = args[i];
 
         if (arg == null) {
-          log.debug("  Parameter Type[{}]  : null");
-          log.debug("  Parameter Value[{}] : null");
+          log.debug("  Parameter Type  : null");
+          log.debug("  Parameter Value : null");
         } else {
-          log.debug("  Parameter Type[{}]  : {}", i, arg.getClass().getName());
-          log.debug("  Parameter Value[{}] : {}", i, arg);
+          log.debug("  Parameter Type  : [{}] {}", i, arg.getClass().getName());
+          log.debug("  Parameter Value : [{}] {}", i, arg);
         }
       }
     }

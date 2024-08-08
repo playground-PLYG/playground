@@ -74,7 +74,7 @@ logging:
   logback:
     rollingpolicy:
       clean-history-on-start: false
-      file-name-pattern: playground-api_%d{yyyy-MM-dd}_%i.log
+      file-name-pattern: /logs/playground-api/playground-api_%d{yyyy-MM-dd}_%i.log
       max-file-size: 10MB
       max-history: 30
       total-size-cap: 1GB

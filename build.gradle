@@ -57,6 +57,10 @@ bootJar {
 	archiveVersion = "0.0.0"
 }
 
+springBoot {
+    buildInfo()
+}
+
 dependencies {
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'

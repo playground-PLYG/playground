@@ -55,6 +55,9 @@ spring:
           model: text-embedding-3-small
   devtools:
     add-properties: false
+  output:
+    ansi:
+      enabled: always
   boot:
     admin:
       client:

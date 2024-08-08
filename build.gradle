@@ -44,11 +44,17 @@ ext {
 }
 
 base {
-    archivesName = 'playground'
+    archivesName = 'playground-api'
 }
 
 jar {
     enabled false
+}
+
+bootJar {
+	archivesBaseName = 'playground-api'
+	archiveFileName = 'playground-api.jar'
+	archiveVersion = "0.0.0"
 }
 
 dependencies {

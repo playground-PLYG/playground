@@ -62,7 +62,7 @@ spring:
         username: ${BOOT_ADMIN_SERVER_USERNAME}
         password: ${BOOT_ADMIN_SERVER_PASSWORD}
         instance:
-          service-url: https://playground-api.duckdns.org:8088/
+          service-url: https://playground-api.duckdns.org/
           metadata:
             user:
               name: ${BOOT_ADMIN_SERVER_USERNAME}

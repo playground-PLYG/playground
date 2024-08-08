@@ -74,7 +74,7 @@ spring:
 logging:
   pattern:
     console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%t]){faint} %clr(%logger){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}" #console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
-    file: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} [${LOG_LEVEL_PATTERN:%5p}] [%10.10X{userId}] [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    file: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%t]){faint} %clr(%logger){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
     dateformat: Asia/seoul
   file:
     path: /logs/playground-api

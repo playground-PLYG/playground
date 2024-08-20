@@ -138,6 +138,28 @@ jacocoTestReport {
         html.required = true
         xml.required = true
         csv.required = true
+        exec.required = true
+    }
+
+    def Qdomains = []
+    for (qPattern in '**/entity/QA'..'**/entity/QZ') {
+        Qdomains.add(qPattern + '*')
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, excludes: [
+                    "**/*Application*",
+                    "**/*Config*",
+                    "**/*Dto*",
+                    "**/*Request*",
+                    "**/*Response*",
+                    "**/*Interceptor*",
+                    "**/*Exception*"
+                    ] + Qdomains)
+                })
+        )
     }
 }
 

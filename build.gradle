@@ -152,6 +152,7 @@ jacocoTestReport {
                     "**/*Application*",
                     "**/*Config*",
                     "**/*Dto*",
+                    "**/*Entity*",
                     "**/*Request*",
                     "**/*Response*",
                     "**/*Interceptor*",

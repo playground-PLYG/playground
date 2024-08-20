@@ -151,11 +151,18 @@ jacocoTestReport {
                     fileTree(dir: it, excludes: [
                     "**/*Application*",
                     "**/*Config*",
+                    "**/*Advice*",
+                    "**/*Aspect*",
+                    "**/*Aware*",
+                    "**/*Constants*",
                     "**/*Dto*",
                     "**/*Entity*",
+                    "**/*PK*",
                     "**/*Request*",
                     "**/*Response*",
                     "**/*Interceptor*",
+                    "**/*Repository*",
+                    "**/*Custom*",
                     "**/*Exception*"
                     ] + Qdomains)
                 })

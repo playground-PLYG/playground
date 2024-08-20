@@ -12,6 +12,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.3'
+	id 'jacoco'
 }
 
 group = 'com.playground'
@@ -128,6 +129,16 @@ appengine {  // App Engine tasks configuration
 
 tasks.named('test') {
 	useJUnitPlatform()
+    finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport 동작
+}
+
+// jacoco report 설정
+jacocoTestReport {
+    reports {
+        // html로 report 생성하기
+        // 빌드경로/jacoco/report.html 폴더 내부로 경로 설정
+        html.destination file("$buildDir/jacoco/report.html")
+    }
 }
 
 def querydslDir = 'src/main/generated'
@@ -143,4 +154,6 @@ tasks.withType(JavaCompile) {
 clean {
 	delete file(querydslDir)
 }
+
+
 

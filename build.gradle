@@ -136,6 +136,9 @@ tasks.named('test') {
 jacocoTestReport {
     reports {
         // html로 report 생성하기
+        html.required = true
+        xml.required = true
+        csv.required = true
         // 빌드경로/jacoco/report.html 폴더 내부로 경로 설정
         html.destination file("$buildDir/jacoco/report.html")
     }

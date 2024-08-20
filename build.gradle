@@ -138,7 +138,6 @@ jacocoTestReport {
         html.required = true
         xml.required = true
         csv.required = true
-        exec.required = true
     }
 
     def Qdomains = []

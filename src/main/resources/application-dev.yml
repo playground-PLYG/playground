@@ -130,6 +130,10 @@ management:
     tags:
       application: ${spring.application.name}
 
+profiler:
+  tomcat:
+    excludeurl: /actuator/**
+
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}
 

@@ -28,6 +28,6 @@ public class GameResultRepositoryImpl implements GameResultRepositoryCustom {
       query.orderBy(tbGameResult.gameTime.asc()); // 난이도 desc, 시간 asc
     }
 
-    return query.fetch();
+    return query.limit(100).fetch();
   }
 }

@@ -14,13 +14,13 @@ public class DataSourceConfig {
 
   @Bean(MASTER_DATA_SOURCE)
   @ConfigurationProperties(prefix = "spring.datasource.master.hikari")
-  public DataSource masterDataSource() {
+  DataSource masterDataSource() {
     return DataSourceBuilder.create().type(HikariDataSource.class).build();
   }
 
   @Bean(SLAVE_DATA_SOURCE)
   @ConfigurationProperties(prefix = "spring.datasource.slave.hikari")
-  public DataSource slaveDataSource() {
+  DataSource slaveDataSource() {
     return DataSourceBuilder.create().type(HikariDataSource.class).build();
   }
 }

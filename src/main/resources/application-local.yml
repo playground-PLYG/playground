@@ -54,6 +54,7 @@ spring:
   boot:
     admin:
       client:
+        enabled: false
         url: http://localhost:8889/boot-admin
         username: ${BOOT_ADMIN_SERVER_USERNAME:local}
         password: ${BOOT_ADMIN_SERVER_PASSWORD:local}

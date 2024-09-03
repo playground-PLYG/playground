@@ -22,6 +22,12 @@ public class CodeAddRequest extends BaseDto {
   @Schema(description = "코드명")
   private String codeName;
 
+  @Schema(description = "코드값")
+  private String codeValue;
+
+  @Schema(description = "사용여부")
+  private String useYn;
+
   @Schema(description = "상위코드ID")
   private String upperCode;
 

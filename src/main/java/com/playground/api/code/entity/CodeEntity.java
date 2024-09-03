@@ -42,6 +42,18 @@ public class CodeEntity extends BaseEntity {
   private String codeNm;
 
   /**
+   * 코드값
+   */
+  @Column(name = "code_value")
+  private String codeValue;
+
+  /**
+   * 코드사용여부
+   */
+  @Column(name = "use_at")
+  private String useAt;
+
+  /**
    * 상위코드id
    */
   @Column(name = "upper_code_id")

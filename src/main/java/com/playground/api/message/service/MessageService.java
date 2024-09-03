@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.playground.api.code.model.CodeSrchRequest;
 import com.playground.api.code.model.CodeSrchResponse;
 import com.playground.api.code.service.CodeService;
-import com.playground.api.message.component.DiscordComponent;
+import com.playground.api.message.client.DiscordHttpClient;
 import com.playground.api.message.model.DiscordRequest;
 import com.playground.exception.BizException;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class MessageService {
   // @Value("${discord.webhookURL}")
   // private String url;
 
-  private final DiscordComponent discordComponent;
+  private final DiscordHttpClient discordComponent;
 
   private final CodeService codeService;
 

@@ -29,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/playground")
 public class CodeController {
-
   private final CodeService codeService;
 
   /**
@@ -87,5 +86,3 @@ public class CodeController {
     return codeService.getCodeGroupList(reqData);
   }
 }
-
-

@@ -2,7 +2,6 @@ package com.playground.api.code.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -51,7 +50,7 @@ public class CodeService {
         .map(codeEntity -> CodeResponse.builder().codeSerialNo(codeEntity.getCodeSn()).code(codeEntity.getCodeId()).codeName(codeEntity.getCodeNm())
             .upperCode(codeEntity.getUpperCodeId()).groupCode(codeEntity.getGroupCodeAt()).order(codeEntity.getSortOrdr())
             .registUsrId(codeEntity.getRegistUsrId()).registDt(codeEntity.getRegistDt()).updtUsrId(codeEntity.getUpdtUsrId())
-            .updtDt(codeEntity.getUpdtDt()).build())
+            .updtDt(codeEntity.getUpdtDt()).codeValue(codeEntity.getCodeValue()).useYn(codeEntity.getUseAt()).build())
         .toList();
 
     return new CachedPageImpl<>(codeList, codePageList.getPageable(), codePageList.getTotalElements());
@@ -72,7 +71,8 @@ public class CodeService {
     if (CollectionUtils.isNotEmpty(allCodeList)) {
       return new ArrayList<>(allCodeList.stream()
           .map(codeEntity -> CodeResponse.builder().codeSerialNo(codeEntity.getCodeSn()).code(codeEntity.getCodeId()).codeName(codeEntity.getCodeNm())
-              .upperCode(codeEntity.getUpperCodeId()).groupCode(codeEntity.getGroupCodeAt()).order(codeEntity.getSortOrdr()).build())
+              .upperCode(codeEntity.getUpperCodeId()).groupCode(codeEntity.getGroupCodeAt()).order(codeEntity.getSortOrdr())
+              .codeValue(codeEntity.getCodeValue()).useYn(codeEntity.getUseAt()).build())
           .toList());
     } else {
       return new ArrayList<>();
@@ -87,7 +87,7 @@ public class CodeService {
   @CacheEvict(cacheNames = {"code", "codes", "code_group"}, allEntries = true)
   @Transactional
   public void removeCode(List<CodeRemoveRequest> reqData) {
-    List<Integer> codeSns = reqData.stream().map(CodeRemoveRequest::getCodeSerialNo).collect(Collectors.toList());
+    List<Integer> codeSns = reqData.stream().map(CodeRemoveRequest::getCodeSerialNo).toList();
 
     log.debug("codeSns: {}", codeSns);
 
@@ -104,7 +104,8 @@ public class CodeService {
   @Transactional
   public CodeResponse addCode(CodeAddRequest reqData) {
     CodeEntity entity = CodeEntity.builder().codeSn(reqData.getCodeSerialNo()).codeId(reqData.getCode()).codeNm(reqData.getCodeName())
-        .upperCodeId(reqData.getUpperCode()).groupCodeAt(reqData.getGroupCode()).sortOrdr(reqData.getOrder()).build();
+        .upperCodeId(reqData.getUpperCode()).groupCodeAt(reqData.getGroupCode()).sortOrdr(reqData.getOrder()).codeValue(reqData.getCodeValue())
+        .useAt(reqData.getUseYn()).build();
 
     log.debug("addCode entity: {}", entity);
 
@@ -112,7 +113,8 @@ public class CodeService {
     codeRepository.save(entity);
 
     return CodeResponse.builder().codeSerialNo(entity.getCodeSn()).code(entity.getCodeNm()).codeName(entity.getGroupCodeAt())
-        .upperCode(entity.getUpperCodeId()).groupCode(entity.getGroupCodeAt()).order(entity.getSortOrdr()).build();
+        .upperCode(entity.getUpperCodeId()).groupCode(entity.getGroupCodeAt()).order(entity.getSortOrdr()).codeValue(entity.getCodeValue())
+        .useYn(entity.getUseAt()).build();
   }
 
   /**
@@ -127,7 +129,7 @@ public class CodeService {
     CodeEntity codeEntity = codeRepository.findFirstByCodeIdAndUpperCodeId(reqData.getCode(), reqData.getUpperCode()).orElseGet(CodeEntity::new);
 
     return CodeSrchResponse.builder().code(codeEntity.getCodeId()).codeName(codeEntity.getCodeNm()).upperCode(codeEntity.getUpperCodeId())
-        .order(codeEntity.getSortOrdr()).build();
+        .order(codeEntity.getSortOrdr()).codeValue(codeEntity.getCodeValue()).useYn(codeEntity.getUseAt()).build();
   }
 
   /**
@@ -145,8 +147,11 @@ public class CodeService {
       /*
        * Stream.toList() 사용 시 Cache Serialize 문제가 발생해 우선 ArrayList로 wrapping 처리 - 참고) https://github.com/spring-projects/spring-data-redis/issues/2697
        */
-      return new ArrayList<>(codeEntityList.stream().map(codeEntity -> CodeSrchResponse.builder().code(codeEntity.getCodeId())
-          .codeName(codeEntity.getCodeNm()).upperCode(codeEntity.getUpperCodeId()).order(codeEntity.getSortOrdr()).build()).toList());
+      return new ArrayList<>(codeEntityList.stream()
+          .map(codeEntity -> CodeSrchResponse.builder().code(codeEntity.getCodeId()).codeName(codeEntity.getCodeNm())
+              .upperCode(codeEntity.getUpperCodeId()).order(codeEntity.getSortOrdr()).codeValue(codeEntity.getCodeValue())
+              .useYn(codeEntity.getUseAt()).build())
+          .toList());
     } else {
       return new ArrayList<>();
     }
